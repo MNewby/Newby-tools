@@ -1,0 +1,169 @@
+293.378764743 -1.32265317152 43.44897657 9
+286.018660014 0.617437946314 44.5333141553 10
+279.668105068 1.64164639847 41.12964767 11
+274.608204472 1.72935051475 40.6613470442 12
+268.149264011 2.40359823616 36.2081553 13
+256.320181558 5.62341003375 28.50752301 14
+251.683234738 5.11992893236 27.2940821417 15
+240.333695054 7.83510026632 27.7916312094 16
+233.208998448 8.55688142391 25.83924425 17
+227.683369802 8.64098528775 25.3661816574 18
+221.717807056 9.08032584301 23.49649247 19
+217.531781591 8.83747436872 22.74834568 20
+210.992050816 9.96219684485 21.19475133 21
+205.001617514 11.0743153627 18.1383361664 22
+201.483971148 11.1403258808 16.6590935702 23
+114.420219003 -2.94690293759 30.2251904426 79
+105.097102523 -1.15947777213 29.2282635752 82
+87.3733022121 -0.0437684949148 26.0772126665 86
+0.12595583903 1.52782266002 24.0000001363
+[293.37876474300663, -0.14732637989130948, 86.671407916571297, -0.26359558584063408, 76.010694194109746]
+[286.01866001419944, 0.53596363061625174, -108.76228528988962, -0.16127857499896606, 46.746119856517538]
+[279.66810506814363, 0.092551348951187176, 15.245987287320958, -0.017333169814019583, 6.4891811551774223]
+[274.60820447177878, 0.68946164946962918, -148.67047856875828, -0.10438983382220585, 30.395655345768379]
+[268.14926401051724, 0.65099151357422091, -138.35473994201996, -0.27219455190116887, 75.392366996134655]
+[256.32018155793617, 0.26168962370927146, -38.568808850988461, 0.10858030531568159, -22.207913538385682]
+[251.68323473849136, -0.043838700210966974, 38.327548017486734, -0.23923184634968203, 65.330573874107799]
+[240.3336950539171, 0.27403089104905753, -38.067225395313258, -0.10130693242054824, 32.182569669525591]
+[233.2089984478159, 0.085612447552877224, 5.8736511015273365, -0.015220686953005935, 12.106482583907219]
+[227.68336980195164, 0.31341371586662553, -45.992909313305425, -0.073646120910370094, 25.408982269461262]
+[221.71780705627103, 0.17872485396464322, -16.129990217492981, 0.058014810540913668, -3.7825907269033934]
+[217.53178159084803, 0.23756243239660602, -28.929033478289103, -0.17198299363112818, 46.24924137662385]
+[210.99205081638655, 0.51021604105873442, -86.456777532400068, -0.18564909444968639, 49.132680014994946]
+[205.00161751437142, 0.42052055328410837, -68.069057454861209, -0.018765535579640953, 14.921280510080804]
+# - LAMBDA BIN SIZE: 7.65333333333
+# - Lambda wedge 0:
+#Lambda 200.0:207.653333333, lam, beta, r
+# - File ./Lambda_outs/lam_out_0.txt successfully read into data
+KILLED: 0
+###   Number of stars in stream:  3024
+###   Corrected for SDSS Eff.:    6518.15752401
+###   Correcter for SDSS/FTO Eff: 6532.37332088
+# - Lambda wedge 1:
+#Lambda 207.653333333:215.306666667, lam, beta, r
+# - File ./Lambda_outs/lam_out_1.txt successfully read into data
+KILLED: 0
+###   Number of stars in stream:  6098
+###   Corrected for SDSS Eff.:    13234.1089427
+###   Correcter for SDSS/FTO Eff: 13265.0377183
+# - Lambda wedge 2:
+#Lambda 215.306666667:222.96, lam, beta, r
+# - File ./Lambda_outs/lam_out_2.txt successfully read into data
+KILLED: 0
+###   Number of stars in stream:  8736
+###   Corrected for SDSS Eff.:    19064.6511228
+###   Correcter for SDSS/FTO Eff: 19111.5154778
+# - Lambda wedge 3:
+#Lambda 222.96:230.613333333, lam, beta, r
+# - File ./Lambda_outs/lam_out_3.txt successfully read into data
+KILLED: 1
+###   Number of stars in stream:  10445
+###   Corrected for SDSS Eff.:    22907.5974927
+###   Correcter for SDSS/FTO Eff: 22966.3560337
+# - Lambda wedge 4:
+#Lambda 230.613333333:238.266666667, lam, beta, r
+# - File ./Lambda_outs/lam_out_4.txt successfully read into data
+KILLED: 17
+###   Number of stars in stream:  10327
+###   Corrected for SDSS Eff.:    22725.0364733
+###   Correcter for SDSS/FTO Eff: 22785.5620255
+# - Lambda wedge 5:
+#Lambda 238.266666667:245.92, lam, beta, r
+# - File ./Lambda_outs/lam_out_5.txt successfully read into data
+KILLED: 85
+###   Number of stars in stream:  10629
+###   Corrected for SDSS Eff.:    23382.4987312
+###   Correcter for SDSS/FTO Eff: 23447.5865382
+# - Lambda wedge 6:
+#Lambda 245.92:253.573333333, lam, beta, r
+# - File ./Lambda_outs/lam_out_6.txt successfully read into data
+KILLED: 214
+###   Number of stars in stream:  11540
+###   Corrected for SDSS Eff.:    25303.2775267
+###   Correcter for SDSS/FTO Eff: 25377.3595499
+# - Lambda wedge 7:
+#Lambda 253.573333333:261.226666667, lam, beta, r
+# - File ./Lambda_outs/lam_out_7.txt successfully read into data
+KILLED: 648
+###   Number of stars in stream:  13054
+###   Corrected for SDSS Eff.:    27886.9820598
+###   Correcter for SDSS/FTO Eff: 27971.7570894
+# - Lambda wedge 8:
+#Lambda 261.226666667:268.88, lam, beta, r
+# - File ./Lambda_outs/lam_out_8.txt successfully read into data
+KILLED: 1503
+###   Number of stars in stream:  14501
+###   Corrected for SDSS Eff.:    29376.3762054
+###   Correcter for SDSS/FTO Eff: 29468.8486221
+# - Lambda wedge 9:
+#Lambda 268.88:276.533333333, lam, beta, r
+# - File ./Lambda_outs/lam_out_9.txt successfully read into data
+KILLED: 3160
+###   Number of stars in stream:  16538
+###   Corrected for SDSS Eff.:    30479.1104261
+###   Correcter for SDSS/FTO Eff: 30579.8014142
+# - Lambda wedge 10:
+#Lambda 276.533333333:284.186666667, lam, beta, r
+# - File ./Lambda_outs/lam_out_10.txt successfully read into data
+KILLED: 5200
+###   Number of stars in stream:  18494
+###   Corrected for SDSS Eff.:    30424.8903058
+###   Correcter for SDSS/FTO Eff: 30528.2743992
+# - Lambda wedge 11:
+#Lambda 284.186666667:291.84, lam, beta, r
+# - File ./Lambda_outs/lam_out_11.txt successfully read into data
+KILLED: 6058
+###   Number of stars in stream:  17026
+###   Corrected for SDSS Eff.:    25122.6310161
+###   Correcter for SDSS/FTO Eff: 25208.6614339
+# - Lambda wedge 12:
+#Lambda 291.84:299.493333333, lam, beta, r
+# - File ./Lambda_outs/lam_out_12.txt successfully read into data
+KILLED: 1982
+###   Number of stars in stream:  12694
+###   Corrected for SDSS Eff.:    25639.4106946
+###   Correcter for SDSS/FTO Eff: 25740.8746295
+# - Lambda wedge 13:
+#Lambda 299.493333333:307.146666667, lam, beta, r
+# - File ./Lambda_outs/lam_out_13.txt successfully read into data
+KILLED: 403
+###   Number of stars in stream:  4845
+###   Corrected for SDSS Eff.:    10734.6697793
+###   Correcter for SDSS/FTO Eff: 10777.9692835
+# - Lambda wedge 14:
+#Lambda 307.146666667:314.8, lam, beta, r
+# - File ./Lambda_outs/lam_out_14.txt successfully read into data
+KILLED: 0
+###   Number of stars in stream:  212
+###   Corrected for SDSS Eff.:    521.925730234
+###   Correcter for SDSS/FTO Eff: 524.106565572
+[[   203.82666667   3024.           3259.078762     3266.18666044
+     426.76654971]
+ [   211.48         6098.           6617.05447136   6632.51885915
+     866.61831783]
+ [   219.13333333   8736.           9532.3255614    9555.75773888
+    1248.57461745]
+ [   226.78666667  10445.          11453.79874633  11483.17801684
+    1500.4152461 ]
+ [   234.44        10327.          11362.51823666  11392.78101277
+    1488.60379087]
+ [   242.09333333  10629.          11691.2493656   11723.7932691
+    1531.85452122]
+ [   249.74666667  11540.          12651.63876336  12688.67977496
+    1657.92854202]
+ [   257.4         13054.          13943.49102989  13985.87854471
+    1827.4231548 ]
+ [   265.05333333  14501.          14688.18810272  14734.42431106
+    1925.22965737]
+ [   272.70666667  16538.          15239.55521305  15289.90070708
+    1997.80932584]
+ [   280.36        18494.          15212.4451529   15264.13719958
+    1994.44301388]
+ [   288.01333333  17026.          12561.31550805  12604.33071694
+    1646.90732364]
+ [   295.66666667  12694.          12819.70534732  12870.43731477
+    1681.67734949]
+ [   303.32         4845.           5367.33488967   5388.98464176
+     704.13562392]
+ [   310.97333333    212.            260.96286512    262.05328279
+      34.24041151]]

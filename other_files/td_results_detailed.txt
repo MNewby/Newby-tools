@@ -1,0 +1,243 @@
+#-File Vmean.text successfully read into data
+#-File tdVmean.text successfully read into data
+$ td6
+#--Using Vmean= 7.4251
+#-File ./Plates/td6.text successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---Succesfully Plotted  ./Plates/td6_halo_fit param plots
+#---Mean parameters: [  2.4395867    2.09657475 -24.95904154  16.81035494] Parameter deviations: [ 0.02554191  0.11917719  1.96028251  0.9938323 ]
+#---Best parameters: [  2.3924413    2.33186344 -21.38810382  14.9903277 ] 3.17502521785
+#---After: 5141  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [  2.3924413    2.33186344 -21.38810382  14.9903277 ]
+#---Gradient Descent successful, exited after  41  iterations
+#---Final values: [  2.39893451   2.3318552  -21.8625492   13.88935637] 3.1691199693
+#---GD Best fit:
+$ [  2.39893451   2.3318552  -21.8625492   13.88935637]
+#---function and fit plot saved as ./Plates/td6_halo_fit_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 12.59848137   3.53233732   0.03399049   0.34876644]
+ [  3.53233732   3.14526008  -0.10063915   0.16679717]
+ [  0.03399049  -0.10063915   0.01471447   0.01505371]
+ [  0.34876644   0.16679717   0.01505371   0.03093558]]
+!!!Hessian error 1 below zero!!!
+!!!Hessian error 2 below zero!!!
+!!!Hessian error 3 below zero!!!
+#---Hessian Errors: [  0.51805452   0.86248711  16.5201012   11.34274405]
+#- Done with ./Plates/td6.text
+$ td12
+#--Using Vmean= -33.991
+#-File ./Plates/td12.text successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---Succesfully Plotted  ./Plates/td12_halo_fit param plots
+#---Mean parameters: [  2.35005777   3.4305502  -72.16275179  14.41572015] Parameter deviations: [ 0.02744999  0.05538195  0.0807995   0.82149513]
+#---Best parameters: [  2.37313673   3.48252223 -72.2038192   13.58631786] 3.56792537619
+#---After: 5044  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [  2.37313673   3.48252223 -72.2038192   13.58631786]
+#---Gradient Descent successful, exited after  36  iterations
+#---Final values: [  2.37317166   3.48251778 -72.6512521   13.57970273] 3.57172989471
+#---GD Best fit:
+$ [  2.37317166   3.48251778 -72.6512521   13.57970273]
+#---function and fit plot saved as ./Plates/td12_halo_fit_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 12.11733518   3.40845028   0.12192952   0.57341071]
+ [  3.40845028   5.24015402  -0.05684153   0.43213598]
+ [  0.12192952  -0.05684153   0.05524202  -0.01340158]
+ [  0.57341071   0.43213598  -0.01340158   0.08561711]]
+#---Hessian Errors: [ 0.5212454   0.81285211  6.47329973  7.26455357]
+#- Done with ./Plates/td12.text
+$ td8
+#--Using Vmean= -3.2909
+#-File ./Plates/td8.text successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---Succesfully Plotted  ./Plates/td8_halo_fit param plots
+#---Mean parameters: [  1.14794734   2.27844468 -39.08340861  21.55724597] Parameter deviations: [ 0.03921126  0.01703212  0.70950238  0.54458743]
+#---Best parameters: [  1.09427732   2.27672605 -38.00353944  22.36979022] 0.438660349878
+#---After: 4983  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [  1.09427732   2.27672605 -38.00353944  22.36979022]
+#---Gradient Descent successful, exited after  28  iterations
+#---Final values: [  1.09427732   2.27672605 -38.00353944  22.36979022] 0.438660349878
+#---GD Best fit:
+$ [  1.09427732   2.27672605 -38.00353944  22.36979022]
+#---function and fit plot saved as ./Plates/td8_halo_fit_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  4.14911888e+00   3.32002629e+00   6.97774225e-02   1.91242161e-01]
+ [  3.32002629e+00   7.03722797e+00  -9.69465620e-03   2.15750471e-01]
+ [  6.97774225e-02  -9.69465620e-03   1.10655453e-02  -5.01578303e-03]
+ [  1.91242161e-01   2.15750471e-01  -5.01578303e-03   2.14879336e-02]]
+#---Hessian Errors: [  1.45842967   0.71292211  21.33472679  18.56046952]
+#- Done with ./Plates/td8.text
+$ td13
+#--Using Vmean= -40.767
+#-File ./Plates/td13.text successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---Succesfully Plotted  ./Plates/td13_halo_fit param plots
+#---Mean parameters: [  0.77453121   1.36047744 -76.81046988  27.42307753] Parameter deviations: [ 0.0866781   0.04058054  1.05035598  1.8108818 ]
+#---Best parameters: [  0.62723417   1.4177987  -75.22496175  30.34226854] 2.29625593672
+#---After: 5190  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [  0.62723417   1.4177987  -75.22496175  30.34226854]
+#---Gradient Descent successful, exited after  35  iterations
+#---Final values: [  0.62723417   1.4177987  -75.22496175  30.34226854] 2.29625593672
+#---GD Best fit:
+$ [  0.62723417   1.4177987  -75.22496175  30.34226854]
+#---function and fit plot saved as ./Plates/td13_halo_fit_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  1.84358707e+00   2.42602182e+00   2.50250196e-02   5.71593733e-02]
+ [  2.42602182e+00   6.18129359e+00  -2.28064272e-02   5.62388569e-02]
+ [  2.50250196e-02  -2.28064272e-02   1.30184286e-03   2.40514497e-03]
+ [  5.71593733e-02   5.62388569e-02   2.40514497e-03   2.62533151e-03]]
+!!!Hessian error 2 below zero!!!
+#---Hessian Errors: [  2.38078701   0.85382118  29.50546509   9.5824668 ]
+#- Done with ./Plates/td13.text
+$ td14
+#--Using Vmean= -46.599
+#-File ./Plates/td14.text successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---Succesfully Plotted  ./Plates/td14_halo_fit param plots
+#---Mean parameters: [  1.5105087    2.43599497 -87.69107385  29.56746551] Parameter deviations: [ 0.04058041  0.01853205  0.31530577  1.34934649]
+#---Best parameters: [  1.46349483   2.42732506 -87.92251841  31.16747887] 4.10359576371
+#---After: 5086  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [  1.46349483   2.42732506 -87.92251841  31.16747887]
+#---Gradient Descent successful, exited after  22  iterations
+#---Final values: [  1.46349483   2.42732506 -87.92251841  31.16747887] 4.10359576371
+#---GD Best fit:
+$ [  1.46349483   2.42732506 -87.92251841  31.16747887]
+#---function and fit plot saved as ./Plates/td14_halo_fit_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  6.21273514e+00   4.98411100e+00   1.11959076e-01   2.26357981e-01]
+ [  4.98411100e+00   1.01130382e+01  -2.68851406e-02   2.33517081e-01]
+ [  1.11959076e-01  -2.68851406e-02   9.06717768e-03  -1.82643012e-04]
+ [  2.26357981e-01   2.33517081e-01  -1.82643012e-04   2.27737809e-02]]
+#---Hessian Errors: [  1.20541078   0.69391307  22.18757681  12.98204299]
+#- Done with ./Plates/td14.text
+$ td10
+#--Using Vmean= -12.242
+#-File ./Plates/td10.text successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---Succesfully Plotted  ./Plates/td10_halo_fit param plots
+#---Mean parameters: [  3.4933538    4.65974621 -49.69713932  28.97823218] Parameter deviations: [ 0.09421122  0.04230672  1.29854646  0.69165758]
+#---Best parameters: [  3.36347892   4.72106513 -47.85363547  29.76829571] 4.43323163728
+#---After: 5185  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [  3.36347892   4.72106513 -47.85363547  29.76829571]
+#---Gradient Descent successful, exited after  31  iterations
+#---Final values: [  3.36347892   4.72106513 -47.85363547  29.76829571] 4.43323163728
+#---GD Best fit:
+$ [  3.36347892   4.72106513 -47.85363547  29.76829571]
+#---function and fit plot saved as ./Plates/td10_halo_fit_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 11.89985157   8.35058185   0.29892817   0.74367996]
+ [  8.35058185  13.19222088  -0.12081289   0.71012973]
+ [  0.29892817  -0.12081289   0.05633224  -0.02492028]
+ [  0.74367996   0.71012973  -0.02492028   0.13146361]]
+#---Hessian Errors: [  0.98943266   0.64246351  10.38746835   6.75719364]
+#- Done with ./Plates/td10.text
+$ td5
+#--Using Vmean= 18.476
+#-File ./Plates/td5.text successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---Succesfully Plotted  ./Plates/td5_halo_fit param plots
+#---Mean parameters: [  1.67238438   2.04375858 -16.51116295  28.30496337] Parameter deviations: [ 0.08387599  0.05662531  1.67632775  1.45858318]
+#---Best parameters: [  1.53471068   2.11790071 -13.69679952  30.59246202] 1.45629201717
+#---After: 5268  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [  1.53471068   2.11790071 -13.69679952  30.59246202]
+#---Gradient Descent successful, exited after  31  iterations
+#---Final values: [  1.53471068   2.11790071 -13.69679952  30.59246202] 1.45629201717
+#---GD Best fit:
+$ [  1.53471068   2.11790071 -13.69679952  30.59246202]
+#---function and fit plot saved as ./Plates/td5_halo_fit_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  6.46114289e+00   5.31867309e+00   6.64611431e-02   1.80691068e-01]
+ [  5.31867309e+00   8.21708878e+00  -7.15777471e-02   1.51681865e-01]
+ [  6.64611431e-02  -7.15777471e-02   5.34723454e-03   1.93962885e-03]
+ [  1.80691068e-01   1.51681865e-01   1.93962885e-03   1.48308522e-02]]
+#---Hessian Errors: [  2.48784338   2.19158169  62.87531908  14.34926859]
+#- Done with ./Plates/td5.text
+$ td11
+#--Using Vmean= -22.547
+#-File ./Plates/td11.text successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---Succesfully Plotted  ./Plates/td11_halo_fit param plots
+#---Mean parameters: [  0.20525685   2.86441547 -52.36838751  25.34860516] Parameter deviations: [ 0.26521221  0.05576127  1.99961356  0.52958057]
+#---Best parameters: [  3.12076555e-03   2.94014243e+00  -4.99007532e+01   2.42433575e+01] 1.46407422562
+#---After: 5320  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [  3.12076555e-03   2.94014243e+00  -4.99007532e+01   2.42433575e+01]
+#---Gradient Descent successful, exited after  21  iterations
+#---Final values: [  3.12076555e-03   2.94014243e+00  -4.99007532e+01   2.42433575e+01] 1.46407422562
+#---GD Best fit:
+$ [  3.12076555e-03   2.94014243e+00  -4.99007532e+01   2.42433575e+01]
+#---function and fit plot saved as ./Plates/td11_halo_fit_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  1.53401112e-01   1.28039256e-02   3.58353958e-04   1.00343372e-03]
+ [  1.28039256e-02   1.05490849e+01  -1.51680140e-02   4.43188518e-01]
+ [  3.58353958e-04  -1.51680140e-02   2.69063293e-02   1.17547100e-02]
+ [  1.00343372e-03   4.43188518e-01   1.17547100e-02   3.93155559e-02]]
+#---Hessian Errors: [  3.61108962   0.65788759  10.13655821  11.55320838]
+#- Done with ./Plates/td11.text
+$ td2
+#--Using Vmean= 27.736
+#-File ./Plates/td2.text successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---Succesfully Plotted  ./Plates/td2_halo_fit param plots
+#---Mean parameters: [  2.75495025e+00   2.70462710e-03  -1.15949683e+01   1.91980177e+01] Parameter deviations: [ 0.01144131  0.02494789  0.127848    0.21084115]
+#---Best parameters: [  2.75602813e+00   7.94534371e-05  -1.13995336e+01   1.90272195e+01] 7.54656500814
+#---After: 4877  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [  2.75602813e+00   7.94534371e-05  -1.13995336e+01   1.90272195e+01]
+#---Gradient Descent successful, exited after  3  iterations
+#---Final values: [  2.75602813e+00   7.94534371e-05  -1.13995336e+01   1.90272195e+01] 7.54656500814
+#---GD Best fit:
+$ [  2.75602813e+00   7.94534371e-05  -1.13995336e+01   1.90272195e+01]
+#---function and fit plot saved as ./Plates/td2_halo_fit_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  1.67080687e+01   2.81410450e-04   4.44089210e-10   4.44089210e-10]
+ [  2.81410450e-04   1.91762500e+00  -2.41295872e-06  -1.00897068e-06]
+ [  4.44089210e-10  -2.41295872e-06  -4.44089210e-10   4.44089210e-10]
+ [  4.44089210e-10  -1.00897068e-06   4.44089210e-10  -4.44089210e-10]]
+!!!Hessian error 2 below zero!!!
+!!!Hessian error 3 below zero!!!
+#---Hessian Errors: [  3.45980696e-01   8.98010117e-05   5.72644663e+05   5.74255778e+05]
+#- Done with ./Plates/td2.text
+#---All tasks complete

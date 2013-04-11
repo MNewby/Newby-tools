@@ -1,0 +1,49 @@
+#-File ori_dhist.txt successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---MCMC hist plot saved as text_MCMChist_.ps
+#---Succesfully Plotted  text param plots
+#---Mean parameters: [   4.18579005    0.37671       0.82331921  119.99041633] Parameter deviations: [ 0.03859013  0.02680871  0.0269556   0.23635193]
+#---Best parameters: [   4.1809448     0.37401807    0.82392611  120.51895787] 18.1417468488
+#---After: 4539  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [   4.1809448     0.37401807    0.82392611  120.51895787]
+#---Gradient Descent successful, exited after  32  iterations
+#---Final values: [   4.1809448     0.37401807    0.82392611  120.51895787] 18.1417468488
+#---GD Best fit: [   4.1809448     0.37401807    0.82392611  120.51895787]
+#---function and fit plot saved as text_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  4.32111406e+03  -4.15823695e+03   1.95400759e+03  -2.49330120e-01]
+ [ -4.15823695e+03   6.78201172e+03  -8.88178420e-10   8.32760277e+00]
+ [  1.95400759e+03  -8.88178420e-10   3.38585605e+03   8.10223823e+00]
+ [ -2.49330120e-01   8.32760277e+00   8.10223823e+00   9.00871884e-02]]
+#---Hessian Errors: [ 0.05575509  0.03908197  0.0423075   5.75327313]
+#---All tasks complete
+
+#-File new_dhist.txt successfully read into data
+#---Making subplot: 4 2 1
+#---Making subplot: 4 2 2
+#---Making subplot: 4 2 3
+#---Making subplot: 4 2 4
+#---MCMC hist plot saved as text_MCMChist_.ps
+#---Succesfully Plotted  text param plots
+#---Mean parameters: [   4.21229985    0.5455819     0.75345333  119.86434381] Parameter deviations: [ 0.028643    0.02124715  0.02105383  0.13809622]
+#---Best parameters: [   4.22093908    0.55110852    0.74865317  119.96299199] 13.5678080549
+#---After: 4489  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [   4.22093908    0.55110852    0.74865317  119.96299199]
+#---Gradient Descent successful, exited after  23  iterations
+#---Final values: [   4.22093908    0.55110852    0.74865317  119.96299199] 13.5678080549
+#---GD Best fit: [   4.22093908    0.55110852    0.74865317  119.96299199]
+#---function and fit plot saved as text_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  3.15057344e+03  -2.50795027e+03   1.86898442e+03  -3.72132103e-02]
+ [ -2.50795027e+03   4.22472070e+03   0.00000000e+00   8.30538255e+00]
+ [  1.86898442e+03   0.00000000e+00   3.15921451e+03   8.25014273e+00]
+ [ -3.72132103e-02   8.30538255e+00   8.25014273e+00   1.06241897e-01]]
+#---Hessian Errors: [ 0.05997212  0.04307507  0.04570924  5.40859881]
+

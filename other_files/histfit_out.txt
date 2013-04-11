@@ -1,0 +1,1333 @@
+['./An_Project/hist_real_noF1_7.7.txt', './An_Project/hist_real_noG1_60.0.txt', './An_Project/hist_real_noG1_20.0.txt', './An_Project/hist_real_noG0_7.7.txt', './An_Project/hist_real_noF0_7.7.txt', './An_Project/hist_real_noF0_80.0.txt', './An_Project/hist_real_noF1_30.0.txt', './An_Project/hist_real_noF1_15.0.txt', './An_Project/hist_real_noF1_20.0.txt', './An_Project/hist_real_noF1_80.0.txt', './An_Project/hist_real_noG1_25.0.txt', './An_Project/hist_real_noF0_25.0.txt', './An_Project/hist_real_noG0_25.0.txt', './An_Project/hist_real_noG1_80.0.txt', './An_Project/hist_real_noF0_15.0.txt', './An_Project/hist_real_noG1_10.0.txt', './An_Project/hist_real_noF1_40.0.txt', './An_Project/hist_real_noF0_30.0.txt', './An_Project/hist_real_noF1_10.0.txt', './An_Project/hist_real_noG1_7.7.txt', './An_Project/hist_real_noG0_30.0.txt', './An_Project/hist_real_noG0_80.0.txt', './An_Project/hist_real_noG0_15.0.txt', './An_Project/hist_real_noG1_15.0.txt', './An_Project/hist_real_noF1_60.0.txt', './An_Project/hist_real_noF0_10.0.txt', './An_Project/hist_real_noG0_60.0.txt', './An_Project/hist_real_noG0_20.0.txt', './An_Project/hist_real_noF1_25.0.txt', './An_Project/hist_real_noG1_40.0.txt', './An_Project/hist_real_noF0_20.0.txt', './An_Project/hist_real_noF0_60.0.txt', './An_Project/hist_real_noG1_30.0.txt', './An_Project/hist_real_noG0_40.0.txt', './An_Project/hist_real_noG0_10.0.txt', './An_Project/hist_real_noF0_40.0.txt']
+#-File ./An_Project/hist_real_noF1_7.7.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit__noF1_7.7_MCMChist_.ps
+#---Succesfully Plotted  fit__noF1_7.7 param plots
+#---Mean parameters: [ 10.5641167   -1.44476771   0.6038165    5.89799708   0.11724688
+   0.90434258] Parameter deviations: [ 0.36265404  0.03424821  0.03247794  0.28323634  0.21293735  0.16021165]
+#---Best parameters: [ 9.70073754 -1.48776525  0.52376552  6.48921251 -0.37794679  1.21958144] 60.4703446621
+#---After: 4585  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 9.70073754 -1.48776525  0.52376552  6.48921251 -0.37794679  1.21958144]
+#---Gradient Descent successful, exited after  38  iterations
+#---Final values: [ 9.70073754 -1.48776525  0.52376552  6.48921251 -0.37794679  1.21958144] 60.4703446621
+#---GD Best fit: [ 9.70073754 -1.48776525  0.52376552  6.48921251 -0.37794679  1.21958144]
+#---function and fit plot saved as fit__noF1_7.7_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[   57.13458354   -52.07451563   385.27687521    38.82962232
+    -80.90488025    88.37748799]
+ [  -52.07451563  3649.36579042 -1209.32469948   106.18617403
+    318.14413717  -651.09615887]
+ [  385.27687521 -1209.32469948  6568.33058864   503.44947146
+   -841.94683568  1300.44249204]
+ [   38.82962232   106.18617403   503.44947146   118.10468127
+    105.21135021   229.96560612]
+ [  -80.90488025   318.14413717  -841.94683568   105.21135021
+    604.80524802   261.87348063]
+ [   88.37748799  -651.09615887  1300.44249204   229.96560612
+    261.87348063  1080.72125072]]
+#---Hessian Errors: [ 0.58163567  0.03502528  0.08924814  0.77160777  0.34612826  0.09375615]
+$ fit__noF1_7.7
+$ [ 9.70073754 -1.48776525  0.52376552  6.48921251 -0.37794679  1.21958144]
+$ [ 0.58163567  0.03502528  0.08924814  0.77160777  0.34612826  0.09375615]
+#-File ./An_Project/hist_real_noG1_60.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG1_60.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG1_60.0 param plots
+#---Mean parameters: [ 1.27371408 -2.00606985  1.52834298  1.74799288  0.07755385  0.59384868] Parameter deviations: [ 0.1362403   0.24282109  0.11860312  0.16922849  0.09558247  0.08214913]
+#---Best parameters: [ 1.33667323 -1.65690949  1.53103069  1.72011858  0.13518534  0.51542711] 2.5606557302
+#---After: 4304  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 1.33667323 -1.65690949  1.53103069  1.72011858  0.13518534  0.51542711]
+#---Gradient Descent successful, exited after  27  iterations
+#---Final values: [ 1.33667323 -1.65690949  1.53103069  1.72011858  0.13518534  0.51542711] 2.5606557302
+#---GD Best fit: [ 1.33667323 -1.65690949  1.53103069  1.72011858  0.13518534  0.51542711]
+#---function and fit plot saved as fit_noG1_60.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  5.29478384e+01  -1.23415681e+00   1.05868324e+01   1.34795968e+01
+   -7.62629813e+00   2.68041691e+01]
+ [ -1.23415681e+00   4.78298317e+00   8.76839437e-01   6.21590182e+00
+    4.23558422e-02   1.04491721e+01]
+ [  1.05868324e+01   8.76839437e-01   6.67606692e+00   7.28435417e+00
+    3.56732854e+00   1.27327025e+01]
+ [  1.34795968e+01   6.21590182e+00   7.28435417e+00   2.26682486e+01
+    1.63253095e+00   2.34430740e+01]
+ [ -7.62629813e+00   4.23558422e-02   3.56732854e+00   1.63253095e+00
+    4.04975777e+01   1.85388806e+01]
+ [  2.68041691e+01   1.04491721e+01   1.27327025e+01   2.34430740e+01
+    1.85388806e+01   6.64852190e+01]]
+#---Hessian Errors: [ 0.35064996  1.35098289  0.86358163  0.50661101  0.31904553  0.39806877]
+$ fit_noG1_60.0
+$ [ 1.33667323 -1.65690949  1.53103069  1.72011858  0.13518534  0.51542711]
+$ [ 0.35064996  1.35098289  0.86358163  0.50661101  0.31904553  0.39806877]
+#-File ./An_Project/hist_real_noG1_20.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG1_20.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG1_20.0 param plots
+#---Mean parameters: [ 5.473041   -1.42595924  1.23764683 -3.09772176  0.25727634  0.26751368] Parameter deviations: [ 0.14637849  0.04950477  0.04111276  0.43627492  0.13948299  0.08975582]
+#---Best parameters: [ 5.47540608 -1.44881405  1.22382458 -3.1908219   0.27729616  0.27405971] 18.8249888614
+#---After: 4524  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 5.47540608 -1.44881405  1.22382458 -3.1908219   0.27729616  0.27405971]
+#---Gradient Descent successful, exited after  34  iterations
+#---Final values: [ 5.47540608 -1.44881405  1.22382458 -3.1908219   0.27729616  0.27405971] 18.8249888614
+#---GD Best fit: [ 5.47540608 -1.44881405  1.22382458 -3.1908219   0.27729616  0.27405971]
+#---function and fit plot saved as fit_noG1_20.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 146.58465968  -13.16999203  222.92581743  -12.33899929   -9.01241675
+    84.01148702]
+ [ -13.16999203  500.77490847  142.89767702  -38.15552875   13.65027575
+   258.51716822]
+ [ 222.92581743  142.89767702  969.68386297  -54.34051385   77.14427913
+   387.20183131]
+ [ -12.33899929  -38.15552875  -54.34051385   13.41670941   -7.828942
+   -47.2775438 ]
+ [  -9.01241675   13.65027575   77.14427913   -7.828942    267.92451931
+   358.67402614]
+ [  84.01148702  258.51716822  387.20183131  -47.2775438   358.67402614
+   778.32515506]]
+#---Hessian Errors: [ 0.16780837  0.09379623  0.06382101  0.50467108  0.20349166  0.14188664]
+$ fit_noG1_20.0
+$ [ 5.47540608 -1.44881405  1.22382458 -3.1908219   0.27729616  0.27405971]
+$ [ 0.16780837  0.09379623  0.06382101  0.50467108  0.20349166  0.14188664]
+#-File ./An_Project/hist_real_noG0_7.7.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit__noG0_7.7_MCMChist_.ps
+#---Succesfully Plotted  fit__noG0_7.7 param plots
+#---Mean parameters: [ 10.65590006  -1.50929663   0.55495736   6.09596958   0.10874474
+   0.86380627] Parameter deviations: [ 0.34531502  0.03382113  0.03169711  0.22913538  0.15276392  0.13306887]
+#---Best parameters: [ 9.84208049 -1.52904225  0.48100209  6.24637151 -0.4315746   1.30036193] 59.2789606657
+#---After: 4732  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 9.84208049 -1.52904225  0.48100209  6.24637151 -0.4315746   1.30036193]
+#---Gradient Descent successful, exited after  40  iterations
+#---Final values: [ 9.77578467 -1.52876608  0.48112589  6.23604414 -0.43157902  1.30087955] 59.3801882426
+#---GD Best fit: [ 9.77578467 -1.52876608  0.48112589  6.23604414 -0.43157902  1.30087955]
+#---function and fit plot saved as fit__noG0_7.7_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[   53.31037295   -54.11580786   403.86584262    37.25789951
+    -67.72652252    68.25471148]
+ [  -54.11580786  4145.34549795 -1173.96191817    87.01159697
+    305.80667267  -577.82507814]
+ [  403.86584262 -1173.96191817  7060.87218501   543.39726338
+   -864.95782308  1166.60324116]
+ [   37.25789951    87.01159697   543.39726338   119.46758222
+     75.61393569   220.86388948]
+ [  -67.72652252   305.80667267  -864.95782308    75.61393569
+    549.03648115   142.51667867]
+ [   68.25471148  -577.82507814  1166.60324116   220.86388948
+    142.51667867  1009.30017124]]
+#---Hessian Errors: [ 0.28503453  0.0274284   0.03731306  0.32212188  0.11716043  0.06589445]
+$ fit__noG0_7.7
+$ [ 9.77578467 -1.52876608  0.48112589  6.23604414 -0.43157902  1.30087955]
+$ [ 0.28503453  0.0274284   0.03731306  0.32212188  0.11716043  0.06589445]
+#-File ./An_Project/hist_real_noF0_7.7.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit__noF0_7.7_MCMChist_.ps
+#---Succesfully Plotted  fit__noF0_7.7 param plots
+#---Mean parameters: [ 9.46417663 -1.49412932  0.47508678  6.88149843 -0.5815935   1.23056212] Parameter deviations: [ 0.28235386  0.03569985  0.04106478  0.34826568  0.07170016  0.05109364]
+#---Best parameters: [ 9.45287558 -1.49503393  0.46597269  6.96834332 -0.61286606  1.2208757 ] 54.4605911598
+#---After: 4662  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 9.45287558 -1.49503393  0.46597269  6.96834332 -0.61286606  1.2208757 ]
+#---Gradient Descent successful, exited after  34  iterations
+#---Final values: [ 9.45287558 -1.49503393  0.46597269  6.96834332 -0.61286606  1.2208757 ] 54.4605911598
+#---GD Best fit: [ 9.45287558 -1.49503393  0.46597269  6.96834332 -0.61286606  1.2208757 ]
+#---function and fit plot saved as fit__noF0_7.7_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[   46.49418074   -34.54677165   324.3125173     39.6748358    -74.45646243
+     70.67330262]
+ [  -34.54677165  3291.82033397 -1174.42367122    68.50726312
+    448.41923335  -670.04647686]
+ [  324.3125173  -1174.42367122  6206.93081416   541.38283424
+   -906.62431514  1297.80414521]
+ [   39.6748358     68.50726312   541.38283424   123.27312091
+     71.98031542   286.94580065]
+ [  -74.45646243   448.41923335  -906.62431514    71.98031542   821.1701467
+    105.59789544]
+ [   70.67330262  -670.04647686  1297.80414521   286.94580065
+    105.59789544  1788.45429219]]
+#---Hessian Errors: [ 0.31381738  0.03140799  0.03550894  0.32439684  0.08383651  0.04957054]
+$ fit__noF0_7.7
+$ [ 9.45287558 -1.49503393  0.46597269  6.96834332 -0.61286606  1.2208757 ]
+$ [ 0.31381738  0.03140799  0.03550894  0.32439684  0.08383651  0.04957054]
+#-File ./An_Project/hist_real_noF0_80.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF0_80.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF0_80.0 param plots
+#---Mean parameters: [ 1.80817496 -1.43979845  1.58384334  2.28909651 -0.13151517  0.69990412] Parameter deviations: [ 0.17090253  0.14409908  0.12137688  0.19013797  0.08644667  0.07779001]
+#---Best parameters: [ 1.67853805 -1.61468714  1.74858492  2.33699449 -0.1822756   0.73809456] 5.0187807065
+#---After: 4411  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 1.67853805 -1.61468714  1.74858492  2.33699449 -0.1822756   0.73809456]
+#---Gradient Descent successful, exited after  30  iterations
+#---Final values: [ 1.67853805 -1.61468714  1.74858492  2.33699449 -0.1822756   0.73809456] 5.0187807065
+#---GD Best fit: [ 1.67853805 -1.61468714  1.74858492  2.33699449 -0.1822756   0.73809456]
+#---function and fit plot saved as fit_noF0_80.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  67.61589329   -2.62480102   15.34175438   30.8093179   -13.63279309
+    56.80515454]
+ [  -2.62480102    7.74410663    1.1431788    10.36906946    6.14854415
+    14.05524749]
+ [  15.34175438    1.1431788    10.31714242   10.13355888   10.9696411
+    20.25502355]
+ [  30.8093179    10.36906946   10.13355888   41.06171598    2.45122967
+    38.34402065]
+ [ -13.63279309    6.14854415   10.9696411     2.45122967   63.63377004
+    22.11046504]
+ [  56.80515454   14.05524749   20.25502355   38.34402065   22.11046504
+   129.61460803]]
+#---Hessian Errors: [ 0.60564733  1.40996931  0.75355842  0.59212454  0.28136475  0.292859  ]
+$ fit_noF0_80.0
+$ [ 1.67853805 -1.61468714  1.74858492  2.33699449 -0.1822756   0.73809456]
+$ [ 0.60564733  1.40996931  0.75355842  0.59212454  0.28136475  0.292859  ]
+#-File ./An_Project/hist_real_noF1_30.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF1_30.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF1_30.0 param plots
+#---Mean parameters: [  4.30038116e+00  -1.07754522e+00   1.19428420e+00   9.89271019e-04
+   7.05057342e-01   2.19217402e+00] Parameter deviations: [ 0.12828405  0.05896517  0.04130584  0.40100786  0.11867196  0.15987607]
+#---Best parameters: [ 4.29646854 -1.07899395  1.2030689  -0.03394118  0.66547736  2.29467176] 27.6936891087
+#---After: 4632  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 4.29646854 -1.07899395  1.2030689  -0.03394118  0.66547736  2.29467176]
+#---Gradient Descent successful, exited after  34  iterations
+#---Final values: [ 4.29646854 -1.07899395  1.2030689  -0.03394118  0.66547736  2.29467176] 27.6936891087
+#---GD Best fit: [ 4.29646854 -1.07899395  1.2030689  -0.03394118  0.66547736  2.29467176]
+#---function and fit plot saved as fit_noF1_30.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  1.32694934e+02  -3.58058661e+00   1.71304965e+02  -1.25004066e+00
+   -4.35222134e-03   5.04027442e-03]
+ [ -3.58058661e+00   3.08051102e+02   1.72401160e+02  -1.23232861e+00
+    5.89750826e-03  -5.92344040e-03]
+ [  1.71304965e+02   1.72401160e+02   5.98413872e+02  -3.30787196e+00
+   -2.74658429e-03   1.07577476e-02]
+ [ -1.25004066e+00  -1.23232861e+00  -3.30787196e+00   4.89597476e+00
+   -7.31853338e-02   4.98415213e-02]
+ [ -4.35222134e-03   5.89750826e-03  -2.74658429e-03  -7.31853338e-02
+   -9.01228425e-04  -1.55007562e-04]
+ [  5.04027442e-03  -5.92344040e-03   1.07577476e-02   4.98415213e-02
+   -1.55007562e-04  -7.65004060e-04]]
+!!!Hessian error 4 below zero!!!
+!!!Hessian error 5 below zero!!!
+#---Hessian Errors: [  0.16572931   0.09431013   0.08519058   0.3524669   34.06268468
+  42.65050428]
+$ fit_noF1_30.0
+$ [ 4.29646854 -1.07899395  1.2030689  -0.03394118  0.66547736  2.29467176]
+$ [  0.16572931   0.09431013   0.08519058   0.3524669   34.06268468
+  42.65050428]
+#-File ./An_Project/hist_real_noF1_15.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF1_15.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF1_15.0 param plots
+#---Mean parameters: [ 7.17672197 -1.31245108  1.15046616 -0.19657671  0.20744682  0.9480198 ] Parameter deviations: [ 0.13944377  0.03385689  0.03341886  0.72495696  0.19607093  0.14070742]
+#---Best parameters: [ 7.20402277 -1.30149974  1.15642536 -0.08797481  0.72829642  0.73128923] 30.1826116742
+#---After: 4705  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 7.20402277 -1.30149974  1.15642536 -0.08797481  0.72829642  0.73128923]
+#---Gradient Descent successful, exited after  40  iterations
+#---Final values: [ 7.16284432 -1.30149969  1.15680036 -0.08798344  0.7282111   0.73147345] 30.2661494472
+#---GD Best fit: [ 7.16284432 -1.30149969  1.15680036 -0.08798344  0.7282111   0.73147345]
+#---function and fit plot saved as fit_noF1_15.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  1.58448164e+02   2.50594490e+00   3.81072056e+02  -9.62190646e-01
+   -1.57825202e-02   4.82571250e-02]
+ [  2.50594490e+00   1.19395832e+03   3.14066795e+02  -4.71303990e+00
+    8.73782025e-03   1.61596506e-01]
+ [  3.81072056e+02   3.14066795e+02   2.39855202e+03  -8.36131781e+00
+    1.17512429e-01   2.65358563e-01]
+ [ -9.62190646e-01  -4.71303990e+00  -8.36131781e+00   2.66124039e+00
+   -3.17513521e-01   3.12039744e-02]
+ [ -1.57825202e-02   8.73782025e-03   1.17512429e-01  -3.17513521e-01
+   -2.07527000e-02  -3.34977397e-02]
+ [  4.82571250e-02   1.61596506e-01   2.65358563e-01   3.12039744e-02
+   -3.34977397e-02  -2.40967974e-02]]
+!!!Hessian error 3 below zero!!!
+!!!Hessian error 4 below zero!!!
+!!!Hessian error 5 below zero!!!
+#---Hessian Errors: [  0.14437006   0.04180084   0.03763576   0.90665061   9.22512074
+  14.31890638]
+$ fit_noF1_15.0
+$ [ 7.16284432 -1.30149969  1.15680036 -0.08798344  0.7282111   0.73147345]
+$ [  0.14437006   0.04180084   0.03763576   0.90665061   9.22512074
+  14.31890638]
+#-File ./An_Project/hist_real_noF1_20.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF1_20.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF1_20.0 param plots
+#---Mean parameters: [ 3.73872619 -2.36074435  1.39271887 -5.32818561 -0.79607885  0.85366191] Parameter deviations: [ 0.49189924  0.35540085  0.08764221  0.45004748  0.08451751  0.07082114]
+#---Best parameters: [ 3.85115299 -2.28072964  1.35499405 -5.39409526 -0.7544239   0.8366605 ] 14.4926940075
+#---After: 4475  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 3.85115299 -2.28072964  1.35499405 -5.39409526 -0.7544239   0.8366605 ]
+#---Gradient Descent successful, exited after  41  iterations
+#---Final values: [ 3.81890569 -2.27898899  1.35706788 -5.30308236 -0.75449837  0.83755955] 14.7181571372
+#---GD Best fit: [ 3.81890569 -2.27898899  1.35706788 -5.30308236 -0.75449837  0.83755955]
+#---function and fit plot saved as fit_noF1_20.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[   89.59641492   -20.11494563    56.04836376   -44.1326604    -72.28815652
+    178.19879716]
+ [  -20.11494563    83.80548466     3.8976622    -49.92821998
+     40.48757813    97.36105577]
+ [   56.04836376     3.8976622    111.70031834   -63.98110767
+    105.57206603   220.41655525]
+ [  -44.1326604    -49.92821998   -63.98110767    77.59928      -30.56791378
+   -164.22654951]
+ [  -72.28815652    40.48757813   105.57206603   -30.56791378
+    543.62501625   210.12785654]
+ [  178.19879716    97.36105577   220.41655525  -164.22654951
+    210.12785654  1132.08255391]]
+!!!Hessian error 0 below zero!!!
+!!!Hessian error 1 below zero!!!
+!!!Hessian error 3 below zero!!!
+!!!Hessian error 5 below zero!!!
+#---Hessian Errors: [ 0.42644137  0.51240703  0.22674618  0.58284108  0.09274914  0.05455846]
+$ fit_noF1_20.0
+$ [ 3.81890569 -2.27898899  1.35706788 -5.30308236 -0.75449837  0.83755955]
+$ [ 0.42644137  0.51240703  0.22674618  0.58284108  0.09274914  0.05455846]
+#-File ./An_Project/hist_real_noF1_80.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF1_80.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF1_80.0 param plots
+#---Mean parameters: [ 1.98051186 -0.56640292  0.96979993  0.01696074  0.03070218  1.18710586] Parameter deviations: [ 0.12975108  0.06386387  0.07900705  0.37449169  0.14638993  0.09845495]
+#---Best parameters: [ 1.99598911 -0.57927711  0.98840837  0.06341652 -0.26717762  1.27717136] 4.10821255726
+#---After: 4534  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 1.99598911 -0.57927711  0.98840837  0.06341652 -0.26717762  1.27717136]
+#---Gradient Descent successful, exited after  27  iterations
+#---Final values: [ 1.99598911 -0.57927711  0.98840837  0.06341652 -0.26717762  1.27717136] 4.10821255726
+#---GD Best fit: [ 1.99598911 -0.57927711  0.98840837  0.06341652 -0.26717762  1.27717136]
+#---function and fit plot saved as fit_noF1_80.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  6.08033009e+01  -1.21547244e+00   3.86332138e+01   2.19594380e+00
+   -7.24489746e-03   2.76268032e-02]
+ [ -1.21547244e+00   3.92844803e+01   1.65294991e+01   3.19388428e-01
+    3.37343251e-02  -4.30860614e-03]
+ [  3.86332138e+01   1.65294991e+01   5.68223185e+01   1.85659583e+00
+    5.08455389e-03   5.50196890e-02]
+ [  2.19594380e+00   3.19388428e-01   1.85659583e+00   1.41499417e-01
+    8.69510389e-02  -3.39541750e-02]
+ [ -7.24489746e-03   3.37343251e-02   5.08455389e-03   8.69510389e-02
+   -9.08946918e-04   5.67931835e-03]
+ [  2.76268032e-02  -4.30860614e-03   5.50196890e-02  -3.39541750e-02
+    5.67931835e-03  -1.26417412e-02]]
+!!!Hessian error 3 below zero!!!
+!!!Hessian error 4 below zero!!!
+!!!Hessian error 5 below zero!!!
+#---Hessian Errors: [  0.25598444   0.25839      0.28445148   0.81814729   7.99331397
+  15.77877979]
+$ fit_noF1_80.0
+$ [ 1.99598911 -0.57927711  0.98840837  0.06341652 -0.26717762  1.27717136]
+$ [  0.25598444   0.25839      0.28445148   0.81814729   7.99331397
+  15.77877979]
+#-File ./An_Project/hist_real_noG1_25.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG1_25.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG1_25.0 param plots
+#---Mean parameters: [ 3.71319742 -2.00130587  1.33955818  3.59858613 -0.40608045  0.74893092] Parameter deviations: [ 0.24281009  0.17893129  0.12733594  0.35631729  0.14673599  0.09221453]
+#---Best parameters: [ 3.89305352 -1.84885873  1.32771696  3.46422316 -0.2941517   0.65497152] 11.8451256987
+#---After: 4617  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 3.89305352 -1.84885873  1.32771696  3.46422316 -0.2941517   0.65497152]
+#---Gradient Descent successful, exited after  34  iterations
+#---Final values: [ 3.89305352 -1.84885873  1.32771696  3.46422316 -0.2941517   0.65497152] 11.8451256987
+#---GD Best fit: [ 3.89305352 -1.84885873  1.32771696  3.46422316 -0.2941517   0.65497152]
+#---function and fit plot saved as fit_noG1_25.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 115.25141011  -16.10387482   94.95714419   32.96247782  -29.66598427
+    97.94673529]
+ [ -16.10387482  142.09176227   14.30714989   48.47422045   19.90928537
+   110.14941998]
+ [  94.95714419   14.30714989  223.1889418    60.47530496   77.65040512
+   172.90841518]
+ [  32.96247782   48.47422045   60.47530496   41.33779715   12.74954407
+    63.5364815 ]
+ [ -29.66598427   19.90928537   77.65040512   12.74954407  169.14384841
+   136.26724294]
+ [  97.94673529  110.14941998  172.90841518   63.5364815   136.26724294
+   408.39828429]]
+#---Hessian Errors: [ 0.78614588  0.68825602  0.19082797  1.12143876  0.43116482  0.37374505]
+$ fit_noG1_25.0
+$ [ 3.89305352 -1.84885873  1.32771696  3.46422316 -0.2941517   0.65497152]
+$ [ 0.78614588  0.68825602  0.19082797  1.12143876  0.43116482  0.37374505]
+#-File ./An_Project/hist_real_noF0_25.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF0_25.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF0_25.0 param plots
+#---Mean parameters: [ 4.34426207 -1.73796612  1.5417054   4.61583186 -0.4704161   0.71356969] Parameter deviations: [ 0.24278985  0.17038554  0.07544092  0.32380168  0.05742124  0.06997997]
+#---Best parameters: [ 4.03354719 -1.95341172  1.65567353  4.87879097 -0.52776124  0.7701356 ] 15.7460081743
+#---After: 4614  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 4.03354719 -1.95341172  1.65567353  4.87879097 -0.52776124  0.7701356 ]
+#---Gradient Descent successful, exited after  34  iterations
+#---Final values: [ 4.03354719 -1.95341172  1.65567353  4.87879097 -0.52776124  0.7701356 ] 15.7460081743
+#---GD Best fit: [ 4.03354719 -1.95341172  1.65567353  4.87879097 -0.52776124  0.7701356 ]
+#---function and fit plot saved as fit_noF0_25.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 122.43670288  -11.43969698   76.60635438   50.56337259  -42.24124469
+   197.60871943]
+ [ -11.43969698   93.59607858   31.40995012   45.47821282   67.65923532
+   137.59222566]
+ [  76.60635438   31.40995012  138.20091976   49.09575979  122.26027458
+   229.70522407]
+ [  50.56337259   45.47821282   49.09575979   61.28082406   20.33860499
+   128.56453213]
+ [ -42.24124469   67.65923532  122.26027458   20.33860499  414.27637997
+   155.69968632]
+ [ 197.60871943  137.59222566  229.70522407  128.56453213  155.69968632
+   848.17736041]]
+#---Hessian Errors: [ 0.58854196  0.51467461  0.26116582  0.58015142  0.13399916  0.13578266]
+$ fit_noF0_25.0
+$ [ 4.03354719 -1.95341172  1.65567353  4.87879097 -0.52776124  0.7701356 ]
+$ [ 0.58854196  0.51467461  0.26116582  0.58015142  0.13399916  0.13578266]
+#-File ./An_Project/hist_real_noG0_25.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG0_25.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG0_25.0 param plots
+#---Mean parameters: [ 4.71621    -1.530564    1.46221211  3.61633633 -0.11953154  0.55810874] Parameter deviations: [ 0.23492072  0.11420799  0.06764324  0.27060412  0.11024743  0.10004875]
+#---Best parameters: [ 4.83139342 -1.49533885  1.42806498  3.60420381 -0.01840355  0.48298854] 16.892523782
+#---After: 4602  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 4.83139342 -1.49533885  1.42806498  3.60420381 -0.01840355  0.48298854]
+#---Gradient Descent successful, exited after  33  iterations
+#---Final values: [ 4.83139342 -1.49533885  1.42806498  3.60420381 -0.01840355  0.48298854] 16.892523782
+#---GD Best fit: [ 4.83139342 -1.49533885  1.42806498  3.60420381 -0.01840355  0.48298854]
+#---function and fit plot saved as fit_noG0_25.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 149.13366775  -15.76664576  160.06258968   28.14038388  -16.49400755
+   119.48273714]
+ [ -15.76664576  272.57775939   52.53003017   46.70180739   39.50204829
+   188.04846376]
+ [ 160.06258968   52.53003017  458.71818676   51.88069766  104.45409405
+   247.68554023]
+ [  28.14038388   46.70180739   51.88069766   24.87173131    8.61947384
+    52.65384712]
+ [ -16.49400755   39.50204829  104.45409405    8.61947384  202.60741638
+   183.39527582]
+ [ 119.48273714  188.04846376  247.68554023   52.65384712  183.39527582
+   476.05388227]]
+#---Hessian Errors: [ 0.28169111  0.17986556  0.10155061  0.47300361  0.19621679  0.16629713]
+$ fit_noG0_25.0
+$ [ 4.83139342 -1.49533885  1.42806498  3.60420381 -0.01840355  0.48298854]
+$ [ 0.28169111  0.17986556  0.10155061  0.47300361  0.19621679  0.16629713]
+#-File ./An_Project/hist_real_noG1_80.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG1_80.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG1_80.0 param plots
+#---Mean parameters: [ 0.79958732 -1.97224271  1.47170273  0.88255628  0.11615425  1.02964414] Parameter deviations: [ 0.131808    0.21606182  0.11532809  0.14176077  0.13183806  0.1889412 ]
+#---Best parameters: [ 0.91775828 -1.81351709  1.51330493  0.93879086  0.23665231  0.56346192] 1.15466195162
+#---After: 4190  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 0.91775828 -1.81351709  1.51330493  0.93879086  0.23665231  0.56346192]
+#---Gradient Descent successful, exited after  29  iterations
+#---Final values: [ 0.91457144 -1.81363948  1.51067993  0.93512257  0.23666298  0.56383846] 1.15462402629
+#---GD Best fit: [ 0.91457144 -1.81363948  1.51067993  0.93512257  0.23666298  0.56383846]
+#---function and fit plot saved as fit_noG1_80.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 32.71259755  -0.11421538   4.06038984   6.93299235  -2.56407145
+    6.45781364]
+ [ -0.11421538   1.18082554   0.22789729   2.4989349   -0.32379675
+    1.84523501]
+ [  4.06038984   0.22789729   1.61320275   3.24582958   0.24924666
+    2.27014723]
+ [  6.93299235   2.4989349    3.24582958  11.57663824  -0.91612148
+    4.97986156]
+ [ -2.56407145  -0.32379675   0.24924666  -0.91612148   4.42209468
+    2.16358339]
+ [  6.45781364   1.84523501   2.27014723   4.97986156   2.16358339
+    5.69068229]]
+!!!Hessian error 1 below zero!!!
+!!!Hessian error 5 below zero!!!
+#---Hessian Errors: [ 0.30937849  1.40447532  1.48940795  0.75483525  0.72498141  0.72052431]
+$ fit_noG1_80.0
+$ [ 0.91457144 -1.81363948  1.51067993  0.93512257  0.23666298  0.56383846]
+$ [ 0.30937849  1.40447532  1.48940795  0.75483525  0.72498141  0.72052431]
+#-File ./An_Project/hist_real_noF0_15.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF0_15.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF0_15.0 param plots
+#---Mean parameters: [ 7.72184659 -1.24832803  1.23191898 -0.19179919  0.64452776  1.42273901] Parameter deviations: [ 0.1408375   0.03539835  0.03086937  0.6298255   0.21186595  0.26025916]
+#---Best parameters: [ 7.73997406 -1.23686894  1.2348801   0.04343167  0.35993693  1.69649885] 39.321547633
+#---After: 4663  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 7.73997406 -1.23686894  1.2348801   0.04343167  0.35993693  1.69649885]
+#---Gradient Descent successful, exited after  31  iterations
+#---Final values: [ 7.73997406 -1.23686894  1.2348801   0.04343167  0.35993693  1.69649885] 39.321547633
+#---GD Best fit: [ 7.73997406 -1.23686894  1.2348801   0.04343167  0.35993693  1.69649885]
+#---function and fit plot saved as fit_noF0_15.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  1.75273052e+02   3.48243420e+00   4.28682900e+02   1.03721547e+00
+   -5.08053208e-03   8.84966109e-03]
+ [  3.48243420e+00   1.34366629e+03   3.23311689e+02   2.49437631e+00
+    1.75129937e-02  -9.49628820e-03]
+ [  4.28682900e+02   3.23311689e+02   2.59949950e+03   5.10504421e+00
+    9.59961000e-03   3.59118797e-02]
+ [  1.03721547e+00   2.49437631e+00   5.10504421e+00   1.46896095e+00
+    3.20214527e-02  -5.14250313e-03]
+ [ -5.08053208e-03   1.75129937e-02   9.59961000e-03   3.20214527e-02
+   -5.42014433e-04  -4.73853845e-04]
+ [  8.84966109e-03  -9.49628820e-03   3.59118797e-02  -5.14250313e-03
+   -4.73853845e-04  -1.59429980e-03]]
+!!!Hessian error 4 below zero!!!
+!!!Hessian error 5 below zero!!!
+#---Hessian Errors: [  1.39503095e-01   3.95623598e-02   3.68138481e-02   6.84296270e-01
+   4.14186343e+01   3.63948695e+01]
+$ fit_noF0_15.0
+$ [ 7.73997406 -1.23686894  1.2348801   0.04343167  0.35993693  1.69649885]
+$ [  1.39503095e-01   3.95623598e-02   3.68138481e-02   6.84296270e-01
+   4.14186343e+01   3.63948695e+01]
+#-File ./An_Project/hist_real_noG1_10.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG1_10.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG1_10.0 param plots
+#---Mean parameters: [ 9.1462933  -1.50233987  0.76824048  4.94038199  0.31679466  0.50014884] Parameter deviations: [ 0.16480972  0.03152313  0.03136415  0.35048045  0.0538911   0.06522989]
+#---Best parameters: [ 9.16916166 -1.48303034  0.77612665  5.06632957  0.35246532  0.43871531] 43.7747096696
+#---After: 4602  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 9.16916166 -1.48303034  0.77612665  5.06632957  0.35246532  0.43871531]
+#---Gradient Descent successful, exited after  40  iterations
+#---Final values: [ 9.12963324 -1.48296103  0.77626011  5.0618814   0.35246239  0.43877092] 43.8352058347
+#---GD Best fit: [ 9.12963324 -1.48296103  0.77626011  5.0618814   0.35246239  0.43877092]
+#---function and fit plot saved as fit_noG1_10.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  111.99661531   -31.41302451   500.81361016     9.08286681
+    -45.48486115    81.06099815]
+ [  -31.41302451  2974.07510863  -314.08418248   100.07961734
+   -362.99088576   681.50227582]
+ [  500.81361016  -314.08418248  4925.36801693   201.06248169
+   -473.05948599  1108.56244833]
+ [    9.08286681   100.07961734   201.06248169    42.28207101
+     48.90227153   163.53656936]
+ [  -45.48486115  -362.99088576  -473.05948599    48.90227153   936.8918869
+    344.51639831]
+ [   81.06099815   681.50227582  1108.56244833   163.53656936
+    344.51639831  1178.27261996]]
+#---Hessian Errors: [ 0.19230671  0.03801591  0.04187055  0.34289935  0.07125195  0.07970331]
+$ fit_noG1_10.0
+$ [ 9.12963324 -1.48296103  0.77626011  5.0618814   0.35246239  0.43877092]
+$ [ 0.19230671  0.03801591  0.04187055  0.34289935  0.07125195  0.07970331]
+#-File ./An_Project/hist_real_noF1_40.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF1_40.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF1_40.0 param plots
+#---Mean parameters: [ 2.348497   -1.59699331  1.5888181   3.16659734 -0.42306252  0.6241348 ] Parameter deviations: [ 0.15565952  0.1275205   0.10822142  0.19035335  0.06857551  0.05014161]
+#---Best parameters: [ 2.19724407 -2.02718923  1.62807997  3.39912639 -0.4172626   0.63825617] 6.12628232616
+#---After: 4377  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 2.19724407 -2.02718923  1.62807997  3.39912639 -0.4172626   0.63825617]
+#---Gradient Descent successful, exited after  32  iterations
+#---Final values: [ 2.19724407 -2.02718923  1.62807997  3.39912639 -0.4172626   0.63825617] 6.12628232616
+#---GD Best fit: [ 2.19724407 -2.02718923  1.62807997  3.39912639 -0.4172626   0.63825617]
+#---function and fit plot saved as fit_noF1_40.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  80.04707562   -3.37269579   23.18397117   29.69345272  -26.1808369
+   102.34758311]
+ [  -3.37269579   16.53173393    4.88615211   17.21265229    9.60533649
+    46.99324955]
+ [  23.18397117    4.88615211   23.74872645   18.43486146   27.9209992
+    61.91592255]
+ [  29.69345272   17.21265229   18.43486146   49.56715424    8.81277611
+    79.63291851]
+ [ -26.1808369     9.60533649   27.9209992     8.81277611  214.83786127
+    48.60979108]
+ [ 102.34758311   46.99324955   61.91592255   79.63291851   48.60979108
+   452.98965086]]
+#---Hessian Errors: [ 0.34228826  0.73568178  0.46745514  0.37298478  0.1263922   0.12837995]
+$ fit_noF1_40.0
+$ [ 2.19724407 -2.02718923  1.62807997  3.39912639 -0.4172626   0.63825617]
+$ [ 0.34228826  0.73568178  0.46745514  0.37298478  0.1263922   0.12837995]
+#-File ./An_Project/hist_real_noF0_30.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF0_30.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF0_30.0 param plots
+#---Mean parameters: [ 3.62541288 -1.92549938  1.72113277  4.46848338 -0.39156716  0.70137732] Parameter deviations: [ 0.18816603  0.1223289   0.09715111  0.23061921  0.04874194  0.05462374]
+#---Best parameters: [ 3.79517361 -1.73302551  1.66289751  4.36667949 -0.35663227  0.6527321 ] 12.2891215693
+#---After: 4459  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 3.79517361 -1.73302551  1.66289751  4.36667949 -0.35663227  0.6527321 ]
+#---Gradient Descent successful, exited after  37  iterations
+#---Final values: [ 3.77459927 -1.73201318  1.66569602  4.33140095 -0.35663809  0.65342868] 12.3153923393
+#---GD Best fit: [ 3.77459927 -1.73201318  1.66569602  4.33140095 -0.35663809  0.65342868]
+#---function and fit plot saved as fit_noF0_30.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 126.82603838   -9.48876147   76.5008984    42.89999455  -29.25020263
+   174.52214385]
+ [  -9.48876147   89.22062747   20.10047819   36.21279002   50.20556027
+   125.66291773]
+ [  76.5008984    20.10047819  133.9715369    35.84341519   90.75081447
+   173.73822119]
+ [  42.89999455   36.21279002   35.84341519   47.41140238   12.80679492
+    95.45826613]
+ [ -29.25020263   50.20556027   90.75081447   12.80679492  321.96386686
+   102.04657841]
+ [ 174.52214385  125.66291773  173.73822119   95.45826613  102.04657841
+   675.33981485]]
+#---Hessian Errors: [ 0.33553851  0.33281032  0.20165423  0.40740904  0.10897077  0.11211456]
+$ fit_noF0_30.0
+$ [ 3.77459927 -1.73201318  1.66569602  4.33140095 -0.35663809  0.65342868]
+$ [ 0.33553851  0.33281032  0.20165423  0.40740904  0.10897077  0.11211456]
+#-File ./An_Project/hist_real_noF1_10.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF1_10.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF1_10.0 param plots
+#---Mean parameters: [ 6.91332393 -1.49141974  0.49580099  6.85930279 -1.0870721   1.2376747 ] Parameter deviations: [ 0.36382064  0.03910213  0.0496481   0.35481466  0.04429264  0.05025023]
+#---Best parameters: [ 6.70293726 -1.50699505  0.47878401  7.085258   -1.10072014  1.20969515] 21.890576178
+#---After: 4564  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 6.70293726 -1.50699505  0.47878401  7.085258   -1.10072014  1.20969515]
+#---Gradient Descent successful, exited after  40  iterations
+#---Final values: [ 6.6669592  -1.5067684   0.47896612  7.04127951 -1.10073991  1.2104237 ] 22.0377466803
+#---GD Best fit: [ 6.6669592  -1.5067684   0.47896612  7.04127951 -1.10073991  1.2104237 ]
+#---function and fit plot saved as fit_noF1_10.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[   29.50049558    -9.78552789   124.82778727    42.63578511
+    -38.98226572    35.12248703]
+ [   -9.78552789   916.27928269  -158.63538127    15.82027762
+    387.75535157  -245.34320197]
+ [  124.82778727  -158.63538127  1701.91559872   350.3151025   -291.31348026
+    604.25256814]
+ [   42.63578511    15.82027762   350.3151025    130.98429938
+     35.81954832   341.27039171]
+ [  -38.98226572   387.75535157  -291.31348026    35.81954832
+   1005.84815435   113.2116597 ]
+ [   35.12248703  -245.34320197   604.25256814   341.27039171   113.2116597
+   2176.34684771]]
+#---Hessian Errors: [ 0.53851599  0.0564857   0.06844527  0.46118902  0.06219755  0.0609932 ]
+$ fit_noF1_10.0
+$ [ 6.6669592  -1.5067684   0.47896612  7.04127951 -1.10073991  1.2104237 ]
+$ [ 0.53851599  0.0564857   0.06844527  0.46118902  0.06219755  0.0609932 ]
+#-File ./An_Project/hist_real_noG1_7.7.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit__noG1_7.7_MCMChist_.ps
+#---Succesfully Plotted  fit__noG1_7.7 param plots
+#---Mean parameters: [ 9.84923749 -1.54205521  0.46051597  6.57953064 -0.42532326  1.19084487] Parameter deviations: [ 0.40369481  0.0263087   0.052236    0.34338957  0.20432698  0.11050491]
+#---Best parameters: [ 9.61531181 -1.54293066  0.4219977   6.87381754 -0.6051323   1.2439266 ] 51.9955704114
+#---After: 4781  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 9.61531181 -1.54293066  0.4219977   6.87381754 -0.6051323   1.2439266 ]
+#---Gradient Descent successful, exited after  40  iterations
+#---Final values: [ 9.55443875 -1.54264195  0.42209534  6.85778518 -0.60514348  1.24440675] 52.0736854177
+#---GD Best fit: [ 9.55443875 -1.54264195  0.42209534  6.85778518 -0.60514348  1.24440675]
+#---function and fit plot saved as fit__noG1_7.7_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[   42.40305499   -35.33922467   330.56199067    35.41866408
+    -67.92445012    62.52665648]
+ [  -35.33922467  3816.11516212  -890.059666      67.81307051
+    378.86168505  -612.64149962]
+ [  330.56199067  -890.059666    6969.83117806   555.97633481
+   -964.69337107  1210.3731645 ]
+ [   35.41866408    67.81307051   555.97633481   128.65105291
+     70.96271493   280.43738524]
+ [  -67.92445012   378.86168505  -964.69337107    70.96271493   777.6596699
+     82.64054768]
+ [   62.52665648  -612.64149962  1210.3731645    280.43738524
+     82.64054768  1706.34282058]]
+#---Hessian Errors: [ 0.3058243   0.02617721  0.0301381   0.26637585  0.07921129  0.04737679]
+$ fit__noG1_7.7
+$ [ 9.55443875 -1.54264195  0.42209534  6.85778518 -0.60514348  1.24440675]
+$ [ 0.3058243   0.02617721  0.0301381   0.26637585  0.07921129  0.04737679]
+#-File ./An_Project/hist_real_noG0_30.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG0_30.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG0_30.0 param plots
+#---Mean parameters: [ 4.00498933 -1.57980393  1.60609341  3.65649083  0.01410859  0.45532122] Parameter deviations: [ 0.15052856  0.08897566  0.11222525  0.26850299  0.0745296   0.05369894]
+#---Best parameters: [ 3.95553954 -1.60697229  1.61393315  3.7461356  -0.01281776  0.47540686] 14.1640876315
+#---After: 4562  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 3.95553954 -1.60697229  1.61393315  3.7461356  -0.01281776  0.47540686]
+#---Gradient Descent successful, exited after  30  iterations
+#---Final values: [ 3.95553954 -1.60697229  1.61393315  3.7461356  -0.01281776  0.47540686] 14.1640876315
+#---GD Best fit: [ 3.95553954 -1.60697229  1.61393315  3.7461356  -0.01281776  0.47540686]
+#---function and fit plot saved as fit_noG0_30.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 144.51381338   -5.17389598   99.47792859   28.87775013  -17.95644883
+   136.5937637 ]
+ [  -5.17389598  123.01406147   34.80278719   33.30898032   27.5713836
+   151.6301339 ]
+ [  99.47792859   34.80278719  183.97862981   34.96213096   71.89832783
+   184.22555437]
+ [  28.87775013   33.30898032   34.96213096   30.56025716    5.52649153
+    72.4602302 ]
+ [ -17.95644883   27.5713836    71.89832783    5.52649153  274.40580709
+   213.5376335 ]
+ [ 136.5937637   151.6301339   184.22555437   72.4602302   213.5376335
+   574.23306666]]
+#---Hessian Errors: [ 0.2454449   0.23252255  0.15932316  0.36535476  0.14870317  0.14252346]
+$ fit_noG0_30.0
+$ [ 3.95553954 -1.60697229  1.61393315  3.7461356  -0.01281776  0.47540686]
+$ [ 0.2454449   0.23252255  0.15932316  0.36535476  0.14870317  0.14252346]
+#-File ./An_Project/hist_real_noG0_80.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG0_80.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG0_80.0 param plots
+#---Mean parameters: [ 1.51767815 -1.40627251  1.93875187  1.55640518  0.21571896  0.65834467] Parameter deviations: [ 0.12998933  0.20595189  0.12081446  0.23547824  0.10314924  0.18130316]
+#---Best parameters: [ 1.61585985 -1.1377773   1.89817785  1.59942694  0.28436105  0.43177079] 2.98289886524
+#---After: 4284  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 1.61585985 -1.1377773   1.89817785  1.59942694  0.28436105  0.43177079]
+#---Gradient Descent successful, exited after  25  iterations
+#---Final values: [ 1.61585985 -1.1377773   1.89817785  1.59942694  0.28436105  0.43177079] 2.98289886524
+#---GD Best fit: [ 1.61585985 -1.1377773   1.89817785  1.59942694  0.28436105  0.43177079]
+#---function and fit plot saved as fit_noG0_80.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 82.70239922  -3.24292537  16.17460444  16.60571116  -4.34802728
+   34.54838025]
+ [ -3.24292537   6.97238983   0.56000749   5.06812327   1.95833891
+    9.97342522]
+ [ 16.17460444   0.56000749   8.08135722   4.03760651   3.73582804
+    9.01099031]
+ [ 16.60571116   5.06812327   4.03760651  14.64661145  -1.99983098
+   15.95521189]
+ [ -4.34802728   1.95833891   3.73582804  -1.99983098  30.80317744
+   13.8896315 ]
+ [ 34.54838025   9.97342522   9.01099031  15.95521189  13.8896315
+   32.40359259]]
+!!!Hessian error 0 below zero!!!
+!!!Hessian error 1 below zero!!!
+!!!Hessian error 5 below zero!!!
+#---Hessian Errors: [ 0.16744023  0.3465846   0.66792931  0.56002497  0.0974479   0.54121371]
+$ fit_noG0_80.0
+$ [ 1.61585985 -1.1377773   1.89817785  1.59942694  0.28436105  0.43177079]
+$ [ 0.16744023  0.3465846   0.66792931  0.56002497  0.0974479   0.54121371]
+#-File ./An_Project/hist_real_noG0_15.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG0_15.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG0_15.0 param plots
+#---Mean parameters: [ 7.35542045 -1.33452545  1.24984286  4.3711745   0.47112817  0.1442115 ] Parameter deviations: [ 0.15521807  0.03683381  0.03274231  0.53265525  0.04510068  0.03241521]
+#---Best parameters: [ 7.3702102  -1.33694184  1.23912015  4.62335405  0.48754003  0.13851475] 20.309701725
+#---After: 4497  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 7.3702102  -1.33694184  1.23912015  4.62335405  0.48754003  0.13851475]
+#---Gradient Descent successful, exited after  36  iterations
+#---Final values: [ 7.3702102  -1.33694184  1.23912015  4.62335405  0.48754003  0.13851475] 20.309701725
+#---GD Best fit: [ 7.3702102  -1.33694184  1.23912015  4.62335405  0.48754003  0.13851475]
+#---function and fit plot saved as fit_noG0_15.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  168.72232098    -9.11986431   370.3610564      6.99608155
+     -6.09270703   144.54360057]
+ [   -9.11986431  1106.62935809   112.16703122    30.51359753
+     21.37396615   632.92927788]
+ [  370.3610564    112.16703122  2021.89903997    45.07140291
+    102.22337968   950.35065033]
+ [    6.99608155    30.51359753    45.07140291     8.71692981
+      8.15165101    85.78749749]
+ [   -6.09270703    21.37396615   102.22337968     8.15165101
+   1375.96036018  1107.15054631]
+ [  144.54360057   632.92927788   950.35065033    85.78749749
+   1107.15054631  3137.00154576]]
+#---Hessian Errors: [ 0.14171917  0.04700272  0.0438353   0.59469948  0.04827293  0.03953369]
+$ fit_noG0_15.0
+$ [ 7.3702102  -1.33694184  1.23912015  4.62335405  0.48754003  0.13851475]
+$ [ 0.14171917  0.04700272  0.0438353   0.59469948  0.04827293  0.03953369]
+#-File ./An_Project/hist_real_noG1_15.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG1_15.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG1_15.0 param plots
+#---Mean parameters: [ 6.84695457 -1.36584188  1.20268897 -0.039166    0.95028465  1.62817295] Parameter deviations: [ 0.12566248  0.03360065  0.02735834  0.63175974  0.14284721  0.19835566]
+#---Best parameters: [ 6.84736079 -1.35678558  1.21243423 -0.03122985  1.09595775  1.09834147] 32.6876102066
+#---After: 4623  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 6.84736079 -1.35678558  1.21243423 -0.03122985  1.09595775  1.09834147]
+#---Gradient Descent successful, exited after  36  iterations
+#---Final values: [ 6.83987078 -1.35678322  1.21252132 -0.0312301   1.09590448  1.09841448] 32.6906548789
+#---GD Best fit: [ 6.83987078 -1.35678322  1.21252132 -0.0312301   1.09590448  1.09841448]
+#---function and fit plot saved as fit_noG1_15.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  1.64580569e+02   5.15298726e+00   3.55243983e+02  -4.15670801e-01
+   -3.31554464e-03   5.20762597e-03]
+ [  5.15298726e+00   1.00424745e+03   1.83841287e+02  -1.77562911e+00
+   -5.61037261e-03   9.03192543e-03]
+ [  3.55243983e+02   1.83841287e+02   1.95980465e+03  -3.23422657e+00
+   -3.16672200e-03   1.24305508e-02]
+ [ -4.15670801e-01  -1.77562911e+00  -3.23422657e+00   1.80544880e+00
+   -2.13591825e-02   2.19870930e-02]
+ [ -3.31554464e-03  -5.61037261e-03  -3.16672200e-03  -2.13591825e-02
+   -1.03769615e-03  -7.31196437e-04]
+ [  5.20762597e-03   9.03192543e-03   1.24305508e-02   2.19870930e-02
+   -7.31196437e-04   7.31040117e-04]]
+!!!Hessian error 4 below zero!!!
+#---Hessian Errors: [  1.41870034e-01   4.52566244e-02   4.15276266e-02   1.32757354e+00
+   3.36195977e+01   5.62661874e+01]
+$ fit_noG1_15.0
+$ [ 6.83987078 -1.35678322  1.21252132 -0.0312301   1.09590448  1.09841448]
+$ [  1.41870034e-01   4.52566244e-02   4.15276266e-02   1.32757354e+00
+   3.36195977e+01   5.62661874e+01]
+#-File ./An_Project/hist_real_noF1_60.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF1_60.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF1_60.0 param plots
+#---Mean parameters: [ 1.63311834 -1.5691933   1.51685476  2.39461163 -0.28634594  0.60557043] Parameter deviations: [ 0.13184508  0.1416439   0.09139477  0.17614118  0.05985139  0.05140359]
+#---Best parameters: [ 1.55812035 -1.88030229  1.48264887  2.54950086 -0.293299    0.61824906] 3.93787231887
+#---After: 4396  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 1.55812035 -1.88030229  1.48264887  2.54950086 -0.293299    0.61824906]
+#---Gradient Descent successful, exited after  36  iterations
+#---Final values: [ 1.5520935  -1.87858818  1.48421479  2.51738482 -0.29330376  0.61873046] 3.94548446528
+#---GD Best fit: [ 1.5520935  -1.87858818  1.48421479  2.51738482 -0.29330376  0.61873046]
+#---function and fit plot saved as fit_noF1_60.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  54.69690526   -2.60513575   12.34859702   21.20099387  -17.02600243
+    54.39702583]
+ [  -2.60513575    6.86358395    0.92127202   10.01588912    2.34835472
+    18.85179022]
+ [  12.34859702    0.92127202   10.36048789   11.17916319   10.367086
+    24.73427314]
+ [  21.20099387   10.01588912   11.17916319   40.1994564     4.65785901
+    46.70329782]
+ [ -17.02600243    2.34835472   10.367086      4.65785901   97.75565963
+    25.11485503]
+ [  54.39702583   18.85179022   24.73427314   46.70329782   25.11485503
+   218.78770079]]
+#---Hessian Errors: [ 0.41023465  1.19547943  0.68081429  0.46241945  0.18642996  0.17682479]
+$ fit_noF1_60.0
+$ [ 1.5520935  -1.87858818  1.48421479  2.51738482 -0.29330376  0.61873046]
+$ [ 0.41023465  1.19547943  0.68081429  0.46241945  0.18642996  0.17682479]
+#-File ./An_Project/hist_real_noF0_10.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF0_10.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF0_10.0 param plots
+#---Mean parameters: [ 9.6740942  -1.39203017  0.85312931  4.2241579   0.4765435   0.69252141] Parameter deviations: [ 0.19717818  0.03939698  0.03788396  0.46052076  0.1552094   0.16291705]
+#---Best parameters: [ 9.7833389  -1.39975478  0.83108117  4.38955007  0.47317562  0.66950133] 57.9187251848
+#---After: 4610  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 9.7833389  -1.39975478  0.83108117  4.38955007  0.47317562  0.66950133]
+#---Gradient Descent successful, exited after  42  iterations
+#---Final values: [ 9.68055019 -1.39961903  0.83151646  4.38679198  0.47315413  0.66983249] 58.3173437212
+#---GD Best fit: [ 9.68055019 -1.39961903  0.83151646  4.38679198  0.47315413  0.66983249]
+#---function and fit plot saved as fit_noF0_10.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  118.59064246   -48.55843907   528.5047307     16.00917254
+    -43.81662881    69.45269902]
+ [  -48.55843907  3146.71671256  -404.49238841   147.13998793
+   -248.77564496   391.94501164]
+ [  528.5047307   -404.49238841  5338.89287743   270.19392368
+   -244.56825972   552.93642636]
+ [   16.00917254   147.13998793   270.19392368    52.06016883
+     52.74244603   103.35239759]
+ [  -43.81662881  -248.77564496  -244.56825972    52.74244603
+    343.60032803   151.50750661]
+ [   69.45269902   391.94501164   552.93642636   103.35239759
+    151.50750661   345.93887607]]
+#---Hessian Errors: [ 0.19621053  0.05758066  0.04885576  0.4836789   0.19477506  0.17363921]
+$ fit_noF0_10.0
+$ [ 9.68055019 -1.39961903  0.83151646  4.38679198  0.47315413  0.66983249]
+$ [ 0.19621053  0.05758066  0.04885576  0.4836789   0.19477506  0.17363921]
+#-File ./An_Project/hist_real_noG0_60.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG0_60.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG0_60.0 param plots
+#---Mean parameters: [ 1.82667323 -1.67322643  2.29366402  2.18976419 -0.05576875  0.74484088] Parameter deviations: [ 0.14939269  0.16658545  0.29005476  0.22060629  0.11265488  0.08861206]
+#---Best parameters: [ 1.80053657 -1.91143737  2.30545338  2.27099882 -0.041046    0.75829686] 6.04370838284
+#---After: 4389  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 1.80053657 -1.91143737  2.30545338  2.27099882 -0.041046    0.75829686]
+#---Gradient Descent successful, exited after  34  iterations
+#---Final values: [ 1.79535107 -1.9087076   2.30660115  2.25470438 -0.04104668  0.75953481] 6.04356694244
+#---GD Best fit: [ 1.79535107 -1.9087076   2.30660115  2.25470438 -0.04104668  0.75953481]
+#---function and fit plot saved as fit_noG0_60.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 91.69854118   1.59007971  12.9800457   33.49844115 -10.34181755
+   57.28281913]
+ [  1.59007971   5.10663962   2.6850445    9.66303322   4.08196667
+   13.9336757 ]
+ [ 12.9800457    2.6850445    5.09872055   8.72977677   7.89336534
+   15.46340118]
+ [ 33.49844115   9.66303322   8.72977677  39.8430392    2.28074417
+   35.29171094]
+ [-10.34181755   4.08196667   7.89336534   2.28074417  53.14535706
+   20.48738396]
+ [ 57.28281913  13.9336757   15.46340118  35.29171094  20.48738396
+   91.05488345]]
+#---Hessian Errors: [ 0.60976705  2.3061719   1.60968633  0.55443707  0.39251111  0.47908912]
+$ fit_noG0_60.0
+$ [ 1.79535107 -1.9087076   2.30660115  2.25470438 -0.04104668  0.75953481]
+$ [ 0.60976705  2.3061719   1.60968633  0.55443707  0.39251111  0.47908912]
+#-File ./An_Project/hist_real_noG0_20.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG0_20.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG0_20.0 param plots
+#---Mean parameters: [ 6.10058261 -1.32897773  1.34507837  3.58652379  0.37191521  0.21328781] Parameter deviations: [ 0.13155165  0.04168658  0.04157759  0.32179979  0.07985334  0.05387109]
+#---Best parameters: [ 6.15256587 -1.29268818  1.3386161   3.82880605  0.47725384  0.1432739 ] 23.5114910935
+#---After: 4585  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 6.15256587 -1.29268818  1.3386161   3.82880605  0.47725384  0.1432739 ]
+#---Gradient Descent successful, exited after  38  iterations
+#---Final values: [ 6.11855362 -1.29266212  1.33941935  3.8234611   0.47722202  0.14329302] 23.5736764886
+#---GD Best fit: [ 6.11855362 -1.29266212  1.33941935  3.8234611   0.47722202  0.14329302]
+#---function and fit plot saved as fit_noG0_20.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  168.35668342     2.93435784   271.71167262     7.41510327
+     -3.13457787   121.64061377]
+ [    2.93435784   628.43461959   201.72761929    22.32194414
+     20.26262019   371.38543149]
+ [  271.71167262   201.72761929  1174.28262045    29.65828275
+     66.50627904   507.35915425]
+ [    7.41510327    22.32194414    29.65828275     7.29749551     4.5201289
+     63.26923171]
+ [   -3.13457787    20.26262019    66.50627904     4.5201289    872.77703851
+   1078.38844874]
+ [  121.64061377   371.38543149   507.35915425    63.26923171
+   1078.38844874  2078.48349279]]
+#---Hessian Errors: [ 0.14457001  0.06845604  0.05588632  0.85863515  0.12832717  0.09986891]
+$ fit_noG0_20.0
+$ [ 6.11855362 -1.29266212  1.33941935  3.8234611   0.47722202  0.14329302]
+$ [ 0.14457001  0.06845604  0.05588632  0.85863515  0.12832717  0.09986891]
+#-File ./An_Project/hist_real_noF1_25.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF1_25.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF1_25.0 param plots
+#---Mean parameters: [ 4.93234403 -1.19127066  1.20686514 -0.00525545  0.32372883  1.60474133] Parameter deviations: [ 0.12182989  0.04339646  0.03429891  0.38931549  0.10542168  0.23387411]
+#---Best parameters: [ 4.9604594  -1.16891906  1.19703933 -0.00946613  0.47453232  1.19879071] 36.6941813439
+#---After: 4642  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 4.9604594  -1.16891906  1.19703933 -0.00946613  0.47453232  1.19879071]
+#---Gradient Descent successful, exited after  31  iterations
+#---Final values: [ 4.9604594  -1.16891906  1.19703933 -0.00946613  0.47453232  1.19879071] 36.6941813439
+#---GD Best fit: [ 4.9604594  -1.16891906  1.19703933 -0.00946613  0.47453232  1.19879071]
+#---function and fit plot saved as fit_noF1_25.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  1.42865016e+02  -3.67714364e+00   2.15248835e+02  -2.16509811e-01
+   -2.87733037e-04   6.82070223e-04]
+ [ -3.67714364e+00   4.46684987e+02   2.38048740e+02  -4.64679295e-01
+    5.96793726e-04   1.80111925e-04]
+ [  2.15248835e+02   2.38048740e+02   9.12763728e+02  -7.89348616e-01
+    9.99724747e-04   1.45574575e-03]
+ [ -2.16509811e-01  -4.64679295e-01  -7.89348616e-01   4.12700949e+00
+   -4.70228391e-02  -2.36221092e-02]
+ [ -2.87733037e-04   5.96793726e-04   9.99724747e-04  -4.70228391e-02
+   -3.53495011e-05  -4.02774702e-04]
+ [  6.82070223e-04   1.80111925e-04   1.45574575e-03  -2.36221092e-02
+   -4.02774702e-04  -9.67137481e-05]]
+#---Hessian Errors: [  0.15541696   0.07605625   0.06625675   0.49119827  38.13093593
+  59.84066494]
+$ fit_noF1_25.0
+$ [ 4.9604594  -1.16891906  1.19703933 -0.00946613  0.47453232  1.19879071]
+$ [  0.15541696   0.07605625   0.06625675   0.49119827  38.13093593
+  59.84066494]
+#-File ./An_Project/hist_real_noG1_40.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG1_40.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG1_40.0 param plots
+#---Mean parameters: [ 2.27367019 -1.98134612  1.53704501  2.60397993 -0.09269328  0.55702674] Parameter deviations: [ 0.12268008  0.15894044  0.12859514  0.19829621  0.06235333  0.05223949]
+#---Best parameters: [ 2.29894936 -1.97309657  1.51770226  2.65190559 -0.0619125   0.53394415] 4.29074986742
+#---After: 4292  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 2.29894936 -1.97309657  1.51770226  2.65190559 -0.0619125   0.53394415]
+#---Gradient Descent successful, exited after  36  iterations
+#---Final values: [ 2.28025252 -1.97209249  1.51980457  2.62224074 -0.06191268  0.53440866] 4.29405655257
+#---GD Best fit: [ 2.28025252 -1.97209249  1.51980457  2.62224074 -0.06191268  0.53440866]
+#---function and fit plot saved as fit_noG1_40.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  90.63839988   -2.38241014   29.65909548   19.76172184  -16.39439213
+    59.85746306]
+ [  -2.38241014   22.88800865    7.91755689   16.87003314    0.33176645
+    43.96084845]
+ [  29.65909548    7.91755689   34.72833949   21.25079959   15.8749217
+    58.09910827]
+ [  19.76172184   16.87003314   21.25079959   32.94045587    6.86791151
+    49.03761535]
+ [ -16.39439213    0.33176645   15.8749217     6.86791151  123.32549242
+    68.69487321]
+ [  59.85746306   43.96084845   58.09910827   49.03761535   68.69487321
+   239.58154857]]
+#---Hessian Errors: [ 0.25490691  0.61738614  0.38453186  0.42610865  0.1887315   0.20368297]
+$ fit_noG1_40.0
+$ [ 2.28025252 -1.97209249  1.51980457  2.62224074 -0.06191268  0.53440866]
+$ [ 0.25490691  0.61738614  0.38453186  0.42610865  0.1887315   0.20368297]
+#-File ./An_Project/hist_real_noF0_20.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF0_20.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF0_20.0 param plots
+#---Mean parameters: [ 6.45706969 -1.2498255   1.27901409 -4.01821682  0.48374681  0.12491765] Parameter deviations: [ 0.14971555  0.05658869  0.04621272  0.61728306  0.0591637   0.04743166]
+#---Best parameters: [ 6.45802207 -1.24633789  1.26897043 -3.94774486  0.48104089  0.13731685] 33.2627914948
+#---After: 4659  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 6.45802207 -1.24633789  1.26897043 -3.94774486  0.48104089  0.13731685]
+#---Gradient Descent successful, exited after  36  iterations
+#---Final values: [ 6.45802207 -1.24633789  1.26897043 -3.94774486  0.48104089  0.13731685] 33.2627914948
+#---GD Best fit: [ 6.45802207 -1.24633789  1.26897043 -3.94774486  0.48104089  0.13731685]
+#---function and fit plot saved as fit_noF0_20.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  164.18381496   -10.26305728   305.59836679    -7.08801803
+     -3.92497385   121.91748656]
+ [  -10.26305728   784.98471653   275.73179507   -24.4763584     19.97525193
+    425.13392592]
+ [  305.59836679   275.73179507  1499.21751109   -33.46866923
+     73.19567565   594.93995027]
+ [   -7.08801803   -24.4763584    -33.46866923     7.44551309
+     -4.22235741   -62.23272981]
+ [   -3.92497385    19.97525193    73.19567565    -4.22235741
+    853.38150141  1038.37630593]
+ [  121.91748656   425.13392592   594.93995027   -62.23272981
+   1038.37630593  2063.57431625]]
+#---Hessian Errors: [ 0.14973664  0.06229904  0.05048283  0.78178213  0.1159777   0.08951283]
+$ fit_noF0_20.0
+$ [ 6.45802207 -1.24633789  1.26897043 -3.94774486  0.48104089  0.13731685]
+$ [ 0.14973664  0.06229904  0.05048283  0.78178213  0.1159777   0.08951283]
+#-File ./An_Project/hist_real_noF0_60.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF0_60.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF0_60.0 param plots
+#---Mean parameters: [ 1.96896654 -2.32082315  1.73399306  3.180081   -0.23539611  0.76299261] Parameter deviations: [ 0.16220157  0.19625293  0.18861435  0.16422973  0.06189492  0.05851667]
+#---Best parameters: [ 1.98240504 -2.16277661  1.8369185   3.08260298 -0.21882774  0.76244596] 6.5591793583
+#---After: 4512  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 1.98240504 -2.16277661  1.8369185   3.08260298 -0.21882774  0.76244596]
+#---Gradient Descent successful, exited after  31  iterations
+#---Final values: [ 1.98240504 -2.16277661  1.8369185   3.08260298 -0.21882774  0.76244596] 6.5591793583
+#---GD Best fit: [ 1.98240504 -2.16277661  1.8369185   3.08260298 -0.21882774  0.76244596]
+#---function and fit plot saved as fit_noF0_60.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  80.00104834   -1.81544353   15.82694642   31.46412149  -24.24226287
+    82.0107568 ]
+ [  -1.81544353    8.65480904    4.14342868   15.28143107    4.52470286
+    30.02469507]
+ [  15.82694642    4.14342868   10.09321376   17.10085603   17.2506266
+    39.32413162]
+ [  31.46412149   15.28143107   17.10085603   55.91030208    8.39103751
+    75.13954441]
+ [ -24.24226287    4.52470286   17.2506266     8.39103751  155.61987918
+    46.33125537]
+ [  82.0107568    30.02469507   39.32413162   75.13954441   46.33125537
+   271.13699615]]
+#---Hessian Errors: [ 0.75589439  2.45323877  1.05829108  0.696645    0.2488591   0.36095717]
+$ fit_noF0_60.0
+$ [ 1.98240504 -2.16277661  1.8369185   3.08260298 -0.21882774  0.76244596]
+$ [ 0.75589439  2.45323877  1.05829108  0.696645    0.2488591   0.36095717]
+#-File ./An_Project/hist_real_noG1_30.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG1_30.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG1_30.0 param plots
+#---Mean parameters: [ 3.19333229 -1.9289365   1.33935281  3.11952528 -0.25208887  0.66893248] Parameter deviations: [ 0.15268684  0.07774407  0.08920239  0.20281448  0.07485572  0.06930328]
+#---Best parameters: [ 3.29701305 -1.85982963  1.35080598  3.05297287 -0.16264625  0.5970915 ] 8.91066337742
+#---After: 4432  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 3.29701305 -1.85982963  1.35080598  3.05297287 -0.16264625  0.5970915 ]
+#---Gradient Descent successful, exited after  34  iterations
+#---Final values: [ 3.27913764 -1.85934196  1.35178899  3.03905785 -0.16264685  0.5973635 ] 8.92211821583
+#---GD Best fit: [ 3.27913764 -1.85934196  1.35178899  3.03905785 -0.16264685  0.5973635 ]
+#---function and fit plot saved as fit_noG1_30.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 108.88109153  -12.9024962    71.08364707   26.18157754  -23.53189694
+    77.81858713]
+ [ -12.9024962    87.24654859   11.71619198   34.89927499    5.88553979
+    84.08280524]
+ [  71.08364707   11.71619198  133.94323615   44.82620619   44.54386964
+   122.25422886]
+ [  26.18157754   34.89927499   44.82620619   36.27001175   11.40656977
+    57.93982373]
+ [ -23.53189694    5.88553979   44.54386964   11.40656977  152.63093722
+   115.73524544]
+ [  77.81858713   84.08280524  122.25422886   57.93982373  115.73524544
+   314.10560452]]
+#---Hessian Errors: [ 0.50510307  0.65338093  0.23902146  0.76951998  0.3498189   0.34570376]
+$ fit_noG1_30.0
+$ [ 3.27913764 -1.85934196  1.35178899  3.03905785 -0.16264685  0.5973635 ]
+$ [ 0.50510307  0.65338093  0.23902146  0.76951998  0.3498189   0.34570376]
+#-File ./An_Project/hist_real_noG0_40.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG0_40.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG0_40.0 param plots
+#---Mean parameters: [ 3.02559262 -1.61155307  1.6838846   3.14338242  0.00969107  0.53906098] Parameter deviations: [ 0.18816354  0.2503222   0.09410849  0.20992596  0.10034201  0.13483473]
+#---Best parameters: [ 3.22840341 -1.35923556  1.61560458  3.161411    0.1254878   0.39429105] 9.98225016862
+#---After: 4452  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 3.22840341 -1.35923556  1.61560458  3.161411    0.1254878   0.39429105]
+#---Gradient Descent successful, exited after  39  iterations
+#---Final values: [ 3.19035729 -1.35847673  1.6204817   3.12631522  0.12548745  0.39490266] 10.0072030441
+#---GD Best fit: [ 3.19035729 -1.35847673  1.6204817   3.12631522  0.12548745  0.39490266]
+#---function and fit plot saved as fit_noG0_40.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 129.10657969   -5.02394284   70.16631598   22.49204747  -10.51005076
+   107.57496945]
+ [  -5.02394284   71.39203164   14.74658776   19.63863877   16.33178504
+    91.78589343]
+ [  70.16631598   14.74658776  105.79329756   18.98965106   37.32367027
+   100.2874824 ]
+ [  22.49204747   19.63863877   18.98965106   22.45961574    4.66367454
+    51.07688106]
+ [ -10.51005076   16.33178504   37.32367027    4.66367454  207.2748853
+   149.37068628]
+ [ 107.57496945   91.78589343  100.2874824    51.07688106  149.37068628
+   446.95474983]]
+#---Hessian Errors: [ 0.21408618  0.24954395  0.19044175  0.40026665  0.13613662  0.12231575]
+$ fit_noG0_40.0
+$ [ 3.19035729 -1.35847673  1.6204817   3.12631522  0.12548745  0.39490266]
+$ [ 0.21408618  0.24954395  0.19044175  0.40026665  0.13613662  0.12231575]
+#-File ./An_Project/hist_real_noG0_10.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noG0_10.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noG0_10.0 param plots
+#---Mean parameters: [ 9.53494922 -1.46993202  0.80880719  4.75061729  0.41922898  0.64633027] Parameter deviations: [ 0.19188326  0.0349509   0.03704793  0.39313181  0.09254676  0.08283713]
+#---Best parameters: [ 9.5334355  -1.4904053   0.79347354  5.01774928  0.35763952  0.62758919] 54.6024123741
+#---After: 4623  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 9.5334355  -1.4904053   0.79347354  5.01774928  0.35763952  0.62758919]
+#---Gradient Descent successful, exited after  36  iterations
+#---Final values: [ 9.5334355  -1.4904053   0.79347354  5.01774928  0.35763952  0.62758919] 54.6024123741
+#---GD Best fit: [ 9.5334355  -1.4904053   0.79347354  5.01774928  0.35763952  0.62758919]
+#---function and fit plot saved as fit_noG0_10.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  114.3534467    -55.7987917    526.2979674     14.73871934   -54.7134422
+     87.06991481]
+ [  -55.7987917   3173.37540852  -488.68205371   141.18710663
+   -351.81559777   532.60741996]
+ [  526.2979674   -488.68205371  5209.10133654   259.22524375
+   -398.13756868   735.28821921]
+ [   14.73871934   141.18710663   259.22524375    57.28987073
+     62.73337358   150.29756948]
+ [  -54.7134422   -351.81559777  -398.13756868    62.73337358
+    595.30972501   241.80253995]
+ [   87.06991481   532.60741996   735.28821921   150.29756948
+    241.80253995   624.27962647]]
+#---Hessian Errors: [ 0.19998343  0.04917395  0.04487561  0.39157403  0.12334948  0.1307459 ]
+$ fit_noG0_10.0
+$ [ 9.5334355  -1.4904053   0.79347354  5.01774928  0.35763952  0.62758919]
+$ [ 0.19998343  0.04917395  0.04487561  0.39157403  0.12334948  0.1307459 ]
+#-File ./An_Project/hist_real_noF0_40.0.txt successfully read into data
+#---Making subplot: 6 2 1
+#---Making subplot: 6 2 2
+#---Making subplot: 6 2 3
+#---Making subplot: 6 2 4
+#---Making subplot: 6 2 5
+#---Making subplot: 6 2 6
+#---MCMC hist plot saved as fit_noF0_40.0_MCMChist_.ps
+#---Succesfully Plotted  fit_noF0_40.0 param plots
+#---Mean parameters: [ 2.97847157 -1.90325938  1.69035287  3.99888222 -0.24477429  0.65935225] Parameter deviations: [ 0.17514826  0.14127126  0.17200805  0.20170127  0.06285861  0.05668094]
+#---Best parameters: [ 3.02917394 -1.8212934   1.68500482  3.97071076 -0.24749498  0.64973123] 7.67381645071
+#---After: 4431  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 3.02917394 -1.8212934   1.68500482  3.97071076 -0.24749498  0.64973123]
+#---Gradient Descent successful, exited after  36  iterations
+#---Final values: [ 3.01667009 -1.82000494  1.68750049  3.93622153 -0.24749689  0.65035279] 7.69478159466
+#---GD Best fit: [ 3.01667009 -1.82000494  1.68750049  3.93622153 -0.24749689  0.65035279]
+#---function and fit plot saved as fit_noF0_40.0_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[ 112.01454299   -9.34765833   47.35774159   36.82232522  -29.37017539
+   141.08599195]
+ [  -9.34765833   42.65504061   11.3209937    27.32679911   24.1377845
+    87.53227232]
+ [  47.35774159   11.3209937    60.21100935   28.53864173   56.2273807
+   116.65524256]
+ [  36.82232522   27.32679911   28.53864173   49.40415776   11.08314051
+    94.34336973]
+ [ -29.37017539   24.1377845    56.2273807    11.08314051  294.70989071
+   107.90606777]
+ [ 141.08599195   87.53227232  116.65524256   94.34336973  107.90606777
+   584.81866042]]
+#---Hessian Errors: [ 0.39860832  0.60296796  0.30730977  0.43971189  0.12019547  0.14449751]
+$ fit_noF0_40.0
+$ [ 3.01667009 -1.82000494  1.68750049  3.93622153 -0.24749689  0.65035279]
+$ [ 0.39860832  0.60296796  0.30730977  0.43971189  0.12019547  0.14449751]
+#---All tasks complete

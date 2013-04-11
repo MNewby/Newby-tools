@@ -1,0 +1,46 @@
+#-File ori_color.txt successfully read into data
+#---Making subplot: 3 2 1
+#---Making subplot: 3 2 2
+#---Making subplot: 3 2 3
+#---MCMC hist plot saved as text_MCMChist_.ps
+#---Succesfully Plotted  text param plots
+#---Mean parameters: [ 11.08162428   0.24917617  -0.01885587] Parameter deviations: [ 0.13697877  0.00661297  0.01923264]
+#---Best parameters: [ 11.47644562   0.25027487  -0.02756138] 22.6048127021
+#---After: 1800  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 11.47644562   0.25027487  -0.02756138]
+#---Gradient Descent successful, exited after  44  iterations
+#---Final values: [ 11.47644562   0.25027487  -0.02756138] 22.6048127021
+#---GD Best fit: [ 11.47644562   0.25027487  -0.02756138]
+#---function and fit plot saved as text_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  3.85031083e+01   4.49029373e+02  -8.63404188e+03]
+ [  4.49029373e+02   1.95355487e+06  -2.67264190e+05]
+ [ -8.63404188e+03  -2.67264190e+05   4.87059265e+06]]
+#---Hessian Errors: [ 0.29362701  0.00101564  0.00082757]
+#---All tasks complete
+
+#-File new_color.txt successfully read into data
+#---Making subplot: 3 2 1
+#---Making subplot: 3 2 2
+#---Making subplot: 3 2 3
+#---MCMC hist plot saved as text_MCMChist_.ps
+#---Succesfully Plotted  text param plots
+#---Mean parameters: [ 10.53620557   0.25860663   0.01758877] Parameter deviations: [ 0.17215215  0.00770986  0.02697558]
+#---Best parameters: [ 11.05649343   0.25866625   0.03084969] 20.4357421011
+#---After: 2010  moves out of  10000 iterations
+#---Starting Gradient Descent from parameters: [ 11.05649343   0.25866625   0.03084969]
+#---Gradient Descent successful, exited after  42  iterations
+#---Final values: [ 11.05649343   0.25866625   0.03084969] 20.4357421011
+#---GD Best fit: [ 11.05649343   0.25866625   0.03084969]
+#---function and fit plot saved as text_pltfunc.ps
+#---Done with function and data plot
+#---Plotting successful
+#--Hessian Matrix:
+[[  4.65262209e+01   2.74439520e+02   6.75877973e+03]
+ [  2.74439520e+02   1.25839645e+06  -4.21828000e+05]
+ [  6.75877973e+03  -4.21828000e+05   2.96924917e+06]]
+#---Hessian Errors: [ 0.25876184  0.00131904  0.00104892]
+#---All tasks complete
+
