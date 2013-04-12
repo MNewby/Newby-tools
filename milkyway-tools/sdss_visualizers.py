@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, '../utilities')
 import math as ma
 import numpy as np
 import scipy as sc
@@ -71,7 +73,7 @@ cdict1 = {'red':  ((0.0, 1.0, 1.0),
                    (0.75, 0.25, 0.25),
                    (1.0, 0.0, 0.0))        }
 white_black = LinearSegmentedColormap('grey', cdict1)
-spectral_colors = fi.read_data('spectral_cm.txt')
+spectral_colors = fi.read_data('../utilities/spectral_cm.txt')
 spectral_wb = ListedColormap(spectral_colors[:,:3], name="spectral_wb", N=256)
 
 def get_stripe(wedge, filein):
@@ -449,7 +451,7 @@ def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
     fig = plt.figure()
     sp = plt.subplot(111)
     if color==1:  cmap = spectral_wb
-    else:  cmap = binary
+    else:  cmap = 'gist_yarg'
     plt.imshow(H, extent=extent, interpolation='nearest', vmin=0.0, vmax=vm,
                cmap=cmap)
     if bar == 1:
@@ -462,17 +464,24 @@ def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
             bar.set_ticks(bar_ticks)
             bar.set_ticklabels(bar_labels, update_ticks=True)
     """ Draw axes - mu """
-    mu_axis = gen_mu_axis(mu_lim, r_lim[1])
-    plt.plot(mu_axis[0], mu_axis[1], 'k-')
-    for i in range(len(mu_axis[2])):
+    mu_axis = gen_mu_axis(mu_lim, r_lim[1]) 
+    plt.plot(mu_axis[0], mu_axis[1], 'k-')  # Draws main axis
+    for i in range(len(mu_axis[2])):  
         x0 = [1.0*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.1*r_lim[1]*sc.cos(mu_axis[2][i]*rad)]
         y0 = [1.0*r_lim[1]*sc.sin(mu_axis[2][i]*rad), 1.1*r_lim[1]*sc.sin(mu_axis[2][i]*rad)]
-        plt.plot(x0,y0, 'k-')
+        plt.plot(x0,y0, 'k-')  # Draws mu ticks
         if mu_axis[3][i] <= 180.0:  rot = -90.0 + mu_axis[3][i]
         else:  rot =  -360.0 + mu_axis[3][i] - 90.0
-        x00, y00 = 1.12*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.12*r_lim[1]*sc.sin(mu_axis[2][i]*rad)
-        plt.text(x00, y00, str(mu_axis[3][i]), rotation=rot, fontsize=10,
-                 horizontalalignment='center') #float(mu_axis[3][i]) )
+        x00, y00 = 1.14*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.14*r_lim[1]*sc.sin(mu_axis[2][i]*rad)
+        #Format tick labels - this part adds whitespace to center labels on ticks
+        pre, mulbl = "$", str(mu_axis[3][i])  
+        if len(mulbl) < 3:  
+            for k in range(3-len(mulbl)):  pre = " "+pre
+        if i == (len(mu_axis[2]))-1:
+            plt.text(x00, y00, "$\mu="+str(mu_axis[3][i])+"^{\circ}$", rotation=rot, 
+                fontsize=12, horizontalalignment='center') #float(mu_axis[3][i]) )
+        else:  plt.text(x00, y00, pre+str(mu_axis[3][i])+"^{\circ}$", rotation=rot, 
+                fontsize=12, horizontalalignment='center') #float(mu_axis[3][i]) )
     """ Draw axes - r """
     r_axis = gen_r_axis(mu_lim, r_lim)
     plt.plot(r_axis[0], r_axis[1], 'k-')
@@ -485,7 +494,10 @@ def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
         else:  x2, y2 = tick*sc.cos((mu1[1])*rad), tick*sc.sin((mu1[1])*rad); hl='left'
         plt.plot(x1[:7], y1[:7], "k-")
         plt.plot(x1[-7:], y1[-7:], "k-")
-        plt.text(x2, y2, str(int(tick)), rotation=0.0, fontsize=10,
+        if tick == r_axis[2][-1]:
+            plt.text(x2, y2, "$r="+str(int(tick))+"$", rotation=0.0, fontsize=12,
+                 horizontalalignment=hl, verticalalignment='bottom')
+        else:  plt.text(x2, y2, "$"+str(int(tick))+"$", rotation=0.0, fontsize=12,
                  horizontalalignment=hl, verticalalignment='bottom')
     # Draw axes - g (TO BE DONE)
     """ Clean up output """
@@ -495,9 +507,9 @@ def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
     plt.setp(sp.get_yticklabels(), visible=False)
     plt.setp(sp.get_xticklines(),  visible=False)
     plt.setp(sp.get_yticklines(),  visible=False)
-    return fig
-    #""" Draw Plot """
-    #if outname == None:  plt.show()
+    #return fig
+    """ Draw Plot """
+    if outname == None:  plt.show()
     #else:  plt.savefig((outname+".ps"), papertype='letter')
     #plt.close('all')
 
