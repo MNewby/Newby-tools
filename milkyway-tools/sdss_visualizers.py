@@ -321,7 +321,7 @@ def test_primary(l,b,wedge,low=9,high=23):
         if abs(nu2) < abs(nu0):  return 0
     return 1
 
-def plot_separation_mur(datas, wedge, outname=None, mag=0, scale=0, color=1,
+def plot_separation_mur_OLD(datas, wedge, outname=None, mag=0, scale=0, color=1,
                     mu_lim=None, r_lim=None, nu_flatten=0):
     """ Datas is a list of separated stars: [background, stream1, stream2, stream3]
         Use 'None' for a stream if you don't want it plotted. """
@@ -419,14 +419,41 @@ def plot_separation_mur(datas, wedge, outname=None, mag=0, scale=0, color=1,
 
 def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
                     mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1):
-    fig = single_stripe_mur(data, wedge, mag, scale, color,
-                    mu_lim, r_lim, vm, nu_flatten, bar)
+    fig = plt.figure(1, frameon=False)
+    sp = single_stripe_mur(data, wedge, mag, scale, color, 111, mu_lim, r_lim, vm, nu_flatten, bar)
     """ Draw Plot """
     if outname == None:  plt.show()
     else:  plt.savefig((outname+".ps"), papertype='letter')
     plt.close('all')
 
-def single_stripe_mur(data, wedge, mag=0, scale=0, color=1,
+
+def plot_separation_mur(wedge, data0, data1=None, data2=None, data3=None, 
+                        outname=None, mag=0, scale=0, color=1, mu_lim=None, 
+                        r_lim=None, vm=None, nu_flatten=0, bar=1):
+    """ """
+    fig = plt.figure(1, frameon=False)
+    fig.subplots_adjust(hspace=0.001, wspace=0.001)
+    #place = [221, 222, 223, 224]
+    sp0 = single_stripe_mur(data0, wedge, mag, scale, color, 221, 
+        mu_lim, r_lim, vm, nu_flatten, bar)
+    fig.add_subplot(sp0)
+    if data1 != None:
+        sp1 = single_stripe_mur(data1, wedge, mag, scale, color, 222, 
+            mu_lim, r_lim, vm, nu_flatten, bar=0)
+        fig.add_subplot(sp1)
+    if data2 != None:
+        sp2 = single_stripe_mur(data2, wedge, mag, scale, color, 223,
+            mu_lim, r_lim, vm, nu_flatten, bar=0)
+        fig.add_subplot(sp2)
+    if data3 != None:
+        sp3 = single_stripe_mur(data3, wedge, mag, scale, color, 224, 
+            mu_lim, r_lim, vm, nu_flatten, bar=0) 
+        fig.add_subplot(sp3)
+    if outname == None:  plt.show()
+    else:  plt.savefig((outname+".ps"), papertype='letter')
+    plt.close('all')
+
+def single_stripe_mur(data, wedge, mag=0, scale=0, color=1, position=111,
                     mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1):
     """ change 'scale' to a string tag:  None, sqrt, flatten, log? """
     #l, b = data[:,0], data[:,1]
@@ -457,8 +484,8 @@ def single_stripe_mur(data, wedge, mag=0, scale=0, color=1,
     else:
         if vm==None:  vm=300.0
     """ Begin Figure """
-    fig = plt.figure(frameon=False)
-    sp = plt.subplot(111)
+    #fig = plt.figure(frameon=False)
+    sp = plt.subplot(position)
     if color==1:  cmap = spectral_wb
     else:  cmap = 'gist_yarg'
     plt.imshow(H, extent=extent, interpolation='nearest', vmin=0.0, vmax=vm,
@@ -518,9 +545,9 @@ def single_stripe_mur(data, wedge, mag=0, scale=0, color=1,
     plt.setp(sp.get_yticklabels(), visible=False)
     plt.setp(sp.get_xticklines(),  visible=False)
     plt.setp(sp.get_yticklines(),  visible=False)
-    ax = fig.add_axes([0, 0, 1, 1])  #These two lines supress the axes... supposedly
-    ax.axis('off')
-    return fig
+    #ax = fig.add_axes([0, 0, 1, 1])  #These two lines supress the axes... supposedly
+    #ax.axis('off')
+    return sp
 
 def gen_mu_axis(mu_lim, edge):
     d = edge*1.05
