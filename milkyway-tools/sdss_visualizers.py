@@ -419,6 +419,15 @@ def plot_separation_mur(datas, wedge, outname=None, mag=0, scale=0, color=1,
 
 def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
                     mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1):
+    fig = single_stripe_mur(data, wedge, mag, scale, color,
+                    mu_lim, r_lim, vm, nu_flatten, bar)
+    """ Draw Plot """
+    if outname == None:  plt.show()
+    else:  plt.savefig((outname+".ps"), papertype='letter')
+    plt.close('all')
+
+def single_stripe_mur(data, wedge, mag=0, scale=0, color=1,
+                    mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1):
     """ change 'scale' to a string tag:  None, sqrt, flatten, log? """
     #l, b = data[:,0], data[:,1]
     x_size, y_size = 0.5, 0.5
@@ -448,7 +457,7 @@ def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
     else:
         if vm==None:  vm=300.0
     """ Begin Figure """
-    fig = plt.figure()
+    fig = plt.figure(frameon=False)
     sp = plt.subplot(111)
     if color==1:  cmap = spectral_wb
     else:  cmap = 'gist_yarg'
@@ -472,7 +481,9 @@ def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
         plt.plot(x0,y0, 'k-')  # Draws mu ticks
         if mu_axis[3][i] <= 180.0:  rot = -90.0 + mu_axis[3][i]
         else:  rot =  -360.0 + mu_axis[3][i] - 90.0
-        x00, y00 = 1.14*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.14*r_lim[1]*sc.sin(mu_axis[2][i]*rad)
+        if wedge < 40:  offset = 1.12  #This accounts for different whitespace on each side of 180
+        else:  offset = 1.14
+        x00, y00 = offset*r_lim[1]*sc.cos(mu_axis[2][i]*rad), offset*r_lim[1]*sc.sin(mu_axis[2][i]*rad)
         #Format tick labels - this part adds whitespace to center labels on ticks
         pre, mulbl = "$", str(mu_axis[3][i])  
         if len(mulbl) < 3:  
@@ -507,16 +518,15 @@ def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
     plt.setp(sp.get_yticklabels(), visible=False)
     plt.setp(sp.get_xticklines(),  visible=False)
     plt.setp(sp.get_yticklines(),  visible=False)
-    #return fig
-    """ Draw Plot """
-    if outname == None:  plt.show()
-    #else:  plt.savefig((outname+".ps"), papertype='letter')
-    #plt.close('all')
+    ax = fig.add_axes([0, 0, 1, 1])  #These two lines supress the axes... supposedly
+    ax.axis('off')
+    return fig
 
 def gen_mu_axis(mu_lim, edge):
     d = edge*1.05
     low, high = ma.floor(mu_lim[0]/15.0), ma.ceil(mu_lim[1]/15.0)
-    mu = sc.arange((low*15.0)-10.0, (high*15.0)+11.0, 1.0)
+    #low, high = (mu_lim[0]/15.0), (mu_lim[1]/15.0)
+    mu = sc.arange((low*15.0)-10.0, (high*15.0)+10.1, 1.0)
     x, y = d*sc.cos(mu*rad), d*sc.sin(mu*rad)
     mu_ticks = sc.arange(low, high+1.0, 1.0)
     mu_ticks = mu_ticks*15.0

@@ -15,7 +15,7 @@ if __name__ == "__main__":
     #plot_stripe_lb(data)
     #plot_stripe_3D(data)
     sdss.plot_stripe_mur(data, wedge, mag=0, scale=1, r_lim=(0.0, 46.0), 
-        vm=10.0, mu_lim=(310.0, 419.0), color=0)
+        vm=10.0, mu_lim=(310.0, 419.0), color=1)
     #sdss.plot_stripe_mur(data, wedge, mag=0, scale=1, r_lim=(0.0, 55.0), vm=10.0, mu_lim=(165.0, 245.0))
     #plot_stripe_mug(data, wedge)
     #plot_stripe_mu(data, wedge)
