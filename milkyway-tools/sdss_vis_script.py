@@ -16,15 +16,14 @@ if __name__ == "__main__":
     #plot_stripe_3D(data)
     #sdss.plot_stripe_mur(data, wedge, mag=0, scale=1, r_lim=(0.0, 46.0), 
     #    vm=10.0, mu_lim=(310.0, 419.0), color=1)
-    
-    wedge = 10
-    data0 = fi.read_data("../../sep_lbr/bg-10.txt")
-    data1 = fi.read_data("../../sep_lbr/s1-10.txt")
-    data2 = fi.read_data("../../sep_lbr/s2-10.txt")
-    data3 = fi.read_data("../../sep_lbr/s3-10.txt")
-    sdss.plot_separation_mur(wedge, data0, data1, data2, data3,
-                        outname=None, mag=0, scale=1, color=0, mu_lim=(165.0, 225.0), 
-                        r_lim=(0.0, 70.0), vm=10.0, nu_flatten=0, bar=0)
+    #wedge = 10
+    #data0 = fi.read_data("../../sep_lbr/bg-10.txt")
+    #data1 = fi.read_data("../../sep_lbr/s1-10.txt")
+    #data2 = fi.read_data("../../sep_lbr/s2-10.txt")
+    #data3 = fi.read_data("../../sep_lbr/s3-10.txt")
+    #sdss.plot_separation_mur(wedge, data0, data1, data2, data3,
+    #                    outname=None, mag=0, scale=1, color=0, mu_lim=(165.0, 225.0), 
+    #                    r_lim=(0.0, 70.0), vm=10.0, nu_flatten=0, bar=0)
     #sdss.plot_stripe_mur(data, wedge, mag=0, scale=1, r_lim=(0.0, 55.0), vm=10.0, mu_lim=(165.0, 245.0))
     #plot_stripe_mug(data, wedge)
     #plot_stripe_mu(data, wedge)
@@ -37,8 +36,8 @@ if __name__ == "__main__":
     #do_densityplots()
     #do_onewedgeplot("stripe-10-DR7-clean.txt", 10, None)
     #do_compare_wedges(file1="unmatched-82-1arcsec.txt", file2="matched-82-1arcsec.txt", stripe=82, hern=0)
-    #sdss.lbpolar_plot("./sim_streams/", hemi='N', bin_size=0.5, outfile="s1_sim_hist.txt",
-    #                  infile=None, color=1, scale=1, primary=1)
+    sdss.lbpolar_plot("/home/newbym2/Dropbox/Research/sep_lbr_sSgr/", hemi='N', bin_size=0.5, 
+        outfile="sanSgr_hist_many.txt", infile=None, color=1, scale=1, primary=1)
     #sdss.sgr_xz_plot(folder="./sep_lbr/", bin_size=0.5, outfile=None, infile=None,
     #            primary=1, color=1, scale=0)
     # /home/newbym2/Desktop/star_holder/sep_lbr

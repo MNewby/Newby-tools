@@ -54,7 +54,7 @@ def results_to_parameter_file(argv):
         usage()
         sys.exit(2)
     #Now we can start modifying the parameter file:
-    out_file = in_file[:-4] + '_ps_sanSgr.txt'
+    out_file = in_file[:-4] + '_de_sanSgr.txt'
     readfile = open(in_file, 'r')
     writefile = open(out_file, 'w')
     stream = 0
@@ -154,8 +154,8 @@ def load_params(filename):
     
 
 if __name__ == "__main__":
-    #results_to_parameter_file(sys.argv[1:])
-    batch_job("../sgrOther/Results_ps.txt")  #ALSO CHANGE OUTFILE NAME (line 56)
+    results_to_parameter_file(sys.argv[1:])
+    #batch_job("../sgrOther/Results_ps.txt")  #ALSO CHANGE OUTFILE NAME (line 56)
 
 
 """KILL THIS ONLY HERE FOR REFERENCE"""

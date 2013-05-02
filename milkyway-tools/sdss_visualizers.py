@@ -240,10 +240,10 @@ def lbpolar_plot(folder, hemi='N', bin_size=1.0, outfile=None, infile=None,
     if infile==None:
         H = sc.zeros((y_bins,x_bins), float)
         # Iterate over files
-        files = glob.glob(folder+"/*[0-2][0-9].txt")
+        files = glob.glob(folder+"/*de.txt")
         for file in files:
             data = fi.read_data(file)
-            wedge = int(file[-6:-4])
+            wedge = int(file[-9:-7])  #wedge = int(file[-6:-4])
             for i in range(len(data[:,0])):
                 if primary==1:
                     if test_primary(data[i,0],data[i,1],wedge,low=9,high=23)==0:  continue
@@ -260,7 +260,7 @@ def lbpolar_plot(folder, hemi='N', bin_size=1.0, outfile=None, infile=None,
     sp = plt.subplot(111)
     if color==1:  cmap = spectral_wb
     else:  cmap = binary
-    plt.imshow(H, interpolation='nearest', cmap=cmap, vmin=0.0, vmax=16.0) #extent=extent, 
+    plt.imshow(H, interpolation='nearest', cmap=cmap, vmin=0.0, vmax=12.0) #extent=extent, 
     bar = plt.colorbar(orientation='vertical')
     if scale == 1:
         bar_ticks = sc.arange(0.0, 17.0, 4.0)

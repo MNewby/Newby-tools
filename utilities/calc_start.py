@@ -9,6 +9,8 @@ import numpy as np
 print "# Imported numpy as np"
 import scipy as sc
 print "# imported scipy as sc"
+import scipy.constants as con
+print "# Imported scipy.constants as con"
 #import files as fi
 #print "# imported files as fi"
 import matplotlib
