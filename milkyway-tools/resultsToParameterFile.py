@@ -45,9 +45,9 @@ def results_to_parameter_file(argv):
             print "!!!ERROR: unreadable parameter number", param
             usage()
             sys.exit(2)
-        if param.count(".") == 0:  param = param + ".0"
+        if param.count(".") == 0:  param = param.strip(',') + ".0"
         parameters.append(param.strip(' ,') )
-    # Check for the right number of paramters
+    # Check for the right number of parameters
     param_num = 2 + (6*number_streams)
     if param_num != len(parameters):
         print "!!!ERROR: # of input parameters does not match expected # of parameters!"

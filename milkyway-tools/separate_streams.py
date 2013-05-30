@@ -16,7 +16,7 @@ import glob
 
 def separation(folder="/home/newbym2/Desktop/sansSgr/"):
     """ Separates a separation file into distinct star files """
-    files = glob.glob(folder+"/separation-[0-2][0-9]-de.txt")
+    files = glob.glob(folder+"/separation-[0-2][0-9]-new.txt")
     l = len(folder)
     for file in files:
         wedge = int(file[(l+11):(l+13)])
@@ -33,7 +33,7 @@ def separation(folder="/home/newbym2/Desktop/sansSgr/"):
         seps, tags, count = [bg, s1, s2, s3], ['bg-', 's1-', 's2-', 's3-'], 0
         for sep in seps:
             if sep != []:
-                fileout = tags[count]+str(wedge)+name+"-de.txt"
+                fileout = tags[count]+str(wedge)+name+"-new.txt"
                 writefile = open(fileout, 'w')
                 for line in sep:  writefile.write(line)
             count = count + 1
@@ -44,7 +44,7 @@ def sep_lbr(folder1="/home/newbym2/Desktop/sansSgr/stars",
             folder2="/home/newbym2/Desktop/sansSgr/outfiles"):
     """ Matches an lbr starfile with an xyz starfile and saves the result"""
     files1 = glob.glob(folder1+"/stars-[0-2][0-9]*") #Star files
-    files2 = glob.glob(folder2+"/out-*ps*") #Separation files
+    files2 = glob.glob(folder2+"/out-*new*") #Separation files
     #files2 = glob.glob(folder2+"/*[7-8][2-9]*")
     #print files1
     #print files2
@@ -76,7 +76,7 @@ def sep_lbr(folder1="/home/newbym2/Desktop/sansSgr/stars",
             holder.append(flags[count]+line)
             count = count + 1
         data1.close()
-        fileout = "separation-"+str(wedge)+"-ps.txt"
+        fileout = "separation-"+str(wedge)+"-new.txt"
         writefile = open(fileout, "w")
         for line in holder:  writefile.write(line)
         writefile.close()
