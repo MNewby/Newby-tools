@@ -37,7 +37,7 @@ if __name__ == "__main__":
     #do_onewedgeplot("stripe-10-DR7-clean.txt", 10, None)
     #do_compare_wedges(file1="unmatched-82-1arcsec.txt", file2="matched-82-1arcsec.txt", stripe=82, hern=0)
     sdss.lbpolar_plot("/home/newbym2/Dropbox/Research/sep_lbr_sSgr/", hemi='N', bin_size=0.5, 
-        outfile="sanSgr_hist_ss_new.txt", infile=None, color=1, scale=1, primary=1)
+        outfile=None, infile="/home/newbym2/Dropbox/Research/sgrOther/sanSgr_hist_many.txt", color=1, scale=1, primary=1)
     #sdss.sgr_xz_plot(folder="./sep_lbr/", bin_size=0.5, outfile=None, infile=None,
     #            primary=1, color=1, scale=0)
     # /home/newbym2/Desktop/star_holder/sep_lbr
