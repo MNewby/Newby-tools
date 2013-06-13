@@ -1,5 +1,5 @@
 import subprocess as sp
-import glob as glob
+#import glob as glob
 import sys
 
 infile = sys.argv[1]

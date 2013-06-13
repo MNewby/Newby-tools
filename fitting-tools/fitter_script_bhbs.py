@@ -1,8 +1,10 @@
+import sys
+sys.path.insert(0, '../utilities')
+import files as fi
+import functions as func
 import math as ma
 import numpy as np
 import scipy as sc
-import functions as func
-import files as fi
 import fit as fit
 import matplotlib
 import matplotlib.pyplot as plt
@@ -14,7 +16,7 @@ bins=20
 
 for i in run:
     print "# --- Fitting region {0}".format(i)
-    data = fi.read_data("../Cetus_Polar/bhb_dmod"+str(i)+".txt", skip=1)
+    data = fi.read_data("/home/newbym2/Dropbox/Research/Cetus_Polar/bhb_dmod"+str(i)+".txt", skip=1)
     print "# --- l-coordinate mean, std: {0}, {1}".format(np.mean(data[:,0]), np.std(data[:,0]) )
     b_hist, b_edges = np.histogram(data[:,1], bins, range=[80.0, 180.0])
     b_err = func.poisson_errors(b_hist)

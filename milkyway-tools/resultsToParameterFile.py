@@ -54,7 +54,7 @@ def results_to_parameter_file(argv):
         usage()
         sys.exit(2)
     #Now we can start modifying the parameter file:
-    out_file = in_file[:-4] + '_de_sanSgr.txt'
+    out_file = in_file[:-4] + '_new.txt'
     readfile = open(in_file, 'r')
     writefile = open(out_file, 'w')
     stream = 0
