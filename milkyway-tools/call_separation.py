@@ -8,7 +8,7 @@ pfolder = "/home/newbym2/milkyway_parameters_sansSgr/"
 sfolder = "/home/newbym2/milkyway_stars_sansSgr/"
 ofolder = "/home/newbym2/milkyway_out_sansSgr/"
 mwfolder = "/home/newbym2/milkywayathome_client/bin/"
-tfolder = "" #template folder
+tfolder = "/home/newbym2/milkyway_parameters_sansSgr/" #template folder
 tag=""
 
 def Usage():
@@ -104,4 +104,5 @@ def do_separation(filename):
 		
 		
 if __name__ == "__main__":
-	do_separation()
+	args = sys.argv[1:]
+	do_separation(args[0])
