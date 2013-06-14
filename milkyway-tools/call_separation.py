@@ -1,4 +1,6 @@
 import resultsToParameterFile as PF
+import separate_streams as ss
+#import sdss_visualizers as sdss
 import subprocess as sp
 import glob as glob
 import sys
@@ -7,7 +9,7 @@ import getopt
 pfolder = "/home/newbym2/milkyway_parameters_sansSgr/"
 sfolder = "/home/newbym2/milkyway_stars_sansSgr/"
 ofolder = "/home/newbym2/milkyway_out_sansSgr/"
-mwfolder = "/home/newbym2/milkywayathome_client/bin/"
+mwfolder = "/home/newbym2/Desktop/milkywayathome_client/bin/"
 tfolder = "/home/newbym2/milkyway_parameters_sansSgr/" #template folder
 tag=""
 
@@ -40,14 +42,19 @@ def parseInFile(filename):
 
 def parseString(MWname):
     """ Parse an MW@H search name string and return the result"""
-    new_name = MWname.split("_-")
+    new_name = MWname.split("_")
+    stripe, num_streams = 0, 0
     for name in new_name:  # Get stripe number
         try:
             stripe = int(name)
             if stripe > 8:  break
         except ValueError:  pass
+    if stripe == 0:  print "!!!ERROR - Failure to read stripe number"; sys.exit(2)
     for name in new_name:
-        if name.count("s") > 0:  num_streams = int(name.strip()[0]);  break
+        if name.count("s") > 0:  
+			try:
+				num_streams = int(name[0])
+			except ValueError:  pass
     return stripe, num_streams
 
 def makeParamFile(stripe, num_streams, paramstr, tag=""):
@@ -73,36 +80,57 @@ def makeParamFile(stripe, num_streams, paramstr, tag=""):
 def getStarFile(stripe, tag=""):
 	"""Right now, this only works if only one starfile in the target 
 		directory matches the stripe number"""
-	starfiles = glob.glob(sfolder+"*"+str(stripe)+"*")
+	if stripe==9:  ss="09"
+	else:  ss = str(stripe)
+	starfiles = glob.glob(sfolder+"*"+ss+"*")
 	if len(starfiles) != 1:  
-		print "!!!ERROR - {0} starfiles found matching Stripe {1}".format(len(starfiles))
+		print "!!!ERROR - {0} starfiles found matching Stripe {1}".format(len(starfiles), stripe)
 		if len(starfiles) > 0:
-			for s in starfile:  print s
-		sys.exit(2)
-	return starfile[0]
+			for s in starfiles:  print s
+			sys.exit(2)
+	return starfiles[0]
 
 
-def do_separation(filename):
+def do_separation(filename, r):
+	names, params = parseInFile(filename)
+	jobs, coms = [], []
+	for i, name in enumerate(names):
+		stripe, num_streams = parseString(name)
+		print "# --- Processing Stripe {0}".format(stripe)
+		p = makeParamFile(stripe, num_streams, params[i], tag)
+		s = getStarFile(stripe)
+		#s = sfolder+"/stars-"+stripe+"-"+tag+".txt"  #FIX
+		if stripe == 9:  ss="09"
+		else:  str(stripe)
+		o = ofolder+"out-"+ss+"-"+tag+".txt"
+		jobs.append([stripe,p,s,o])
+		command = mwfolder+"milkyway_separation -i -a "+p+" -s "+s+" -o "+o
+		coms.append(command)
+		print command
+	print "\n# --- Running Commands\n" 
+	if r==0:  print "# --- Verification Mode\n"
+	else:  print "# --- For Realsies\n"
+	for com in coms:  
+		print com
+		if r==1:  sts = sp.call(com, shell=True)
+	print "# --- Done"
+		
+		
+if __name__ == "__main__":
+	realsies=0
+	resultsfile = sys.argv[1]
+	opts, args = getopt.getopt(sys.argv[2:], 'rt:')
+	for opt, arg in opts:
+		if opt=="-r":  realsies=1
+		elif opt=="-t":  tag=arg
 	print "# --- Starting runs, using the following settings:"
 	print pfolder 
 	print sfolder
 	print ofolder
 	print tfolder
 	print tag
-	names, params = parseInFile(filename)
-	for i, name in enumerate(names):
-		stripe, num_streams = parseString(name)
-		print "# --- Starting Stripe {0}".format(stripe)
-		p = makeParamFile(stripe, num_streams, params[i], tag)
-		s = getStarFile(stripe)
-		#s = sfolder+"/stars-"+stripe+"-"+tag+".txt"  #FIX
-		o = ofolder+"/out-"+tag+"-"+wedge+".txt"
-		command = mwfolder+"/milkyway_separation -i -a "+p+" -s "+s+" -o "+o
-		print command
-		#sts = sp.call(command, shell=True)
-	print "# --- Done"
-		
-		
-if __name__ == "__main__":
-	args = sys.argv[1:]
-	do_separation(args[0])
+	#do_separation(resultsfile, realsies)
+	if realsies==1:  
+		ss.sep_lbr(sfolder, ofolder, tag)
+		ss.separation("/home/newbym2/Desktop/Newby-tools/milkyway-tools/", tag)
+		# VISUALIZER

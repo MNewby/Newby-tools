@@ -243,7 +243,7 @@ def lbpolar_plot(folder, hemi='N', bin_size=1.0, outfile=None, infile=None,
         files = glob.glob(folder+"/*.txt")
         for file in files:
             data = fi.read_data(file)
-            wedge = int(file[-10:-8])  #wedge = int(file[-6:-4])
+            wedge = int(file.split("/")[-1][3:5])  
             for i in range(len(data[:,0])):
                 if primary==1:
                     if test_primary(data[i,0],data[i,1],wedge,low=9,high=23)==0:  continue

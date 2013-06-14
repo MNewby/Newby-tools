@@ -14,14 +14,14 @@ import glob
 '''python script for quickly separating separation data
     Matthew Newby, March 23, 2012'''
 
-def separation(folder="/home/newbym2/Desktop/sansSgr/"):
+def separation(folder="/home/newbym2/Desktop/sansSgr/", name="out"):
     """ Separates a separation file into distinct star files """
-    files = glob.glob(folder+"/separation-[0-2][0-9]-new.txt")
+    files = glob.glob(folder+"separation-[0-9][0-9]*.txt")
     l = len(folder)
     for file in files:
         wedge = int(file[(l+11):(l+13)])
-        if len(file) > 29:  name = file[(l+23):(l+29)]
-        else:  name = "out"
+        #if len(file) > 29:  name = file[(l+22):(l+28)]
+        #else:  
         bg, s1, s2, s3 = [], [], [], []
         data = open(file, "r")
         for line in data:
@@ -40,21 +40,22 @@ def separation(folder="/home/newbym2/Desktop/sansSgr/"):
             writefile.close()
         print "{0}, {1} Separated".format(wedge, name)
 
-def sep_lbr(folder1="/home/newbym2/Desktop/sansSgr/stars",
-            folder2="/home/newbym2/Desktop/sansSgr/outfiles"):
+def sep_lbr(folder1="/home/newbym2/Desktop/sansSgr/stars/",
+            folder2="/home/newbym2/Desktop/sansSgr/outfiles/", 
+            tag=""):
     """ Matches an lbr starfile with an xyz starfile and saves the result"""
-    files1 = glob.glob(folder1+"/stars-[0-2][0-9]*") #Star files
-    files2 = glob.glob(folder2+"/out-*new*") #Separation files
+    files1 = glob.glob(folder1+"stars-[0-9][0-9]*") #Star files
+    files2 = glob.glob(folder2+"out-*") #Separation files
     #files2 = glob.glob(folder2+"/*[7-8][2-9]*")
     #print files1
     #print files2
     dict1, dict2 = {}, {}
     for file in files1:
-        temp_dict = {file : int(file[len(folder1)+7:len(folder1)+9])}
+        temp_dict = {file : int(file[len(folder1)+6:len(folder1)+8])}
         #print temp_dict
         dict1.update(temp_dict)
     for file in files2:
-        temp_dict = {file : int(file[len(folder2)+13:len(folder2)+15])}
+        temp_dict = {file : int(file[len(folder2)+4:len(folder2)+6])}
         dict2.update(temp_dict)
     for file1 in files1:
         wedge = dict1[file1]
@@ -76,7 +77,7 @@ def sep_lbr(folder1="/home/newbym2/Desktop/sansSgr/stars",
             holder.append(flags[count]+line)
             count = count + 1
         data1.close()
-        fileout = "separation-"+str(wedge)+"-new.txt"
+        fileout = "separation-"+str(wedge)+"-"+tag+"-new.txt"
         writefile = open(fileout, "w")
         for line in holder:  writefile.write(line)
         writefile.close()
