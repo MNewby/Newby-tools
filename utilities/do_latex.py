@@ -12,8 +12,8 @@ sts2 = sp.call("latex "+infile, shell=True)
 print "\n# --- Converting to PDF\n"
 sts3 = sp.call("dvipdf "+name+".dvi", shell=True)
 print "\n# --- Cleaning up extra files\n"
-sts4 = sp.call("rm "+name+".log", shell=True)
-sts4 = sp.call("rm "+name+".aux", shell=True)
+sts4 = sp.call("rm ./*.log", shell=True)
+sts4 = sp.call("rm ./*.aux", shell=True)
 sts4 = sp.call("rm "+name+".dvi", shell=True)
 print "\n# --- Compile Complete - output as {0}\n".format(name+".pdf")
 
