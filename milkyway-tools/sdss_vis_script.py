@@ -24,7 +24,7 @@ if __name__ == "__main__":
     #sdss.plot_separation_mur(wedge, data0, data1, data2, data3,
     #                    outname=None, mag=0, scale=1, color=0, mu_lim=(165.0, 225.0), 
     #                    r_lim=(0.0, 70.0), vm=10.0, nu_flatten=0, bar=0)
-    #sdss.plot_stripe_mur(data, wedge, mag=0, scale=1, r_lim=(0.0, 55.0), vm=10.0, mu_lim=(165.0, 245.0))
+    sdss.plot_stripe_mur(data, wedge, mag=0, scale=1, r_lim=(0.0, 55.0), vm=10.0, mu_lim=(165.0, 245.0))
     #plot_stripe_mug(data, wedge)
     #plot_stripe_mu(data, wedge)
     #plot_stripe_munu(data, wedge)
@@ -38,6 +38,8 @@ if __name__ == "__main__":
     #do_compare_wedges(file1="unmatched-82-1arcsec.txt", file2="matched-82-1arcsec.txt", stripe=82, hern=0)
     sdss.lbpolar_plot("/home/newbym2/Dropbox/Research/sep_lbr_sSgr/", hemi='N', bin_size=0.5, 
         outfile=None, infile="/home/newbym2/Dropbox/Research/sgrOther/sanSgr_hist0.txt", color=1, scale=1, primary=1)
+    #sdss.lbpolar_plot("/home/newbym2/sscon_lbr/", hemi='N', bin_size=0.5, 
+    #    outfile=None, infile=None, color=1, scale=1, primary=1)
     #sdss.sgr_xz_plot(folder="./sep_lbr/", bin_size=0.5, outfile=None, infile=None,
     #            primary=1, color=1, scale=0)
     # /home/newbym2/Desktop/star_holder/sep_lbr
