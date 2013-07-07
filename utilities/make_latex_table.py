@@ -1,6 +1,8 @@
 '''python code for producing tables in the aastex deluxe table format
 Matthew Newby, March 8, 2012'''
 
+# DEPRECATED BY "latex_quick_table.py"
+
 class DataTable:
     """ Contains the headers, data and footnotes for a latex table"""
     def __init__(self, data, justify="r", title="TITLE", label="LABEL", heading=None):
