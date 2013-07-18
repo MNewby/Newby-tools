@@ -14,6 +14,9 @@ sts3 = sp.call("dvipdf "+name+".dvi", shell=True)
 print "\n# --- Cleaning up extra files\n"
 sts4 = sp.call("rm ./*.log", shell=True)
 sts4 = sp.call("rm ./*.aux", shell=True)
+sts4 = sp.call("rm ./*.toc", shell=True)
+sts4 = sp.call("rm ./*.lot", shell=True)
+sts4 = sp.call("rm ./*.lof", shell=True)
 sts4 = sp.call("rm "+name+".dvi", shell=True)
 print "\n# --- Compile Complete - output as {0}\n".format(name+".pdf")
 
