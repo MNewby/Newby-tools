@@ -16,7 +16,7 @@ import astro_coordinates as coor
 import os.path
 import sys
 import glob
-import test_wedge_generator as twg
+#import test_wedge_generator as twg
 
 '''Input: l,b,g_0
 l limits: 20.4835409501, 205.337883034
@@ -334,100 +334,6 @@ def test_primary(l,b,wedge,low=9,high=23):
         if abs(nu2) < abs(nu0):  return 0
     return 1
 
-def plot_separation_mur_OLD(datas, wedge, outname=None, mag=0, scale=0, color=1,
-                    mu_lim=None, r_lim=None, nu_flatten=0):
-    """ Datas is a list of separated stars: [background, stream1, stream2, stream3]
-        Use 'None' for a stream if you don't want it plotted. """
-    hists, counter = [], 0
-    for data in datas:
-        if data==None:  continue
-        x_size, y_size = 0.5, 0.5
-        if mag==1:  r = coor.getr(data[:,2])
-        else:       r = data[:,2]
-        ra, dec = coor.lbToEq(data[:,0],data[:,1])
-        mu, nu = coor.EqToGC(ra, dec, wedge)
-        if counter==0:  #Initializes wedge limits for background, if not already done
-            if r_lim == None:  r_lim = (np.ma.min(r), np.ma.max(r))
-            if mu_lim==None:  mu_lim = (np.ma.max(mu), np.ma.min(mu))
-        x, y = r*sc.cos(mu*rad), r*sc.sin(mu*rad)
-        x_bins = int((np.ma.max(x)-np.ma.min(x))/x_size) + 1
-        y_bins = int((np.ma.max(y)-np.ma.min(y))/y_size) + 1
-        H, x, y = np.histogram2d(y, x, [y_bins, x_bins]) #, range=[[-155.0, 110.0],[-190.0, 0.0]])
-        if counter==0:
-            extent = [np.ma.min(y), np.ma.max(y), np.ma.max(x), np.ma.min(x)]
-        if nu_flatten == 1:
-            print "!!! DOUBLE-CHECK NU FLATTENING! {0}".format(H.shape)
-            for i in range(H.shape[0]):
-                for j in range(H.shape[1]):
-                    dist = ma.sqrt( ((i-(H.shape[0]/2.0))*y_size)**2 + (j*x_size)**2)
-                    H[i,j] = H[i,j] / (dist*2.5)
-            H = sc.sqrt(H) #sc.log10(H)
-            #vm = 1.5
-        elif scale==1:  H=sc.sqrt(H)
-        else:  vm=300.0
-        hists.append(H)
-        counter=1
-    """ Setup Figure """
-    if nu_flatten==1 or scale==1:  vm=16.0
-    else:  vm = 300.0
-    if color==1:  cmap = spectral_wb
-    else:  cmap = binary
-    """ Begin Figure """
-    plt.figure(1)
-    plt.subplots_adjust(hspace=0.001, wspace=0.001)
-    place = [221, 222, 223, 224]
-    for i,H in list(enumerate(hists)):
-        sp = plt.subplot(place[i], adjustable='box', aspect=1.0)
-        plt.imshow(H, extent=extent, interpolation='nearest', vmin=0.0, vmax=vm,
-               cmap=cmap)
-        if i==3:  #last plot
-            bar = plt.colorbar(orientation='vertical')
-            if scale == 1:
-                bar_ticks = sc.arange(0.0, vm+1.0, 2.0)
-                bar_labels = []
-                for i in range(len(bar_ticks)):   
-                    bar_labels.append(str(int(bar_ticks[i]**2)))
-                bar.set_ticks(bar_ticks)
-                bar.set_ticklabels(bar_labels, update_ticks=True)
-        """ Draw axes - mu """
-        mu_axis = gen_mu_axis(mu_lim, r_lim[1])
-        plt.plot(mu_axis[0], mu_axis[1], 'k-')
-        for i in range(len(mu_axis[2])):
-            x0 = [1.0*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.1*r_lim[1]*sc.cos(mu_axis[2][i]*rad)]
-            y0 = [1.0*r_lim[1]*sc.sin(mu_axis[2][i]*rad), 1.1*r_lim[1]*sc.sin(mu_axis[2][i]*rad)]
-            plt.plot(x0,y0, 'k-')
-            if mu_axis[3][i] <= 180.0:  rot = -90.0 + mu_axis[3][i]
-            else:  rot =  -360.0 + mu_axis[3][i] - 90.0
-            x00, y00 = 1.12*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.12*r_lim[1]*sc.sin(mu_axis[2][i]*rad)
-            plt.text(x00, y00, str(mu_axis[3][i]), rotation=rot, fontsize=10,
-                 horizontalalignment='center') #float(mu_axis[3][i]) )
-        """ Draw axes - r """
-        r_axis = gen_r_axis(mu_lim, r_lim)
-        plt.plot(r_axis[0], r_axis[1], 'k-')
-        mu1 = sc.arange(mu_lim[0]-6.0, mu_lim[1]+7.0, 1.0)
-        for tick in r_axis[2]:
-            x1, y1 = tick*sc.cos(mu1*rad), tick*sc.sin(mu1*rad)
-            if mu1[-1] < 90.0 or mu1[-1] > 360.0:
-                x2, y2 = tick*sc.cos((mu1[-1])*rad), tick*sc.sin((mu1[-1])*rad)
-                hl = 'right'
-            else:  x2, y2 = tick*sc.cos((mu1[1])*rad), tick*sc.sin((mu1[1])*rad); hl='left'
-            plt.plot(x1[:7], y1[:7], "k-")
-            plt.plot(x1[-7:], y1[-7:], "k-")
-            plt.text(x2, y2, str(int(tick)), rotation=0.0, fontsize=10,
-                 horizontalalignment=hl, verticalalignment='bottom')
-        # Draw axes - g (TO BE DONE)
-        """ Clean up output """
-        y_lim = plt.ylim()
-        plt.ylim(y_lim[1], y_lim[0])
-        plt.setp(sp.get_xticklabels(), visible=False)
-        plt.setp(sp.get_yticklabels(), visible=False)
-        plt.setp(sp.get_xticklines(),  visible=False)
-        plt.setp(sp.get_yticklines(),  visible=False)
-    """ Draw Plot """
-    if outname == None:  plt.show()
-    else:  plt.savefig((outname+".ps"), papertype='letter')
-    plt.close('all')
-
 """ ----------------- plot_stripe_mur ----------------------"""
 
 def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
@@ -587,17 +493,6 @@ def gen_r_axis(mu_lim, r_lim):
     r_ticks = sc.arange(10.0, 10.0*ma.floor(r_lim[1]/10.0)+1.0, 10.0)
     return [x,y,r_ticks]
 
-def plot_stripe_mu(data, wedge, musize=1.0, name="out"):  #Aspect ratio is crap - just bin along mu?
-    l, b, r = data[:,0], data[:,1], coor.getr(data[:,2])
-    ra, dec = coor.lbToEq(l,b)
-    mu, nu = coor.EqToGC(ra, dec, wedge)
-    mu_hist = np.histogram(mu, int((np.ma.max(mu)-np.ma.min(mu))/musize), (np.ma.min(mu),np.ma.max(mu)))
-    plt.figure(1)
-    plt.bar(mu_hist[1][:-1], mu_hist[0], musize)
-    #plt.savefig((name+".ps"), papertype='letter')
-    plt.show()
-    plt.close('all')
-
 def plot_wedge_density(data, wedge=82, q=0.458, r0=19.5, mu_min=310.0, mu_max=419.0,
                        streams=None, perturb=None, name="out", mag=0, plot=1, size=1.0):
     """Plots the average density of a wedge versus radius
@@ -659,9 +554,6 @@ def plot_wedge_density(data, wedge=82, q=0.458, r0=19.5, mu_min=310.0, mu_max=41
         plt.show()
         plt.close('all')
     return rho_hist
-
-def plot_subwedge_density():
-    return 0
 
 def plot_double_mur(data, wedge=82, mu_min=310.0, mu_max=419.0, name="out",
                     mag=0, rsize=2.0, musize=2.0):
@@ -808,3 +700,101 @@ if __name__ == "__main__":
     print "Total time elapsed: {0} minutes".format(((tf-t0)/60.0))"""
     
     print "# --- Done"
+
+""" ----------------- DEPRECATED FUNCTIONS ----------------------"""
+"""
+def plot_separation_mur_OLD(datas, wedge, outname=None, mag=0, scale=0, color=1,
+                    mu_lim=None, r_lim=None, nu_flatten=0):
+    #Datas is a list of separated stars: [background, stream1, stream2, stream3]
+    #    Use 'None' for a stream if you don't want it plotted. 
+    hists, counter = [], 0
+    for data in datas:
+        if data==None:  continue
+        x_size, y_size = 0.5, 0.5
+        if mag==1:  r = coor.getr(data[:,2])
+        else:       r = data[:,2]
+        ra, dec = coor.lbToEq(data[:,0],data[:,1])
+        mu, nu = coor.EqToGC(ra, dec, wedge)
+        if counter==0:  #Initializes wedge limits for background, if not already done
+            if r_lim == None:  r_lim = (np.ma.min(r), np.ma.max(r))
+            if mu_lim==None:  mu_lim = (np.ma.max(mu), np.ma.min(mu))
+        x, y = r*sc.cos(mu*rad), r*sc.sin(mu*rad)
+        x_bins = int((np.ma.max(x)-np.ma.min(x))/x_size) + 1
+        y_bins = int((np.ma.max(y)-np.ma.min(y))/y_size) + 1
+        H, x, y = np.histogram2d(y, x, [y_bins, x_bins]) #, range=[[-155.0, 110.0],[-190.0, 0.0]])
+        if counter==0:
+            extent = [np.ma.min(y), np.ma.max(y), np.ma.max(x), np.ma.min(x)]
+        if nu_flatten == 1:
+            print "!!! DOUBLE-CHECK NU FLATTENING! {0}".format(H.shape)
+            for i in range(H.shape[0]):
+                for j in range(H.shape[1]):
+                    dist = ma.sqrt( ((i-(H.shape[0]/2.0))*y_size)**2 + (j*x_size)**2)
+                    H[i,j] = H[i,j] / (dist*2.5)
+            H = sc.sqrt(H) #sc.log10(H)
+            #vm = 1.5
+        elif scale==1:  H=sc.sqrt(H)
+        else:  vm=300.0
+        hists.append(H)
+        counter=1
+    """ Setup Figure """
+    if nu_flatten==1 or scale==1:  vm=16.0
+    else:  vm = 300.0
+    if color==1:  cmap = spectral_wb
+    else:  cmap = binary
+    """ Begin Figure """
+    plt.figure(1)
+    plt.subplots_adjust(hspace=0.001, wspace=0.001)
+    place = [221, 222, 223, 224]
+    for i,H in list(enumerate(hists)):
+        sp = plt.subplot(place[i], adjustable='box', aspect=1.0)
+        plt.imshow(H, extent=extent, interpolation='nearest', vmin=0.0, vmax=vm,
+               cmap=cmap)
+        if i==3:  #last plot
+            bar = plt.colorbar(orientation='vertical')
+            if scale == 1:
+                bar_ticks = sc.arange(0.0, vm+1.0, 2.0)
+                bar_labels = []
+                for i in range(len(bar_ticks)):   
+                    bar_labels.append(str(int(bar_ticks[i]**2)))
+                bar.set_ticks(bar_ticks)
+                bar.set_ticklabels(bar_labels, update_ticks=True)
+        """ Draw axes - mu """
+        mu_axis = gen_mu_axis(mu_lim, r_lim[1])
+        plt.plot(mu_axis[0], mu_axis[1], 'k-')
+        for i in range(len(mu_axis[2])):
+            x0 = [1.0*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.1*r_lim[1]*sc.cos(mu_axis[2][i]*rad)]
+            y0 = [1.0*r_lim[1]*sc.sin(mu_axis[2][i]*rad), 1.1*r_lim[1]*sc.sin(mu_axis[2][i]*rad)]
+            plt.plot(x0,y0, 'k-')
+            if mu_axis[3][i] <= 180.0:  rot = -90.0 + mu_axis[3][i]
+            else:  rot =  -360.0 + mu_axis[3][i] - 90.0
+            x00, y00 = 1.12*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.12*r_lim[1]*sc.sin(mu_axis[2][i]*rad)
+            plt.text(x00, y00, str(mu_axis[3][i]), rotation=rot, fontsize=10,
+                 horizontalalignment='center') #float(mu_axis[3][i]) )
+        """ Draw axes - r """
+        r_axis = gen_r_axis(mu_lim, r_lim)
+        plt.plot(r_axis[0], r_axis[1], 'k-')
+        mu1 = sc.arange(mu_lim[0]-6.0, mu_lim[1]+7.0, 1.0)
+        for tick in r_axis[2]:
+            x1, y1 = tick*sc.cos(mu1*rad), tick*sc.sin(mu1*rad)
+            if mu1[-1] < 90.0 or mu1[-1] > 360.0:
+                x2, y2 = tick*sc.cos((mu1[-1])*rad), tick*sc.sin((mu1[-1])*rad)
+                hl = 'right'
+            else:  x2, y2 = tick*sc.cos((mu1[1])*rad), tick*sc.sin((mu1[1])*rad); hl='left'
+            plt.plot(x1[:7], y1[:7], "k-")
+            plt.plot(x1[-7:], y1[-7:], "k-")
+            plt.text(x2, y2, str(int(tick)), rotation=0.0, fontsize=10,
+                 horizontalalignment=hl, verticalalignment='bottom')
+        # Draw axes - g (TO BE DONE)
+        """ Clean up output """
+        y_lim = plt.ylim()
+        plt.ylim(y_lim[1], y_lim[0])
+        plt.setp(sp.get_xticklabels(), visible=False)
+        plt.setp(sp.get_yticklabels(), visible=False)
+        plt.setp(sp.get_xticklines(),  visible=False)
+        plt.setp(sp.get_yticklines(),  visible=False)
+    """ Draw Plot """
+    if outname == None:  plt.show()
+    else:  plt.savefig((outname+".ps"), papertype='letter')
+    plt.close('all')
+
+"""

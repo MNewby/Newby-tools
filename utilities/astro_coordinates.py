@@ -25,7 +25,7 @@ dsun = 8.5
 
 """ !!!  There may be lingering 'type' issues... !!! """
 
-def EqToGC (ra_deg, dec_deg, wedge):  #produces lists...  anglebounds2!!!
+def EqToGC (ra_deg, dec_deg, wedge):  #produces lists...  anglebounds2!!!  ROTATE
     """ Converts equatorial ra,dec into Great Circle mu, nu; 'atSurveyGeometry.c' in
     m31.phys.rpi.edu:/p/prd/astrotools/v5_18/Linux-2-4-2-3-2/src"""
     node = (surveyCenterRa - 90.0)*rad
@@ -44,7 +44,7 @@ def EqToGC (ra_deg, dec_deg, wedge):  #produces lists...  anglebounds2!!!
     nu, mu = angle_bounds2((nu*deg), (mu*deg))
     return mu,nu
 
-def GCToEq (mu_deg, nu_deg, wedge):  # produces lists....
+def GCToEq (mu_deg, nu_deg, wedge):  # produces lists....  ROTATE
     """ Converts Stripe mu, nu into equatorial ra, dec.  Called 'atGCToEq' in at SurveyGeometry.c"""
     node = (surveyCenterRa - 90.0)*rad
     eta = get_eta(wedge)
@@ -288,6 +288,36 @@ def lambeta2lbr(lam, beta, r, center=[], plane=[], origin=None):
     x1, y1, z1 = longlat2xyz(lam, beta, r)
     x, y, z = plane2xyz(x1, y1, z1, center, plane, origin)
     return xyz2lbr(x,y,z)
+
+
+""" ------------------ Projections ------------------ """
+
+def equal_area_projection(lam, phi, acc=0.0002777778):
+	""" Mollweide equal-area projection (Wikipedia)
+		lam:  longitude from central meridian
+		phi:  latitude from equator	
+		acc:  desired accuracy, in degrees.  Default is one arcsecond"""
+	xm, ym = (2.0)*ma.sqrt(2.0)/ma.pi, ma.sqrt(2.0) #multipliers for projection
+	if type(lam) != type(arr):  theta = sc.array([lam])
+	if type(phi) != type(arr):  phi = sc.array([phi])
+	theta=[]
+	for i in range(len(lam)):  #Newton-Ralphson method to get auxiliary angle "t"
+		if (abs(phi[i])-90.0) < acc:  theta.append(phi[i]); continue  #Takes care of singularities at poles
+		t = phi[i]
+		while (2.0*t + ma.sin(2.0*t) - ma.pi*ma.sin(phi)) > acc:
+			t = t - ( (2.0*t + ma.sin(2.0*t) - ma.pi*ma.sin(phi))/(2.0 + 2.0*ma.cos(2.0*t)) )
+		theta.append(t)
+	theta = sc.array(theta)
+	x = xm*lam*sc.cos(theta)
+	y = ym*sc.sin(t)
+	if len(x)==1:  x, y = x[0], y[0]
+	return x, y
+	
+def tripel_projection(lam, phi):
+	""" Winkel tripel projection (Wikipedia); minimizes distortion
+		"""
+	x, y = -1, -1
+	return x, y
 
 
 """ ------------------ Utilities ------------------ """
