@@ -233,7 +233,7 @@ def plot_stripe_mug(data, wedge, name="out", mag=0):
 
 def lbpolar_plot(folder, hemi='N', bin_size=1.0, outfile=None, infile=None,
                  color=1, scale=1, primary=1):
-	""" Makes a polar plot centered at the north or south Galactic caps, 
+    """ Makes a polar plot centered at the north or south Galactic caps, 
 		using all files in a given folder.  Files should be in l,b,r format.
 		hemi: 	'N' for Northern Galactic cap, 'S' for Southern Galactic cap
 		bin_size:  size of bins, in (roughly) degrees
@@ -241,7 +241,8 @@ def lbpolar_plot(folder, hemi='N', bin_size=1.0, outfile=None, infile=None,
 		infile:  if not None, reads in the histogram from the file 
 		color:  1 for spectral color map, 0 for black and white
 		scale:  1 to sqrt bin counts, 0 to leave the bin counts
-		primary:  1 to test wedges for primary stars (SDSS), 0 to skip test"""		
+		primary:  1 to test wedges for primary stars (SDSS), 0 to skip test
+    """		
     x_size, y_size, b_min = bin_size, bin_size, 30.0
     b_min = 90.0-b_min  # Flips it around so that 90.0 is at the origin
     # Initialize custom histogram
@@ -252,7 +253,7 @@ def lbpolar_plot(folder, hemi='N', bin_size=1.0, outfile=None, infile=None,
         files = glob.glob(folder+"/*.txt")
         for file in files:
             data = fi.read_data(file)
-            wedge = int(file.split("/")[-1][3:5])
+            wedge = int(file.split("/")[-1][6:8])
             if hemi=='S':   data[:,1] = -1.0*data[:,1]
             for i in range(len(data[:,0])):
                 if primary==1:
@@ -275,10 +276,10 @@ def lbpolar_plot(folder, hemi='N', bin_size=1.0, outfile=None, infile=None,
     if scale == 1:
         bar_ticks = sc.arange(0.0, 17.0, 4.0)
         bar_labels = []
-        for i in range(len(bar_ticks)):   
-            bar_labels.append(str(int(bar_ticks[i]**2)))
-        bar.set_ticks(bar_ticks)
-        bar.set_ticklabels(bar_labels, update_ticks=True)
+        #for i in range(len(bar_ticks)):   
+        #    bar_labels.append(str(int(bar_ticks[i]**2)))
+        #bar.set_ticks(bar_ticks)
+        #bar.set_ticklabels(bar_labels, update_ticks=True)
     # plot axes - l
     for i in [30.0, 45.0, 60.0, 75.0]:
         l = sc.arange(0.0, 361.0, 1.0)
@@ -286,9 +287,9 @@ def lbpolar_plot(folder, hemi='N', bin_size=1.0, outfile=None, infile=None,
         y = ((90.0-i)/(bin_size))*sc.sin(l*rad)+(b_min/y_size)          # FLAG y_size
         if i%2==0:  plt.plot(x,y,'k-')
         else:  plt.plot(x,y,'k:', linewidth=0.5)
-        if hemi=='S':  plt.text(x[89]+1.0, y[89]+1.0, r"$b="+str(int(i))+r"^{\circ}$", 
+        if hemi=='S':  plt.text(x[89]+1.0, y[89]+1.0, "$b="+str(-1.0*int(i))+"^{\circ}$", 
 			horizontalalignment='left', verticalalignment='bottom', fontsize=12)
-		else:  plt.text(x[89]+1.0, y[89]+1.0, r"$b="+str(int(i))+r"^{\circ}$", 
+        else:  plt.text(x[89]+1.0, y[89]+1.0, r"$b="+str(int(i))+r"^{\circ}$", 
 			horizontalalignment='left', verticalalignment='bottom', fontsize=12)
     # plot axes - b
     for i in sc.arange(0.0, 180.0, 15.0):
