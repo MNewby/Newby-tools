@@ -292,6 +292,18 @@ def lambeta2lbr(lam, beta, r, center=[], plane=[], origin=None):
 
 """ ------------------ Projections ------------------ """
 
+def equirec_projection(lam, phi, phi1=0.0):
+	""" Equirectangular Projection (Wikipedia), projects lat/long lines to rectangles
+		lam:  longitude from central meridian
+		phi:  latitude from equator 
+		phi1:  standard parallel; default makes lat/long -> cartesian coordinates"""
+		if type(lam) != type(arr):  theta = sc.array([lam])
+		if type(phi) != type(arr):  phi = sc.array([phi])
+		x = lam*np.cos(phi1)
+		y = phi
+		if len(x)==1:  x, y = x[0], y[0]
+		return x, y
+	
 def equal_area_projection(lam, phi, acc=0.0002777778):
 	""" Mollweide equal-area projection (Wikipedia)
 		lam:  longitude from central meridian
@@ -302,21 +314,41 @@ def equal_area_projection(lam, phi, acc=0.0002777778):
 	if type(phi) != type(arr):  phi = sc.array([phi])
 	theta=[]
 	for i in range(len(lam)):  #Newton-Ralphson method to get auxiliary angle "t"
-		if (abs(phi[i])-90.0) < acc:  theta.append(phi[i]); continue  #Takes care of singularities at poles
-		t = phi[i]
+		if (abs(phi[i])-90.0) < acc:  theta.append(phi[i]*rad); continue  #Takes care of singularities at poles
+		t = phi[i]*rad	#theta in radians for the trig functions
 		while (2.0*t + ma.sin(2.0*t) - ma.pi*ma.sin(phi)) > acc:
 			t = t - ( (2.0*t + ma.sin(2.0*t) - ma.pi*ma.sin(phi))/(2.0 + 2.0*ma.cos(2.0*t)) )
 		theta.append(t)
 	theta = sc.array(theta)
 	x = xm*lam*sc.cos(theta)
-	y = ym*sc.sin(t)
+	y = ym*sc.sin(theta)
 	if len(x)==1:  x, y = x[0], y[0]
 	return x, y
 	
-def tripel_projection(lam, phi):
-	""" Winkel tripel projection (Wikipedia); minimizes distortion
-		"""
-	x, y = -1, -1
+def tripel_projection(lam, phi, phi1=ma.arccos(2.0/ma.pi)):
+	""" Winkel tripel projection (Wikipedia); minimizes distortion in three categories.
+		lam:  longitude from central meridian
+		phi:  latitude from equator
+		phi1:  standard parallel, in radians;  default is Winkel's proposal"""
+	if type(lam) != type(arr):  lam = sc.array([lam])
+	if type(phi) != type(arr):  phi = sc.array([phi])
+	lam, phi = lam*rad, phi*rad  #convert to radians
+	alpha = np.arccos(np.cos(phi)*np.cos(lam*0.5))
+	# MIGHT NEED LAM, PHI IN DEGREES HERE
+	x = 0.5*(lam*np.cos(phi1) + (2.0*np.cos(phi)*np*sin(lam*0.5)/(unsinc(alpha) )))  
+	y = 0.5*(phi + (np.sin(phi)/unsinc(alpha)) )
+	if len(x)==1:  x, y = x[0], y[0]
+	return x, y
+
+def sin_projection(lam, phi):
+	""" Sinusoidal Projection (Wikipedia); equal-area projection, distorts shapes
+		lam:  longitude from central meridian
+		phi:  latitude from equator """
+	if type(lam) != type(arr):  lam = sc.array([lam])
+	if type(phi) != type(arr):  phi = sc.array([phi])
+	x = lam*np.cos(phi*rad)
+	y = phi
+	if len(x)==1:  x, y = x[0], y[0]
 	return x, y
 
 
@@ -431,6 +463,10 @@ def raDeg (raHr, raMin, raSec, dec=0.0):  # Make this one better
     #print 'converted ra, in degrees:'
     return newra
 
+def unsinc(x):
+	"""Returns the unnormalized sinc function; x in radians"""
+	return np.pi * np.sinc(x/np.pi)
+	
 def check (expected, test):
     arcsec = 1.0 / 3600.0
     if (expected - test) < arcsec:  return "YES - total error: "+str((expected - test)*3600.0)+" arcseconds"
