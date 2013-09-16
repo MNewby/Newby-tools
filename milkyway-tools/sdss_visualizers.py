@@ -339,12 +339,12 @@ def test_primary(l,b,wedge,low=9,high=23):
 def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
                     mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1):
     fig = plt.figure(1, frameon=False)
-    sp = single_stripe_mur(data, wedge, mag, scale, color, 111, mu_lim, r_lim, vm, nu_flatten, bar)
+    sp = single_stripe_mur(data, wedge, mag, scale, color, 111, mu_lim, 
+		r_lim, vm, nu_flatten, bar)
     """ Draw Plot """
     if outname == None:  plt.show()
     else:  plt.savefig((outname+".ps"), papertype='letter')
     plt.close('all')
-
 
 def plot_separation_mur(wedge, data0, data1=None, data2=None, data3=None, 
                         outname=None, mag=0, scale=0, color=1, mu_lim=None, 
@@ -368,6 +368,16 @@ def plot_separation_mur(wedge, data0, data1=None, data2=None, data3=None,
         sp3 = single_stripe_mur(data3, wedge, mag, scale, color, 224, 
             mu_lim, r_lim, vm, nu_flatten, bar=0) 
         fig.add_subplot(sp3)
+    if outname == None:  plt.show()
+    else:  plt.savefig((outname+".ps"), papertype='letter')
+    plt.close('all')
+
+def plot_stripe_results():
+	"""Graphically plots a parameter set, with or without the accompanying data"""
+    fig = plt.figure(1, frameon=False)
+    sp = single_stripe_mur(data, wedge, mag, scale, color, 111, mu_lim, 
+		r_lim, vm, nu_flatten, bar)
+    """ Draw Plot """
     if outname == None:  plt.show()
     else:  plt.savefig((outname+".ps"), papertype='letter')
     plt.close('all')
@@ -736,12 +746,12 @@ def plot_separation_mur_OLD(datas, wedge, outname=None, mag=0, scale=0, color=1,
         else:  vm=300.0
         hists.append(H)
         counter=1
-    """ Setup Figure """
+    #Setup Figure
     if nu_flatten==1 or scale==1:  vm=16.0
     else:  vm = 300.0
     if color==1:  cmap = spectral_wb
     else:  cmap = binary
-    """ Begin Figure """
+    #Begin Figure
     plt.figure(1)
     plt.subplots_adjust(hspace=0.001, wspace=0.001)
     place = [221, 222, 223, 224]
@@ -758,7 +768,7 @@ def plot_separation_mur_OLD(datas, wedge, outname=None, mag=0, scale=0, color=1,
                     bar_labels.append(str(int(bar_ticks[i]**2)))
                 bar.set_ticks(bar_ticks)
                 bar.set_ticklabels(bar_labels, update_ticks=True)
-        """ Draw axes - mu """
+        #Draw axes - mu
         mu_axis = gen_mu_axis(mu_lim, r_lim[1])
         plt.plot(mu_axis[0], mu_axis[1], 'k-')
         for i in range(len(mu_axis[2])):
@@ -770,7 +780,7 @@ def plot_separation_mur_OLD(datas, wedge, outname=None, mag=0, scale=0, color=1,
             x00, y00 = 1.12*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.12*r_lim[1]*sc.sin(mu_axis[2][i]*rad)
             plt.text(x00, y00, str(mu_axis[3][i]), rotation=rot, fontsize=10,
                  horizontalalignment='center') #float(mu_axis[3][i]) )
-        """ Draw axes - r """
+        #Draw axes - r
         r_axis = gen_r_axis(mu_lim, r_lim)
         plt.plot(r_axis[0], r_axis[1], 'k-')
         mu1 = sc.arange(mu_lim[0]-6.0, mu_lim[1]+7.0, 1.0)
@@ -785,14 +795,14 @@ def plot_separation_mur_OLD(datas, wedge, outname=None, mag=0, scale=0, color=1,
             plt.text(x2, y2, str(int(tick)), rotation=0.0, fontsize=10,
                  horizontalalignment=hl, verticalalignment='bottom')
         # Draw axes - g (TO BE DONE)
-        """ Clean up output """
+        #Clean up output
         y_lim = plt.ylim()
         plt.ylim(y_lim[1], y_lim[0])
         plt.setp(sp.get_xticklabels(), visible=False)
         plt.setp(sp.get_yticklabels(), visible=False)
         plt.setp(sp.get_xticklines(),  visible=False)
         plt.setp(sp.get_yticklines(),  visible=False)
-    """ Draw Plot """
+    #Draw Plot
     if outname == None:  plt.show()
     else:  plt.savefig((outname+".ps"), papertype='letter')
     plt.close('all')
