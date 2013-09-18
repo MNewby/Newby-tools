@@ -76,6 +76,12 @@ white_black = LinearSegmentedColormap('grey', cdict1)
 spectral_colors = fi.read_data('../utilities/spectral_cm.txt')
 spectral_wb = ListedColormap(spectral_colors[:,:3], name="spectral_wb", N=256)
 
+def help():
+	myself = open("sdss_visualizers.py", "r")
+	for line in myself:
+		if line[:3] == "def":  ((line.split()[1]).split("("))[0]
+	sys.exit(2)
+
 def get_stripe(wedge, filein):
     stripe_data = []
     skymap = sc.zeros((180, 360), float)
@@ -343,7 +349,9 @@ def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
 		r_lim, vm, nu_flatten, bar)
     """ Draw Plot """
     if outname == None:  plt.show()
-    else:  plt.savefig((outname+".ps"), papertype='letter')
+    else:  
+		plt.savefig((outname+".ps"), papertype='letter')
+		plt.savefig((outname+".png"))
     plt.close('all')
 
 def plot_separation_mur(wedge, data0, data1=None, data2=None, data3=None, 
@@ -372,18 +380,53 @@ def plot_separation_mur(wedge, data0, data1=None, data2=None, data3=None,
     else:  plt.savefig((outname+".ps"), papertype='letter')
     plt.close('all')
 
-def plot_stripe_results():
-	"""Graphically plots a parameter set, with or without the accompanying data"""
+def plot_stripe_results(param_string, wedge, data=None, outname=None, mag=0, 
+        scale=0, color=1, mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1):
+    """ Graphically plots a parameter set, with or without the accompanying data
+		param_string:  a list of MLE fit parameters
+		"""
+    halo = param_string[:2]
+    p1,p2,p3 = None, None, None
+    if len(param_string) > 2:  p1 = param_string[2:8]
+    if len(param_string) > 8:  p2 = param_string[8:14]
+    if len(param_string) > 14:  p3 = param_string[14:]
+    t = sc.arange(0.0, 360.0, 0.1)*rad
     fig = plt.figure(1, frameon=False)
-    sp = single_stripe_mur(data, wedge, mag, scale, color, 111, mu_lim, 
-		r_lim, vm, nu_flatten, bar)
+    if data!=None:  sp = single_stripe_mur(data, wedge, mag, scale, color, 
+        111, mu_lim, r_lim, vm, nu_flatten, bar)
+    else:  sp = single_stripe_mur(sc.array([[0.0,0.0,0.0]]), wedge, mag, scale, color, 
+        111, mu_lim, r_lim, vm, nu_flatten, bar)
+	# Halo
+    xhalo, yhalo = (halo[1]*sc.cos(t)), (halo[1]*sc.sin(t))
+    sp.plot(xhalo, yhalo, "k--")
+    # Stream 1
+    if p1 != None:
+		u1,v1 = p1[5]*sc.cos(t), p1[5]*sc.sin(t)
+		mu1, nu1, r1 = sc.zeros(len(t)), sc.zeros(len(t)), sc.zeros(len(t))
+		for i in range(len(t)):
+			mu1[i],nu1[i],r1[i] = coor.streamToGC(u1[i],v1[i],0.0,p1[1],p1[2],p1[3],2.2*p1[4],wedge)	
+		sp.plot(r1*sc.cos(mu1*rad), r1*sc.sin(mu1*rad), "k-")
+    # Stream 2
+    if p2 != None:
+		u2,v2 = p2[5]*sc.cos(t), p2[5]*sc.sin(t)
+		mu2, nu2, r2 = sc.zeros(len(t)), sc.zeros(len(t)), sc.zeros(len(t))
+		for i in range(len(t)):
+			mu2[i],nu2[i],r2[i] = coor.streamToGC(u2[i],v2[i],0.0,p2[1],p2[2],p2[3],2.2*p2[4],wedge)	
+		sp.plot(r2*sc.cos(mu2*rad), r2*sc.sin(mu2*rad), "b-")
+    # Stream 3
+    if p3 != None:
+		u3,v3 = p3[5]*sc.cos(t), p3[5]*sc.sin(t)
+		mu3, nu3, r3 = sc.zeros(len(t)), sc.zeros(len(t)), sc.zeros(len(t))
+		for i in range(len(t)):
+			mu3[i],nu3[i],r3[i] = coor.streamToGC(u3[i],v3[i],0.0,p3[1],p3[2],p3[3],2.2*p3[4],wedge)	
+		sp.plot(r3*sc.cos(mu3*rad), r3*sc.sin(mu3*rad), "r-")
     """ Draw Plot """
     if outname == None:  plt.show()
     else:  plt.savefig((outname+".ps"), papertype='letter')
     plt.close('all')
 
 def single_stripe_mur(data, wedge, mag=0, scale=0, color=1, position=111,
-                    mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1):
+         mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1, ring=1):
     """ change 'scale' to a string tag:  None, sqrt, flatten, log? """
     #l, b = data[:,0], data[:,1]
     x_size, y_size = 0.5, 0.5
@@ -394,6 +437,13 @@ def single_stripe_mur(data, wedge, mag=0, scale=0, color=1, position=111,
     ra, dec = coor.lbToEq(data[:,0],data[:,1])
     mu, nu = coor.EqToGC(ra, dec, wedge)
     if mu_lim==None:  mu_lim = (np.ma.min(mu), np.ma.max(mu))
+    #Checks if limits straddle mu=0.0
+    if (mu_lim[0] < 1.0) and (mu_lim[1] > 359.0):  
+        mu_lim[0], mu_lim[1] = 0.0, 360.0
+        for i in mu:
+            if (i > 180.0 ) and (i < mu_lim[1]):  mu_lim[1] = i
+            if (i < 180.0 ) and (i > mu_lim[0]):  mu_lim[0] = i
+        mu_lim[0] = mu_lim[0] - 360.0
     x, y = r*sc.cos(mu*rad), r*sc.sin(mu*rad)
     x_bins = int((np.ma.max(x)-np.ma.min(x))/x_size) + 1
     y_bins = int((np.ma.max(y)-np.ma.min(y))/y_size) + 1
@@ -429,7 +479,7 @@ def single_stripe_mur(data, wedge, mag=0, scale=0, color=1, position=111,
             bar.set_ticks(bar_ticks)
             bar.set_ticklabels(bar_labels, update_ticks=True)
     """ Draw axes - mu """
-    mu_axis = gen_mu_axis(mu_lim, r_lim[1]) 
+    mu_axis = gen_mu_axis(mu_lim, r_lim[1], ring) 
     plt.plot(mu_axis[0], mu_axis[1], 'k-')  # Draws main axis
     for i in range(len(mu_axis[2])):  
         x0 = [1.0*r_lim[1]*sc.cos(mu_axis[2][i]*rad), 1.1*r_lim[1]*sc.cos(mu_axis[2][i]*rad)]
@@ -478,15 +528,14 @@ def single_stripe_mur(data, wedge, mag=0, scale=0, color=1, position=111,
     #ax.axis('off')
     return sp
 
-def gen_mu_axis(mu_lim, edge):
+def gen_mu_axis(mu_lim, edge, ring=1):
     d = edge*1.05
-    low, high = ma.floor(mu_lim[0]/15.0), ma.ceil(mu_lim[1]/15.0)
-    #low, high = (mu_lim[0]/15.0), (mu_lim[1]/15.0)
+    if ring==1:  low, high = 0.0, 23.5
+    else:  low, high = ma.floor(mu_lim[0]/15.0), ma.ceil(mu_lim[1]/15.0)
     mu = sc.arange((low*15.0)-10.0, (high*15.0)+10.1, 1.0)
     x, y = d*sc.cos(mu*rad), d*sc.sin(mu*rad)
     mu_ticks = sc.arange(low, high+1.0, 1.0)
     mu_ticks = mu_ticks*15.0
-    #u, v = d*sc.cos(mu_ticks*rad), d*sc.sin(mu_ticks*rad)
     mu_labels = []
     for tick in mu_ticks:
         if tick >= 360.0:

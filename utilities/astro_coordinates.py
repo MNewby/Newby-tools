@@ -17,9 +17,11 @@ surveyCenterRa = 185.0
 surveyCenterDec = 32.5
 raGP = 192.8594813 * rad
 decGP = 27.1282511 * rad
-lCP = 122.932 * rad #123.932
+lCP = 122.932 * rad #123.932 is the wrong value in B&M
+#raSP = 
+#decSP = 
 arr = sc.array([0.0])
-dsun = 8.5
+dsun = 8.5  # 8.0 is current IAU standard!
 
 """ All systems should be accurate to within 1 arcsecond, 1/3600 degree = 0.000278 """
 
@@ -297,12 +299,12 @@ def equirec_projection(lam, phi, phi1=0.0):
 		lam:  longitude from central meridian
 		phi:  latitude from equator 
 		phi1:  standard parallel; default makes lat/long -> cartesian coordinates"""
-		if type(lam) != type(arr):  theta = sc.array([lam])
-		if type(phi) != type(arr):  phi = sc.array([phi])
-		x = lam*np.cos(phi1)
-		y = phi
-		if len(x)==1:  x, y = x[0], y[0]
-		return x, y
+	if type(lam) != type(arr):  theta = sc.array([lam])
+	if type(phi) != type(arr):  phi = sc.array([phi])
+	x = lam*np.cos(phi1)
+	y = phi
+	if len(x)==1:  x, y = x[0], y[0]
+	return x, y
 	
 def equal_area_projection(lam, phi, acc=0.0002777778):
 	""" Mollweide equal-area projection (Wikipedia)
@@ -325,7 +327,7 @@ def equal_area_projection(lam, phi, acc=0.0002777778):
 	if len(x)==1:  x, y = x[0], y[0]
 	return x, y
 	
-def tripel_projection(lam, phi, phi1=ma.arccos(2.0/ma.pi)):
+def tripel_projection(lam, phi, phi1=ma.acos(2.0/ma.pi)):
 	""" Winkel tripel projection (Wikipedia); minimizes distortion in three categories.
 		lam:  longitude from central meridian
 		phi:  latitude from equator

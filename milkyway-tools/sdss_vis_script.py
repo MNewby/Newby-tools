@@ -36,14 +36,17 @@ if __name__ == "__main__":
     #do_densityplots()
     #do_onewedgeplot("stripe-10-DR7-clean.txt", 10, None)
     #do_compare_wedges(file1="unmatched-82-1arcsec.txt", file2="matched-82-1arcsec.txt", stripe=82, hern=0)
-    sdss.lbpolar_plot("/home/newbym2/starfiles/DR7_South/", hemi='S', bin_size=0.5, 
-        outfile=None, infile=None, color=1, scale=1, primary=1)
+    #sdss.lbpolar_plot("/home/newbym2/starfiles/DR7_South/", hemi='S', bin_size=0.5, 
+    #    outfile=None, infile=None, color=1, scale=1, primary=1)
     #sdss.lbpolar_plot("/home/newbym2/sscon_lbr/", hemi='N', bin_size=0.5, 
     #    outfile=None, infile=None, color=1, scale=1, primary=1)
     #sdss.sgr_xz_plot(folder="./sep_lbr/", bin_size=0.5, outfile=None, infile=None,
     #            primary=1, color=1, scale=0)
     # /home/newbym2/Desktop/star_holder/sep_lbr
     #sdss.sgr_plot()
+    sdss.plot_stripe_results([0.56,8.6,-1.7,180.0,27.3,-1.91, -0.14, 3.5,-1.8,190.0,15.0,1.85,-2.1, 2.6,-1.4,192.6, 37.6, 1.6, -0.18, 9.3], wedge, 
+        data=data, outname=None, mag=0, scale=1, color=1, mu_lim=(135.0,240.0), 
+        r_lim=(0.0,50.0), vm=10.0, nu_flatten=0, bar=1)
     """t0 = time.time()
     wedges = range(70,90)
     all_stripes(wedges, "FTO_south_mnewby.csv")
