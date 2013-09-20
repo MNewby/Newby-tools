@@ -421,8 +421,10 @@ def plot_stripe_results(param_string, wedge, data=None, outname=None, mag=0,
 			mu3[i],nu3[i],r3[i] = coor.streamToGC(u3[i],v3[i],0.0,p3[1],p3[2],p3[3],2.2*p3[4],wedge)	
 		sp.plot(r3*sc.cos(mu3*rad), r3*sc.sin(mu3*rad), "r-")
     """ Draw Plot """
+    plt.xlim(-60.0, 60.0)
+    plt.ylim(-60.0, 60.0)
     if outname == None:  plt.show()
-    else:  plt.savefig((outname+".ps"), papertype='letter')
+    else:  plt.savefig(outname+".png") #;plt.savefig((outname+".ps"), papertype='letter')
     plt.close('all')
 
 def single_stripe_mur(data, wedge, mag=0, scale=0, color=1, position=111,
