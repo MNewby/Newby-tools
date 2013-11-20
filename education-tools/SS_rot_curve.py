@@ -4,6 +4,8 @@ import scipy as sc
 import matplotlib
 #matplotlib.use('PS')
 import matplotlib.pyplot as plt
+import sys
+sys.path.insert(0, '../utilities')
 import astro_coordinates as co
 
 rad = ma.pi/180.0
