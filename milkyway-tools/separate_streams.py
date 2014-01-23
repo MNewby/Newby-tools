@@ -14,7 +14,7 @@ import glob
 '''python script for quickly separating separation data
     Matthew Newby, March 23, 2012'''
 
-def separation(folder="/home/newbym2/Desktop/sansSgr/", name="out"):
+def separation(folder="/home/newbym2/Desktop/", name="out"):
     """ Separates a separation file into distinct star files """
     files = glob.glob(folder+"separation-[0-9][0-9]*.txt")
     l = len(folder)
@@ -40,12 +40,12 @@ def separation(folder="/home/newbym2/Desktop/sansSgr/", name="out"):
             writefile.close()
         print "{0}, {1} Separated".format(wedge, name)
 
-def sep_lbr(folder1="/home/newbym2/Desktop/sansSgr/stars/",
-            folder2="/home/newbym2/Desktop/sansSgr/outfiles/", 
+def sep_lbr(folder1="/home/newbym2/Desktop/",
+            folder2="/home/newbym2/Desktop/", 
             tag=""):
     """ Matches an lbr starfile with an xyz starfile and saves the result"""
     files1 = glob.glob(folder1+"stars-[0-9][0-9]*") #Star files
-    files2 = glob.glob(folder2+"out-*") #Separation files
+    files2 = glob.glob(folder2+"sep-*") #Separation files
     #files2 = glob.glob(folder2+"/*[7-8][2-9]*")
     #print files1
     #print files2

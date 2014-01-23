@@ -9,21 +9,21 @@ import sys
 
     
 if __name__ == "__main__":
-    #if len(sys.argv) > 1: data = fi.read_data(sys.argv[1])
-    #if len(sys.argv) > 2: wedge = int(sys.argv[2])
-    #else:  wedge = 82
+    if len(sys.argv) > 1: data = fi.read_data(sys.argv[1])
+    if len(sys.argv) > 2: wedge = int(sys.argv[2])
+    else:  wedge = 82
     #plot_stripe_lb(data)
     #plot_stripe_3D(data)
     #sdss.plot_stripe_mur(data, wedge, mag=0, scale=1, r_lim=(0.0, 46.0), 
     #    vm=10.0, mu_lim=(310.0, 419.0), color=1)
     #wedge = 18
-    #data0 = fi.read_data("../../sep_lbr/bg-18.txt")
-    #data1 = fi.read_data("../../sep_lbr/s1-18.txt")
-    #data2 = fi.read_data("../../sep_lbr/s2-18.txt")
-    #data3 = fi.read_data("../../sep_lbr/s3-18.txt")
-    #sdss.plot_separation_mur(wedge, data0, data1, data2, data3,
-    #                    outname=None, mag=0, scale=1, color=1, mu_lim=(135.0, 240.0), 
-    #                    r_lim=(0.0, 45.0), vm=10.0, nu_flatten=0, bar=0)
+    data0 = fi.read_data("/home/newbym2/Desktop/stars-82-tdouble_new.txt")
+    data1 = fi.read_data("/home/newbym2/Desktop/bg-82out-new.txt")
+    data2 = fi.read_data("/home/newbym2/Desktop/s1-82out-new.txt")
+    data3 = fi.read_data("/home/newbym2/Desktop/s2-82out-new.txt")
+    sdss.plot_separation_mur(wedge, data0, data1, data2, data3,
+                        outname=None, mag=0, scale=1, color=1, mu_lim=(310.0, 420.0), 
+                        r_lim=(0.0, 45.0), vm=10.0, nu_flatten=0, bar=0)
     #sdss.plot_stripe_mur(data, wedge, mag=0, scale=1, r_lim=(0.0, 50.0), vm=10.0, mu_lim=None) #(165.0, 245.0))
     #plot_stripe_mug(data, wedge)
     #plot_stripe_mu(data, wedge)
@@ -47,6 +47,7 @@ if __name__ == "__main__":
     #sdss.plot_stripe_results([0.56,8.6,-1.7,180.0,27.3,-1.91, -0.14, 3.5,-1.8,190.0,15.0,1.85,-2.1, 2.6,-1.4,192.6, 37.6, 1.6, -0.18, 9.3], wedge, 
     #    data=data, outname=None, mag=0, scale=1, color=1, mu_lim=(135.0,240.0), 
     #    r_lim=(0.0,50.0), vm=10.0, nu_flatten=0, bar=1)
+    """
     param_data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrOther/results_table_easyread.txt", delimiter=",")
     wedges, i = [9,10,11,12,13,14,15,16,17,18,19,20,21], 0 #22,23,79,82,86], 0
     if len(wedges) != len(param_data):  print "NOT SAME LENGTH!!!!"
@@ -64,7 +65,7 @@ if __name__ == "__main__":
         sdss.plot_stripe_results(params, wedge, data=data, outname="sec_stripe_results-"+thing,  
             mag=0, scale=1, color=1, mu_lim=None, r_lim=(0.0,50.0), vm=10.0, nu_flatten=0, bar=1)
         i = i + 1
-    """t0 = time.time()
+    t0 = time.time()
     wedges = range(70,90)
     all_stripes(wedges, "FTO_south_mnewby.csv")
     tf = time.time()

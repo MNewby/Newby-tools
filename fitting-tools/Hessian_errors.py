@@ -69,4 +69,3 @@ def R_squared(function, parameters, x, y, sigma):
     
 def reduced_chi_squared(chi_squared, N_data, n_params):
     return ( chi_squared/(N_data-n_params) )
-    

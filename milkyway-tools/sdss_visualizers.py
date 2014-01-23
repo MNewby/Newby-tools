@@ -438,7 +438,7 @@ def single_stripe_mur(data, wedge, mag=0, scale=0, color=1, position=111,
     if r_lim == None:  r_lim = (np.ma.min(r), np.ma.max(r))
     ra, dec = coor.lbToEq(data[:,0],data[:,1])
     mu, nu = coor.EqToGC(ra, dec, wedge)
-    if mu_lim==None:  mu_lim = (np.ma.min(mu), np.ma.max(mu))
+    if mu_lim==None:  mu_lim = [np.ma.min(mu), np.ma.max(mu)]
     #Checks if limits straddle mu=0.0
     if (mu_lim[0] < 1.0) and (mu_lim[1] > 359.0):  
         mu_lim[0], mu_lim[1] = 0.0, 360.0

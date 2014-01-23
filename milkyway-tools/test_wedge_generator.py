@@ -1,5 +1,7 @@
 #! /usr/bin/env python  #'Bang' line - modify as needed
 
+import sys
+sys.path.insert(0, '../utilities')
 import math as ma
 import numpy as np
 import scipy as sc

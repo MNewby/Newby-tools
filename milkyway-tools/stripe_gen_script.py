@@ -26,16 +26,18 @@ single.streams = [stream1]
 double = twg.ParamSet()
 double.background = background
 double.streams = [stream1, stream2]
+double.update_refs()
 
-perturbation = [None, 0.05, 0.10, 0.15, 0.20]
+perturbation = [None] #, 0.05, 0.10, 0.15, 0.20]
 per_params = (0.0, 0.79, -19.9)
 
 t1 = time.time()
 
+"""
 # Single Stream Generation
 for i in range(len(perturbation)):
     t2 = time.time()
-    filename = "single_t82_"+str(i)+"_3.txt"
+    filename = "single_t82_"+str(i)+"_new.txt"
     print "### --- Starting run {0} with {1} stars in perturbation".format(filename, perturbation[i])
     twg.build_stripe(single, filename, 110000, perturbation[i], per_params,
                  con=1, det=1, app=1)
@@ -43,17 +45,18 @@ for i in range(len(perturbation)):
     print "# - completed in {0} senconds".format(t3 - t2)
 
 print " * single stream runs completed in {0} seconds".format(t3-t1)
+"""
 
 # Double Stream Generation
 for i in range(len(perturbation)):
     t2 = time.time()
-    filename = "double_t82_"+str(i)+".txt"
+    filename = "double_t82_"+str(i)+"_new.txt"
     print "### --- Starting run {0} with {1} stars in perturbation".format(filename, perturbation[i])
-    #twg.build_stripe(double, filename, 110000, perturbation[i], per_params,
-    #             con=1, det=1, app=1)
+    twg.build_stripe(double, filename, 110000, perturbation[i], per_params,
+                 con=1, det=1, app=1)
     t4 = time.time()
     print "# - completed in {0} seconds".format(t4-t2)
 
-print " * double stream runs completed in {0} seconds".format(t4-t3)
+#print " * double stream runs completed in {0} seconds".format(t4-t3)
 print " * all runs completed in {0} seconds".format(t4-t1)
 print " --- fin --- "
