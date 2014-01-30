@@ -3,6 +3,7 @@
 import scipy as sc
 import numpy as np
 import subprocess as sp
+import time
 
 """This program contains code for finding errors from R-squared functions.
 Matthew Newby (RPI), Oct 16, 2010
@@ -38,6 +39,7 @@ def get_hessian_errors(result, verbose=0, like=1):
     #Build Hessian
     for i in range(length):
         for j in range(length):
+            print "# - Finding element {0}, {1}".format(i, j)
             #H_1[i,j] = L(Q[j]+h[j], Q[i]+h[i])
             for k in range(length): test_params[k]=base_params[k]
             test_params[j] = test_params[j] + result.steps[j]
@@ -103,7 +105,9 @@ def modify_steps(result, scale, tolerance=0.20):
 
 
 def smart_Hessian(result, loops=10, scale=1.0, tolerance=0.2):
+    t0 = time.time()
     while loops > 0:
+        print "# - Starting Loop {0} (counting down); {1} seconds elapsed".format(loops, (time.time()-t0))
         result.errors = get_hessian_errors(result)
         scale = modify_steps(results, scale, tolerance)
         if scale==0:  break
