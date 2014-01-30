@@ -16,21 +16,20 @@ class results():
         self.params = []
         self.steps = []
         self.errors = []
-    def function(self, params):
-        return -1
+	self.function = mw_func 
 
 """ STUFF TO CHANGE FOR EACH RUN """
-luafile = "/home/newbym2/Dropbox/Research/sgrLetter/ModfitParams.lua"
-def mw_func(params, luafile=luafile):
+luafile = "ModfitParams.lua"
+def mw_func(params):
     write_lua(params, luafile)
     sts1 = sp.call("./milkyway_separation -f -i -s stars-15.txt -a temp.lua", shell=True)
     likelihood = get_likelihood()
     #delete files
     sts2 = sp.call("rm temp.lua", shell=True)
-    sts3 = sp.call("rm stderr.txt.lua", shell=True)
+    sts3 = sp.call("rm stderr.txt", shell=True)
     return likelihood
 
-def get_hessian_errors(result, verbose=0):
+def get_hessian_errors(result, verbose=0, like=1):
     length = len(result.params)
     hessian = sc.zeros((length, length),float)
     base_params = sc.zeros(length, float)
@@ -41,31 +40,31 @@ def get_hessian_errors(result, verbose=0):
         for j in range(length):
             #H_1[i,j] = L(Q[j]+h[j], Q[i]+h[i])
             for k in range(length): test_params[k]=base_params[k]
-            test_params[j] = test_params[j] + results.steps[j]
-            test_params[i] = test_params[i] + results.steps[i]
-            H_1 = results.function(test_params) #R_squared(function, test_params, x, y, sigma)
+            test_params[j] = test_params[j] + result.steps[j]
+            test_params[i] = test_params[i] + result.steps[i]
+            H_1 = result.function(test_params) #R_squared(function, test_params, x, y, sigma)
             if like==1:  H_1 = np.exp(-H_1/2.0)
             #H_2[i,j] = L(Q[j]-h[j], Q[i]+h[i])
             for k in range(length): test_params[k]=base_params[k]
-            test_params[j] = test_params[j] - results.steps[j]
-            test_params[i] = test_params[i] + results.steps[i]
-            H_2 = results.function(test_params) #R_squared(function, test_params, x, y, sigma)
+            test_params[j] = test_params[j] - result.steps[j]
+            test_params[i] = test_params[i] + result.steps[i]
+            H_2 = result.function(test_params) #R_squared(function, test_params, x, y, sigma)
             if like==1:  H_2 = np.exp(-H_2/2.0)
             #H_3[i,j] = L(Q[j]+h[j], Q[i]-h[i])
             for k in range(length): test_params[k]=base_params[k]
-            test_params[j] = test_params[j] + results.steps[j]
-            test_params[i] = test_params[i] - results.steps[i]
-            H_3 = results.function(test_params) #R_squared(function, test_params, x, y, sigma)
+            test_params[j] = test_params[j] + result.steps[j]
+            test_params[i] = test_params[i] - result.steps[i]
+            H_3 = result.function(test_params) #R_squared(function, test_params, x, y, sigma)
             if like==1:  H_3 = np.exp(-H_3/2.0)
             #H_4[i,j] = L(Q[j]-h[j], Q[i]-h[i])
             for k in range(length): test_params[k]=base_params[k]
-            test_params[j] = test_params[j] - results.steps[j]
-            test_params[i] = test_params[i] - results.steps[i]
-            H_4 = results.function(test_params) #R_squared(function, test_params, x, y, sigma)
+            test_params[j] = test_params[j] - result.steps[j]
+            test_params[i] = test_params[i] - result.steps[i]
+            H_4 = result.function(test_params) #R_squared(function, test_params, x, y, sigma)
             if like==1:  H_4 = np.exp(-H_4/2.0)
             #H[i,j] = (H_1[i,j] - H_2[i,j]-H_3[i,j]+H_4[i,j]) / (4*h[i]*h[j])
             #h[k] is the step size for likelihood determination; use same as gradient?
-            hessian[i,j] = (H_1 - H_2 - H_3 + H_4) / (4.0*results.steps[i]*results.steps[j])
+            hessian[i,j] = (H_1 - H_2 - H_3 + H_4) / (4.0*result.steps[i]*result.steps[j])
     #check that it is symmetric
     for i in range(length):
         for j in range(length):
@@ -159,6 +158,6 @@ if __name__ == "__main__":
     result.steps = [0.1,5.0, 0.2,20.0,10.0,1.0,1.0,1.0, 0.2,20.0,10.0,1.0,1.0,1.0, 0.2,20.0,10.0,1.0,1.0,1.0 ]
     results.errors = []
     results.function = mw_func
-    #smart_Hessian(result)
-    print get_likelihood()
+    smart_Hessian(result)
+    #print get_likelihood()
     
