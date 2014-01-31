@@ -17,9 +17,14 @@ class results():
         self.params = []
         self.steps = []
         self.errors = []
-	self.function = mw_func 
+	self.function = mw_func
+    def speak(self):
+        #printa("Params: "+str(self.params)) 
+        printa("Steps: "+str(self.steps))
+        printa("Errors: "+str(self.errors))
 
 """ STUFF TO CHANGE FOR EACH RUN """
+dumpfile = "modfit.out"
 luafile = "ModfitParams.lua"
 def mw_func(params):
     write_lua(params, luafile)
@@ -39,7 +44,7 @@ def get_hessian_errors(result, verbose=0, like=1):
     #Build Hessian
     for i in range(length):
         for j in range(length):
-            print "# - Finding element {0}, {1}".format(i, j)
+            #`print "# - Finding element {0}, {1}".format(i, j)
             #H_1[i,j] = L(Q[j]+h[j], Q[i]+h[i])
             for k in range(length): test_params[k]=base_params[k]
             test_params[j] = test_params[j] + result.steps[j]
@@ -72,12 +77,12 @@ def get_hessian_errors(result, verbose=0, like=1):
         for j in range(length):
             if (hessian[i,j] != hessian[j,i]): 
                 symmetric=False
-                if verbose:  print '!!! Hessian not symmetric!'
+                if verbose:  printa('!!! Hessian not symmetric!')
             else:  symmetric=True
     #Convert to matrix type and invert
     hessian_matrix = np.matrix(hessian)
-    print '#--Hessian Matrix:'
-    print hessian_matrix
+    printa('#--Hessian Matrix:')
+    printa(hessian_matrix)
     hessian_inverse = hessian_matrix.I
     #read off diagonals and calculate errors
     errors = sc.zeros(length, float)
@@ -107,13 +112,14 @@ def modify_steps(result, scale, tolerance=0.20):
 def smart_Hessian(result, loops=10, scale=1.0, tolerance=0.2):
     t0 = time.time()
     while loops > 0:
-        print "# - Starting Loop {0} (counting down); {1} seconds elapsed".format(loops, (time.time()-t0))
+        printa("# - Starting Loop {0} (counting down); {1} seconds elapsed".format(loops, (time.time()-t0)))
         result.errors = get_hessian_errors(result)
-        scale = modify_steps(results, scale, tolerance)
+        scale = modify_steps(result, scale, tolerance)
+        result.speak()
         if scale==0:  break
         loops = loops-1
     if loops < 1:  print "!!! - Exited due to loop threshold"
-    print "# - Hessian Errors:  {0}".format(result.errors)
+    printa("# - Hessian Errors:  {0}".format(result.errors))
     
     
 def read_lua(filename):
@@ -156,12 +162,18 @@ def get_likelihood(likefile="stderr.txt"):
     infile.close()
     return float(hold)
 
+def printa(string, filename=dumpfile):
+    outfile = open(filename, 'a')
+    outfile.write(string+'\n')
+    outfile.close()
+
+
 if __name__ == "__main__":
     result = results()
     result.params = read_lua(luafile)
     result.steps = [0.1,5.0, 0.2,20.0,10.0,1.0,1.0,1.0, 0.2,20.0,10.0,1.0,1.0,1.0, 0.2,20.0,10.0,1.0,1.0,1.0 ]
     results.errors = []
     results.function = mw_func
-    smart_Hessian(result)
+    smart_Hessian(result, loops=2)
     #print get_likelihood()
     
