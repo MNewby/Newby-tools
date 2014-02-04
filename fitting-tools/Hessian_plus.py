@@ -81,15 +81,14 @@ def get_hessian_errors(result, verbose=0, like=1):
             else:  symmetric=True
     #Convert to matrix type and invert
     hessian_matrix = np.matrix(hessian)
-    printa('#--Hessian Matrix:')
-    printa(hessian_matrix)
+    printa('#--Hessian Matrix: \n{0}'.format(hessian_matrix))
     hessian_inverse = hessian_matrix.I
     #read off diagonals and calculate errors
     errors = sc.zeros(length, float)
     for i in range(length):
-        if (hessian_inverse[i,i] < 0.0):  print '!!!Hessian error', i, 'below zero!!!'
+        if (hessian_inverse[i,i] < 0.0):  printa('!!!Hessian error '+str(i)+' below zero!!!')
         errors[i] = np.sqrt(2.0*abs(hessian_inverse[i,i]))  #*(1.0/len(x))
-    if verbose:  print '#---Hessian Errors:', errors
+    if verbose:  printa('#---Hessian Errors: {0}'.format(errors))
     return errors
 
 
@@ -101,10 +100,10 @@ def modify_steps(result, scale, tolerance=0.20):
             result.steps[i] = result.steps[i] - (diff*scale)
             test=test+1
     if test > 0:
-        print "# - {0} parameters have not converged, starting next loop".format(test)
+        printa("# - {0} parameters have not converged, starting next loop".format(test))
         return scale*0.8
     else:
-        print "# - All parameters have converged.  Finishing..."
+        printa("# - All parameters have converged.  Finishing...")
         return 0
 # test &= (abs(result.steps[i] - result.errors[i]) < (tolerance*result.params[i]) ) 
 
@@ -118,7 +117,7 @@ def smart_Hessian(result, loops=10, scale=1.0, tolerance=0.2):
         result.speak()
         if scale==0:  break
         loops = loops-1
-    if loops < 1:  print "!!! - Exited due to loop threshold"
+    if loops < 1:  printa ("!!! - Exited due to loop threshold")
     printa("# - Hessian Errors:  {0}".format(result.errors))
     
     
