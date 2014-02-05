@@ -35,7 +35,7 @@ def mw_func(params):
     sts3 = sp.call("rm stderr.txt", shell=True)
     return likelihood
 
-def get_hessian_errors(result, verbose=0, like=1):
+def get_hessian_errors(result, verbose=1, like=1):
     length = len(result.params)
     hessian = sc.zeros((length, length),float)
     base_params = sc.zeros(length, float)
@@ -92,16 +92,17 @@ def get_hessian_errors(result, verbose=0, like=1):
     return errors
 
 
-def modify_steps(result, scale, tolerance=0.20):
+def modify_steps(result, scale, drag=0.9, tolerance=0.20):
     test=0
     for i in range(len(result.params)):
         diff = result.steps[i] - result.errors[i]
         if (abs(diff) >= (tolerance*result.params[i]) ):
-            result.steps[i] = result.steps[i] - (diff*scale)
+            result.steps[i] = result.steps[i]*(1.0 + scale*(diff/abs(diff)))
+            #result.steps[i] = result.steps[i] - (diff*scale)  # Old, shitty way
             test=test+1
     if test > 0:
         printa("# - {0} parameters have not converged, starting next loop".format(test))
-        return scale*0.8
+        return scale*drag
     else:
         printa("# - All parameters have converged.  Finishing...")
         return 0
@@ -112,13 +113,15 @@ def smart_Hessian(result, loops=10, scale=1.0, tolerance=0.2):
     t0 = time.time()
     while loops > 0:
         printa("# - Starting Loop {0} (counting down); {1} seconds elapsed".format(loops, (time.time()-t0)))
+        result.speak()
         result.errors = get_hessian_errors(result)
         scale = modify_steps(result, scale, tolerance)
-        result.speak()
+        #result.speak()
         if scale==0:  break
         loops = loops-1
     if loops < 1:  printa ("!!! - Exited due to loop threshold")
     printa("# - Hessian Errors:  {0}".format(result.errors))
+    printa("# - Total Time elapsed: {0} seconds".format(time.time()-t0))
     
     
 def read_lua(filename):
@@ -170,7 +173,10 @@ def printa(string, filename=dumpfile):
 if __name__ == "__main__":
     result = results()
     result.params = read_lua(luafile)
-    result.steps = [0.1,5.0, 0.2,20.0,10.0,1.0,1.0,1.0, 0.2,20.0,10.0,1.0,1.0,1.0, 0.2,20.0,10.0,1.0,1.0,1.0 ]
+    result.steps = [0.01,0.5, 
+        0.02,2.0,0.0,0.1,0.1,0.1, 
+        0.02,2.0,0.1,0.1,0.1,0.1, 
+        0.02,2.0,0.1,0.1,0.1,0.1 ]
     results.errors = []
     results.function = mw_func
     smart_Hessian(result, loops=2)
