@@ -50,7 +50,7 @@ if __name__ == "__main__":
         else:  outerg = 23.5
         params.stripe = [(135.0, 240.0, 10), (-1.25, 1.25, 10), (16.0, outerg, 10)]
         params.update_refs()
-        twg.stream_into_stripe(params, 0, nStars[i], batch=1000, 
-            fileout="streamgen_sgr_sim.txt", detection=1, convolve=1, append=1)
+        twg.stream_into_stripe(params, 0, int(nStars[i]*0.5), batch=1000, 
+            fileout="streamgen_bif50_sim.txt", detection=1, convolve=1, append=1)
     
 #if MAKE theta, phi BE IN DEGREES!!!!  <- What the hell does that mean???

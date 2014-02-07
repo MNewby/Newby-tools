@@ -174,7 +174,7 @@ if __name__ == "__main__":
     result = results()
     result.params = read_lua(luafile)
     result.steps = [0.01,0.5, 
-        0.02,2.0,0.0,0.1,0.1,0.1, 
+        0.02,2.0,0.1,0.1,0.1,0.1, 
         0.02,2.0,0.1,0.1,0.1,0.1, 
         0.02,2.0,0.1,0.1,0.1,0.1 ]
     results.errors = []
