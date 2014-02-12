@@ -126,7 +126,7 @@ def stream2xyz (u, v, w, mu, r, theta, phi, wedge, nu=0.0):
     ACCEPTS ONLY 1 POINT AT A TIME - don't know what will happen if arrays are passed in
     stream is aligned along w-axis;  rotation is theta about y-axis, then phi about z-axis
     (See Nathan Cole's thesis, page 17)"""
-    theta, phi = (theta*rad), (phi*rad)
+    #theta, phi = (theta*rad), (phi*rad)  THETA, PHI INPUT SHOULD BE IN RADIANS!!
     # Get uvw origin in xyz
     ra, dec = GCToEq(mu, nu, wedge)
     l, b = EqTolb(ra, dec)

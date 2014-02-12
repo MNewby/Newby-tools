@@ -29,7 +29,7 @@ cdict1 = {'red':  ((0.0, 1.0, 1.0),
                    (1.0, 0.0, 0.0))        }
 white_black = LinearSegmentedColormap('grey', cdict1)
 #Custom heatmap
-spectral_colors = np.loadtxt('spectral_cm.txt')
+spectral_colors = np.loadtxt('../utilities/spectral_cm.txt')
 spectral_wb = ListedColormap(spectral_colors[:,:3], name="spectral_wb", N=256)
         
 
@@ -222,7 +222,7 @@ def PlotHist(field, imfile=None):
     if field.cmap == 'color':  cmap = spectral_wb
     elif field.cmap == 'bw':  cmap = 'gist_yarg'
     else:  cmap = field.cmap
-    plt.figure(1)
+    plt.figure()
     plt.imshow(H, cmap=cmap, norm=None, aspect=None, interpolation='nearest',
                alpha=None, vmin=vmin, vmax=vmax, origin='lower', extent=None)
     cbar = plt.colorbar() #May need to adjust these ticks...
