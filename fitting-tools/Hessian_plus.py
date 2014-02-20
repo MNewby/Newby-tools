@@ -96,8 +96,8 @@ def modify_steps(result, scale, drag=0.9, tolerance=0.20):
     test=0
     for i in range(len(result.params)):
         diff = result.steps[i] - result.errors[i]
-        if (abs(diff) >= (tolerance*result.params[i]) ):
-            result.steps[i] = result.steps[i]*(1.0 + scale*(diff/abs(diff)))
+        if (abs(diff) >= (tolerance) ):
+            result.steps[i] = result.steps[i]*(1.0 - scale*(diff/abs(diff)))
             #result.steps[i] = result.steps[i] - (diff*scale)  # Old, shitty way
             test=test+1
     if test > 0:
@@ -109,7 +109,7 @@ def modify_steps(result, scale, drag=0.9, tolerance=0.20):
 # test &= (abs(result.steps[i] - result.errors[i]) < (tolerance*result.params[i]) ) 
 
 
-def smart_Hessian(result, loops=10, scale=1.0, tolerance=0.2):
+def smart_Hessian(result, loops=10, scale=0.5, tolerance=20.0):
     t0 = time.time()
     while loops > 0:
         printa("# - Starting Loop {0} (counting down); {1} seconds elapsed".format(loops, (time.time()-t0)))
@@ -157,6 +157,7 @@ def write_lua(params, inname, outname="temp.lua"):
 
 def get_likelihood(likefile="stderr.txt"):
     infile = open(likefile, "r")
+    hold = -99999.9
     for line in infile:
         if line[0:19]=="<search_likelihood>":
             hold = line.split(" ")[1]
@@ -179,6 +180,6 @@ if __name__ == "__main__":
         0.02,2.0,0.1,0.1,0.1,0.1 ]
     results.errors = []
     results.function = mw_func
-    smart_Hessian(result, loops=2)
+    smart_Hessian(result, loops=10)
     #print get_likelihood()
     

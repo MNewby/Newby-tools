@@ -2,13 +2,15 @@
 
 import sys
 sys.path.insert(0, '../utilities')
+import time
 import math as ma
 import numpy as np
 import scipy as sc
 import files as fi
-import sys
+import progress as pr
 import astro_coordinates as co
-import time
+#from __future__ import print_function
+
 
 """This script creates test stripes for stream mle code and milkyway@home.
 Matthew Newby (RPI), March 28, 2011
@@ -89,7 +91,7 @@ def generate_stream(num_stars, u_min, u_max, sigma):
     return u,v,w
 
 def stream_into_stripe(params, sn, N_stars, batch=1000, fileout="streamgen82.txt",
-                       detection=1, convolve=1, append=0):
+                       detection=1, convolve=1, append=0, progbar=1):
     """ sn is stream number"""
     # Initialize file
     if append==0:
@@ -103,9 +105,12 @@ def stream_into_stripe(params, sn, N_stars, batch=1000, fileout="streamgen82.txt
     nu_min, nu_max = params.nu_lim[0], params.nu_lim[1]
     mu_min, mu_max = params.mu_lim[0], params.mu_lim[1]
     g_min, g_max = params.stripe[2][0], params.stripe[2][1]
-    print "# - Generating Stream {0}, using parameters {1}, {2}, {3}, {4}, {5}".format(
-        sn, mu, R, theta, phi, sigma)
+    #print "# - Generating Stream {0}, using parameters {1}, {2}, {3}, {4}, {5}".format(
+    #    sn, mu, R, theta, phi, sigma)
     N_out = 0
+    pb = pr.Progressbar(steps=N_stars, prefix="Stream {0} progress:".format(sn), 
+        suffix="Generating {0} Stars".format(N_stars), symbol="#", 
+                active="=", brackets="[]", percent=True, size=40)
     while N_out < N_stars:
         mu_killed, nu_killed, mu_saved = 0,0,0
         u,v,w = generate_stream(batch, u_min, u_max, sigma)
@@ -133,13 +138,14 @@ def stream_into_stripe(params, sn, N_stars, batch=1000, fileout="streamgen82.txt
         if N_out > N_stars:
             slice = -1*(N_out-N_stars)
             holder = holder[:slice]
-            print "#---Sliced {0} stars to make quota".format(str(-1*slice))
+            #print "#---Sliced {0} stars to make quota".format(str(-1*slice))
             N_out = N_out + slice #Slice is negative
         #append to file
         if len(holder) != 0:
             if fi.append_data(sc.array(holder), fileout, delimiter=" ") == 1:
-                print "#---Stream Progress: {0} stars of {1} total stars generated".format(N_out, N_stars)
-                print "# !!! - mu killed: {0}, mu_saved: {1}, nu_killed: {2}".format(mu_killed, mu_saved, nu_killed)
+                #print "#---Stream Progress: {0} stars of {1} total stars generated".format(N_out, N_stars)
+                #print "# !!! - mu killed: {0}, mu_saved: {1}, nu_killed: {2}".format(mu_killed, mu_saved, nu_killed)
+                pb.updatebar(float(N_out)/float(N_stars))
     print "#---Stream {0} generation succeeded, written as {1}".format(sn, fileout)
     return fileout
 
@@ -164,17 +170,17 @@ def get_stream_length(params, N=0, accuracy=0.0001):
         if params.mu_lim[1] > 360.0:
             if mu1 < params.mu_lim[0]:  mu1 = mu1 + 360.0
         if (mu1 < params.mu_lim[0]) or (mu1 > params.mu_lim[1]):
-            print "u1 ({0}) finished due to mu lim: {1}, {2}, {3}".format(u1, mu1, nu1, r1)
+            #print "u1 ({0}) finished due to mu lim: {1}, {2}, {3}".format(u1, mu1, nu1, r1)
             break
         if (nu1 > 2.5):
-            print "u1 ({0}) finished due to nu lim: {1}, {2}, {3}".format(u1, mu1, nu1, r1)
+            #print "u1 ({0}) finished due to nu lim: {1}, {2}, {3}".format(u1, mu1, nu1, r1)
             break
         if (nu1 < -2.5):
-            print "!!! WARNING:  u1 EXITED DUE TO OPPOSITE THRESHOLD"
-            print "u1 ({0}) finished due to nu lim: {1}, {2}, {3}".format(u1, mu1, nu1, r1)
+            #print "!!! WARNING:  u1 EXITED DUE TO OPPOSITE THRESHOLD"
+            #print "u1 ({0}) finished due to nu lim: {1}, {2}, {3}".format(u1, mu1, nu1, r1)
             break
         if (r1 < params.r_lim[0]) or (r1 > params.r_lim[1]):
-            print "u1 ({0}) finished due to r lim: {1}, {2}, {3}".format(u1, mu1, nu1, r1)
+            #print "u1 ({0}) finished due to r lim: {1}, {2}, {3}".format(u1, mu1, nu1, r1)
             break
         u1 = u1 + 0.1
         if u1 > 100.0:  print "!!! u1 {0} reached threshold limit!".format(u1); test=1
@@ -186,24 +192,24 @@ def get_stream_length(params, N=0, accuracy=0.0001):
         if params.mu_lim[1] > 360.0:
             if mu2 < params.mu_lim[0]:  mu2 = mu2 + 360.0
         if (mu2 < params.mu_lim[0]) or (mu2 > params.mu_lim[1]):
-            print "u2 ({0}) finished due to mu lim: {1}, {2}, {3}".format(u2, mu2, nu2, r2)
+            #print "u2 ({0}) finished due to mu lim: {1}, {2}, {3}".format(u2, mu2, nu2, r2)
             break
         if (nu2 < -2.5):
-            print "u2 ({0}) finished due to nu lim: {1}, {2}, {3}".format(u2, mu2, nu2, r2)
+            #print "u2 ({0}) finished due to nu lim: {1}, {2}, {3}".format(u2, mu2, nu2, r2)
             break
         if (nu2 > 2.5):
-            print "!!! WARNING:  u2 EXITED DUE TO OPPOSITE THRESHOLD"
-            print "u2 ({0}) finished due to nu lim: {1}, {2}, {3}".format(u2, mu2, nu2, r2)
+            #print "!!! WARNING:  u2 EXITED DUE TO OPPOSITE THRESHOLD"
+            #print "u2 ({0}) finished due to nu lim: {1}, {2}, {3}".format(u2, mu2, nu2, r2)
             break
         if (r2 < params.r_lim[0]) or (r2 > params.r_lim[1]):
-            print "u2 ({0}) finished due to r lim: {1}, {2}, {3}".format(u2, mu2, nu2, r2)
+            #print "u2 ({0}) finished due to r lim: {1}, {2}, {3}".format(u2, mu2, nu2, r2)
             break
         u2 = u2 - 0.1
         if u2 < -100.0:  print "!!! u1 {0} reached threshold limit!".format(u1); test=1
     # finish up
     length = np.fabs(u1-u2)
     print "# Stream is {0} kpc long within wedge boundaries".format(length)
-    while np.fabs(u1-u2) < 10.0:
+    while np.fabs(u1-u2) < 20.0:
         u1 = u1*2.0
         u2 = u2*2.0
     if u2 > u1:  return u1, u2

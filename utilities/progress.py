@@ -9,7 +9,7 @@ import sys
 
 class Progressbar:
     def __init__(self, steps=100, prefix="Progress:", suffix=None, symbol="#", 
-                active="=", brackets="[]", percent=True, size=30):
+                active="=", brackets="[]", percent=True, size=40):
         self.steps = steps
         self.prefix = prefix
         self.suffix = suffix
@@ -25,7 +25,7 @@ class Progressbar:
         out2 = (self.symbol)*self.state + " "*(self.size-self.state)
         out3 = "{0}".format(self.brackets[1])
         if self.percent==True:  out3 = out3+" {0}% ".format(int(100.0*(float(self.state)/float(self.size))))
-        if self.suffix != None:  out2 = out2 + suffix
+        if self.suffix != None:  out3 = out3 + self.suffix
         out = out1+out2+out3
         width = len(out)+2
         print out,
@@ -48,7 +48,7 @@ class Progressbar:
 
 if __name__=="__main__":
     import time
-    testbar = Progressbar()
+    testbar = Progressbar(prefix="TONS OF STUFF YAAAAAAAAAA", suffix="MORE STUFF!!!")
     #testbar.displaybar()
     for i in range(101):
         time.sleep(0.1)

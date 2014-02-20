@@ -39,22 +39,22 @@ if __name__ == "__main__":
     paramfile.close()
     # loop over stripes
     # build streams
-    for i in range(len(stripes)):
+    for i in range(1, len(stripes)):
         params = twg.ParamSet()
         params.wedge = stripes[i]
         params.streams = [ p[i][3:9] ]
         print params.streams
         for j in range(len(params.streams[0])):
-            #if j==1:  params.streams[0][j] = float(params.streams[0][j]) + 15.0
+            if j==1:  params.streams[0][j] = float(params.streams[0][j]) + 10.0
             #elif j==5:  params.streams[0][j] = float(params.streams[0][j])*2.0
-            #else:     params.streams[0][j] = float(params.streams[0][j])
-            params.streams[0][j] = float(params.streams[0][j])
+            else:     params.streams[0][j] = float(params.streams[0][j])
+            #params.streams[0][j] = float(params.streams[0][j])
         if stripes[i] > 12:  outerg = 22.5
         elif stripes[i] > 10:  outerg = 23.0
         else:  outerg = 23.5
         params.stripe = [(135.0, 240.0, 10), (-1.25, 1.25, 10), (16.0, outerg, 10)]
         params.update_refs()
-        twg.stream_into_stripe(params, 0, int(nStars[i]), batch=1000, 
-            fileout="streamgen_sgr_sim.txt", detection=1, convolve=1, append=1)
+        twg.stream_into_stripe(params, 0, int(nStars[i]*0.5), batch=1000, 
+            fileout="streamgen_bifm10_sim.txt", detection=1, convolve=1, append=1)
     
 #if MAKE theta, phi BE IN DEGREES!!!!  <- What the hell does that mean???

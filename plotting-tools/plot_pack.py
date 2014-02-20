@@ -56,10 +56,10 @@ class HistMaker:
         self.labels = [None, None]  # Labels for x,y axes
         self.xflip, self.yflip = 0, 0   # Set=1 to flip respective axis
     def savehist(self, outfile):
-        np.savetxt(outfile, self.H, delimiter=",", header=" pyplot image output, in y,x. "+\
-          "x is {0} from {1} to {2}, in steps of {3}; "+\
-          "y is {4} from {5} to {6}, in steps of {7}".format(self.labels[0], self.xmin, 
-            self.xmax, self.xsize, self.labels[1], self.ymin, self.ymax, self.ysize)  )
+        np.savetxt(outfile, self.H, delimiter=",") #, header=" pyplot image output, in y,x. "+\
+        #  "x is {0} from {1} to {2}, in steps of {3}; "+\
+        #  "y is {4} from {5} to {6}, in steps of {7}".format(self.labels[0], self.xmin, 
+        #    self.xmax, self.xsize, self.labels[1], self.ymin, self.ymax, self.ysize)  )
     def gblur(self, blur=1):
         self.H = GaussBlurHist(self.H, blur)
     def plot(self):
@@ -227,15 +227,15 @@ def PlotHist(field, imfile=None):
                alpha=None, vmin=vmin, vmax=vmax, origin='lower', extent=None)
     cbar = plt.colorbar() #May need to adjust these ticks...
     # Add Ticks and labels
-    xlocs, xlabels = np.arange(0.0, field.xbins+0.000001, (field.xbins/5.0) ), []
+    xlocs, xlabels = np.arange(0.0, field.xbins+0.000001, (field.xbins/6.0) ), []
     for loc in xlocs:  xlabels.append(str(round((loc*field.xsize + field.xmin),2)  )  )
     if field.xflip == 1:  plt.xticks(xlocs, xlabels[::-1])
     else:                 plt.xticks(xlocs, xlabels)
     if field.labels[0] != None:  plt.xlabel(field.labels[0])
-    ylocs, ylabels = np.arange(0.0, field.ybins+0.000001, (field.ybins/5.0) ), []
+    ylocs, ylabels = np.arange(0.0, field.ybins+0.000001, (field.ybins/6.0) ), []
     for loc in ylocs:  ylabels.append(str(round((loc*field.ysize + field.ymin),2)  )  )
     if field.yflip == 1:  plt.yticks(ylocs, ylabels[::-1])
-    else:                 plt.xticks(ylocs, ylabels)
+    else:                 plt.yticks(ylocs, ylabels)
     if field.labels[1] != None:  plt.ylabel(field.labels[1])
     # Save file, if outfile declared
     if imfile != None:  plt.savefig(imfile, papertype="letter")
