@@ -15,7 +15,7 @@ import glob
 def make_sim_stream_plot():
     """ Makes the plot for the simulated streams 
         /home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"""
-    filename="streamgen_bifm10_sim.txt"
+    filename="streamgen_bifExtra.txt"
     file2="streamgen_sgr_sim.txt"
     data = np.loadtxt(filename)
     for i in range(len(data[:,0])):
@@ -26,12 +26,12 @@ def make_sim_stream_plot():
     sky = pp.HistMaker(np.concatenate([data[:,0],data2[:,0]]), np.concatenate([data[:,1],data2[:,1]]), 
         xsize=0.5, ysize=0.5, xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
     sky.varea = (0.0,200.0)
-    sky.H = sky.H + np.random.normal(45.0, 15.0, sky.H.shape)
+    sky.H = sky.H + np.random.normal(60.0, 15.0, sky.H.shape)
     #for i in range(sky.H.shape[0]):
     #    if i < 14:   sky.H[i,:] = sky.H[i,:]*0.0; continue
     #    sky.H[i,:] = sky.H[i,:] + 45.0 - (0.5/1.0)*i
-    pp.PlotHist(sky, "simtotbifm10_radec.png")
-    sky.savehist("simtotbifm10_radec.csv")
+    pp.PlotHist(sky, "streamgen_bifExtra_radec.png")
+    sky.savehist("streamgen_bifExtra.csv")
     print "Ended Successfully"
 
 def make_total_plot(path="/home/newbym2/Desktop/starfiles"):
@@ -76,17 +76,22 @@ def make_diff_hist():
     """ Subtracts the simulated streams from the real data """
     data = np.loadtxt("SDSSnorth.csv", delimiter=",")
     #sim = np.loadtxt("simtotbif50m30_radec.csv", delimiter=",")
-    sim = np.loadtxt("simtotbifm2_radec.csv", delimiter=",")
-    #new = data-sim
+    #sim = np.loadtxt("simtotbifm2_radec.csv", delimiter=",")
+    #sim = np.loadtxt("streamgen_bifExtra.csv", delimiter=",")
+    sim = np.loadtxt("streamgen_bifGood.csv", delimiter=",")
+    #sim = np.loadtxt("streamgen_bif50Good.csv", delimiter=",")
     for i in range(sim.shape[0]):
         for j in range(sim.shape[1]):
             if data[i,j] < 1.0:  sim[i,j] = 0.0
     sky = pp.HistMaker([1,2], [1,2], xsize=0.5, ysize=0.5, 
         xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    sky.H = sim
-    sky.varea = (0.0,200.0)
-    #sky.plot()
-    pp.PlotHist(sky, "simbifm_zoomed.png")
+    #new = sim #data - sim
+    new = data - sim
+    sky.H = new
+    sky.cmap = 'color_c'
+    sky.varea = (-100.0,100.0)
+    pp.PlotHist(sky, "streamgen_ccdiff.png")
+    #pp.PlotHist(sky, "streamgen_bif50Good_bwdiff.png")
     print "All done"
    
 def get_bif():
@@ -113,11 +118,20 @@ def test_primary(l,b,wedge,low=9,high=23):
         if abs(nu2) < abs(nu0):  return 0
     return 1
 
+def make_color_map():
+    arr = np.zeros((256, 4), float)
+    #define stops:  line number (1 <= l <= 256), RGBA 
+    stops = [ [1, 0.0, 0.0, 0.0, 1.0], 
+              [127, 0.0, 1.0, 0.0, 1.0]
+            ]
+    
+
 if __name__ == "__main__":
     #make_sim_stream_plot()
     #make_total_plot()
-    #make_diff_hist()
-    get_bif()
+    make_diff_hist()
+    #get_bif()
+    #make_color_map()
 
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591

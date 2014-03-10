@@ -28,10 +28,23 @@ cdict1 = {'red':  ((0.0, 1.0, 1.0),
                    (0.75, 0.25, 0.25),
                    (1.0, 0.0, 0.0))        }
 white_black = LinearSegmentedColormap('grey', cdict1)
+# Custom central-void (white) color map
+cdict2 = {'red':  ((0.0, 0.0, 0.0),
+                   (0.5, 1.0, 1.0),
+                   (1.0, 1.0, 1.0)),
+         'green': ((0.0, 0.0, 0.0),
+                   (0.5, 1.0, 1.0),
+                   (1.0, 0.0, 0.0)),
+         'blue':  ((0.0, 0.0, 0.0),
+                   (0.5, 1.0, 1.0),
+                   (1.0, 0.0, 0.0))        }
+spec_center = LinearSegmentedColormap('spec_c', cdict2)
 #Custom heatmap
 spectral_colors = np.loadtxt('../utilities/spectral_cm.txt')
 spectral_wb = ListedColormap(spectral_colors[:,:3], name="spectral_wb", N=256)
-        
+#Custom heatmap
+#spectral_colors = np.loadtxt('../utilities/spectral_center.txt')
+#spectral_c = ListedColormap(spectral_colors[:,:3], name="spectral_c", N=256)
 
 """ ---------------------- 2D Hist Methods ---------------------------------- """
 """ 2-dimensional histogram, creates histogram ready for imshow, and factors for 
@@ -220,6 +233,7 @@ def PlotHist(field, imfile=None):
     if field.yflip == 1:  H = H[::-1,:]
     # Plot the image
     if field.cmap == 'color':  cmap = spectral_wb
+    elif field.cmap == 'color_c':  cmap = spec_center
     elif field.cmap == 'bw':  cmap = 'gist_yarg'
     else:  cmap = field.cmap
     plt.figure()

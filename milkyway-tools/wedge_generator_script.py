@@ -28,8 +28,8 @@ if __name__ == "__main__":
     # Make naked streams
     stripes = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
     nStars = [19386, 18734, 11095, 17044, 18736, 15409, 12519, 12248, 8853, 7328, 5479, 4450, 3486, 2425, 971]
-    #read params: "/home/newbym2/Dropbox/Research/sgrnorth_paper/results_MW_easyread.txt"
-    paramfile = open("/home/newbym2/Dropbox/Research/sgrnorth_paper/results_BG_easyread.txt", "r")
+    #read params: "/home/newbym2/Dropbox/Research/sgrLetter/results_MW_easyread.txt"
+    paramfile = open("/home/newbym2/Dropbox/Research/sgrLetter/results_bif_easyread.txt", "r")
     p = []
     for line in paramfile:
         if line.strip() == "":  continue
@@ -39,14 +39,14 @@ if __name__ == "__main__":
     paramfile.close()
     # loop over stripes
     # build streams
-    for i in range(1, len(stripes)):
+    for i in range(2, len(stripes)):
         params = twg.ParamSet()
         params.wedge = stripes[i]
         params.streams = [ p[i][3:9] ]
         print params.streams
         for j in range(len(params.streams[0])):
-            if j==1:  params.streams[0][j] = float(params.streams[0][j]) + 10.0
-            #elif j==5:  params.streams[0][j] = float(params.streams[0][j])*2.0
+            if j==1:  params.streams[0][j] = float(params.streams[0][j])
+            elif j==5:  params.streams[0][j] = float(params.streams[0][j])*2.0
             else:     params.streams[0][j] = float(params.streams[0][j])
             #params.streams[0][j] = float(params.streams[0][j])
         if stripes[i] > 12:  outerg = 22.5
@@ -54,7 +54,7 @@ if __name__ == "__main__":
         else:  outerg = 23.5
         params.stripe = [(135.0, 240.0, 10), (-1.25, 1.25, 10), (16.0, outerg, 10)]
         params.update_refs()
-        twg.stream_into_stripe(params, 0, int(nStars[i]*0.5), batch=1000, 
-            fileout="streamgen_bifm10_sim.txt", detection=1, convolve=1, append=1)
+        twg.stream_into_stripe(params, 0, int(nStars[i]*2.0), batch=1000, 
+            fileout="streamgen_bifExtra.txt", detection=1, convolve=1, append=1)
     
-#if MAKE theta, phi BE IN DEGREES!!!!  <- What the hell does that mean???
+
