@@ -30,6 +30,36 @@ cdict1 = {'red':  ((0.0, 1.0, 1.0),
 white_black = LinearSegmentedColormap('grey', cdict1)
 # Custom central-void (white) color map
 cdict2 = {'red':  ((0.0, 0.0, 0.0),
+                   (0.125, 1.0, 1.0),
+                   (0.25, 0.0, 0.0),
+                   (0.4, 0.5, 0.5),                   
+                   (0.5, 1.0, 1.0),
+                   (0.6, 0.0, 0.0),
+                   (0.7, 1.0, 1.0),
+                   (0.875, 0.75, 0.75),
+                   (1.0, 0.5, 0.5)),
+         'green': ((0.0, 0.0, 0.0),
+                   (0.125, 0.0, 0.0),
+                   (0.25, 0.0, 0.0),
+                   (0.4, 0.5, 0.5),
+                   (0.5, 1.0, 1.0),
+                   (0.6, 1.0, 1.0),
+                   (0.7, 1.0, 1.0),
+                   (0.875, 0.0, 0.0),
+                   (1.0, 0.2, 0.2)),
+         'blue':  ((0.0, 0.0, 0.0),
+                   (0.125, 1.0, 1.0),
+                   (0.25, 1.0, 1.0),
+                   (0.4, 1.0, 1.0),
+                   (0.5, 1.0, 1.0),
+                   (0.6, 0.0, 0.0),
+                   (0.7, 0.0, 0.0),
+                   (0.825, 0.0, 0.0),
+                   (1.0, 0.2, 0.2))        }
+spec_center = LinearSegmentedColormap('spec_c', cdict2)
+
+# IN PROGRESS
+cdict3 = {'red':  ((0.0, 0.0, 0.0),
                    (0.5, 1.0, 1.0),
                    (1.0, 1.0, 1.0)),
          'green': ((0.0, 0.0, 0.0),
@@ -38,7 +68,7 @@ cdict2 = {'red':  ((0.0, 0.0, 0.0),
          'blue':  ((0.0, 0.0, 0.0),
                    (0.5, 1.0, 1.0),
                    (1.0, 0.0, 0.0))        }
-spec_center = LinearSegmentedColormap('spec_c', cdict2)
+#spec_center = LinearSegmentedColormap('spec_c', cdict3)
 #Custom heatmap
 spectral_colors = np.loadtxt('../utilities/spectral_cm.txt')
 spectral_wb = ListedColormap(spectral_colors[:,:3], name="spectral_wb", N=256)

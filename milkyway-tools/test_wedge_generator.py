@@ -15,6 +15,8 @@ import astro_coordinates as co
 """This script creates test stripes for stream mle code and milkyway@home.
 Matthew Newby (RPI), March 28, 2011
 """
+deg = 180.0 / ma.pi 
+rad = ma.pi / 180.0 
 
 # Finish stream_length, convolve, and master function
 
@@ -116,7 +118,7 @@ def stream_into_stripe(params, sn, N_stars, batch=1000, fileout="streamgen82.txt
         u,v,w = generate_stream(batch, u_min, u_max, sigma)
         holder = []
         for i in range(len(u)):
-            mu1, nu1, r1 = co.streamToGC(u[i],v[i],w[i],mu,R,theta,phi,wedge)
+            mu1, nu1, r1 = co.streamToGC(u[i],v[i],w[i],mu,R,theta*deg,phi*deg,wedge)
             if (nu1 < nu_min) or (nu1 > nu_max):  nu_killed=nu_killed+1; continue
             if (mu_max > 360.0):
                 if (mu1 > (mu_max-360.0)) and (mu1 < mu_min):  mu_killed=mu_killed+1; continue
@@ -156,8 +158,8 @@ def get_stream_length(params, N=0, accuracy=0.0001):
     u1,v1,w1 = 0.1,  0.0, 0.0
     u2,v2,w2 = -0.1,  0.0, 0.0
     #check to see which is closest to the nu = +2.5 boundry, flip if necessary
-    mu1, nu1, r1 = co.streamToGC(u1,v1,w1,mu, R, theta, phi, wedge)
-    mu2, nu2, r2 = co.streamToGC(u2,v2,w2,mu, R, theta, phi, wedge)
+    mu1, nu1, r1 = co.streamToGC(u1,v1,w1,mu, R, theta*deg, phi*deg, wedge)
+    mu2, nu2, r2 = co.streamToGC(u2,v2,w2,mu, R, theta*deg, phi*deg, wedge)
     if np.fabs(nu1 - 2.5) > np.fabs(nu2 - 2.5):
         u1, u2 = (-1.0*u1), (-1.0*u2)
         temp = nu1
@@ -165,7 +167,7 @@ def get_stream_length(params, N=0, accuracy=0.0001):
     # check them against wedge boundries (mu, nu, r)
     test = 0
     while test==0:
-        mu1, nu1, r1 = co.streamToGC(u1,v1,w1,mu, R, theta, phi, wedge)
+        mu1, nu1, r1 = co.streamToGC(u1,v1,w1,mu, R, theta*deg, phi*deg, wedge)
         # account for wrap-around
         if params.mu_lim[1] > 360.0:
             if mu1 < params.mu_lim[0]:  mu1 = mu1 + 360.0
@@ -187,7 +189,7 @@ def get_stream_length(params, N=0, accuracy=0.0001):
     # Do for u2
     test = 0
     while test==0:
-        mu2, nu2, r2 = co.streamToGC(u2,v2,w2,mu, R, theta, phi, wedge)
+        mu2, nu2, r2 = co.streamToGC(u2,v2,w2,mu, R, theta*deg, phi*deg, wedge)
         # account for wrap-around
         if params.mu_lim[1] > 360.0:
             if mu2 < params.mu_lim[0]:  mu2 = mu2 + 360.0

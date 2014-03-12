@@ -15,8 +15,9 @@ import glob
 def make_sim_stream_plot():
     """ Makes the plot for the simulated streams 
         /home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"""
-    filename="streamgen_bifExtra.txt"
-    file2="streamgen_sgr_sim.txt"
+    folder = "/home/newbym2/Dropbox/Research/sgrLetter/"
+    filename=folder+"streamgen_bifExtra.txt"
+    file2=folder+"streamgen_sgr_sim.txt"
     data = np.loadtxt(filename)
     for i in range(len(data[:,0])):
         data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
@@ -74,23 +75,29 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles"):
 
 def make_diff_hist():
     """ Subtracts the simulated streams from the real data """
+    folder = "/home/newbym2/Dropbox/Research/sgrLetter/"
     data = np.loadtxt("SDSSnorth.csv", delimiter=",")
+    sims = ["streamgen_bifGood.csv", "streamgen_bif50Good.csv", "streamgen_bifExtra.csv", "streamgen_bifShift.csv"]
+    outs = ["streamgen_ccdiff.png", "streamgen_cc50good.png", "streamgen_ccExtra.png", "streamgen_ccShift.png"]
     #sim = np.loadtxt("simtotbif50m30_radec.csv", delimiter=",")
     #sim = np.loadtxt("simtotbifm2_radec.csv", delimiter=",")
     #sim = np.loadtxt("streamgen_bifExtra.csv", delimiter=",")
-    sim = np.loadtxt("streamgen_bifGood.csv", delimiter=",")
+    #sim = np.loadtxt("streamgen_bifGood.csv", delimiter=",")
     #sim = np.loadtxt("streamgen_bif50Good.csv", delimiter=",")
-    for i in range(sim.shape[0]):
-        for j in range(sim.shape[1]):
-            if data[i,j] < 1.0:  sim[i,j] = 0.0
-    sky = pp.HistMaker([1,2], [1,2], xsize=0.5, ysize=0.5, 
-        xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    #new = sim #data - sim
-    new = data - sim
-    sky.H = new
-    sky.cmap = 'color_c'
-    sky.varea = (-100.0,100.0)
-    pp.PlotHist(sky, "streamgen_ccdiff.png")
+    for z in range(len(sims)):
+        sim = np.loadtxt(folder+sims[z], delimiter=",")
+        for i in range(sim.shape[0]):
+            for j in range(sim.shape[1]):
+                if data[i,j] < 1.0:  sim[i,j] = 0.0
+        sky = pp.HistMaker([1,2], [1,2], xsize=0.5, ysize=0.5, 
+            xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
+        #new = sim #data - sim
+        new = data - sim
+        sky.H = new
+        sky.cmap = 'color'
+        sky.varea = (0.0,200.0)
+        pp.PlotHist(sky, "sim_"+outs[z])
+        #pp.PlotHist(sky, "data.png"); break
     #pp.PlotHist(sky, "streamgen_bif50Good_bwdiff.png")
     print "All done"
    
