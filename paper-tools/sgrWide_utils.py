@@ -13,7 +13,7 @@ import progress as pr
 import glob
 
 def make_sim_stream_plot():
-    """ Makes the plot for the simulated streams 
+    """ Makes the plot for the simulated streams
         /home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"""
     folder = "/home/newbym2/Dropbox/Research/sgrLetter/"
     filename=folder+"streamgen_bifExtra.txt"
@@ -24,7 +24,7 @@ def make_sim_stream_plot():
     data2 = np.loadtxt(file2)
     for i in range(len(data2[:,0])):
         data2[i,0], data2[i,1] = ac.lbToEq(data2[i,0], data2[i,1])
-    sky = pp.HistMaker(np.concatenate([data[:,0],data2[:,0]]), np.concatenate([data[:,1],data2[:,1]]), 
+    sky = pp.HistMaker(np.concatenate([data[:,0],data2[:,0]]), np.concatenate([data[:,1],data2[:,1]]),
         xsize=0.5, ysize=0.5, xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
     sky.varea = (0.0,200.0)
     sky.H = sky.H + np.random.normal(60.0, 15.0, sky.H.shape)
@@ -35,11 +35,11 @@ def make_sim_stream_plot():
     sky.savehist("streamgen_bifExtra.csv")
     print "Ended Successfully"
 
-def make_total_plot(path="/home/newbym2/Desktop/starfiles"):
+def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0):
     files = glob.glob(path+"/stars*")
     #print files
     data=[]
-    pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None, 
+    pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
         wedge = int(f.split("-")[1].split(".")[0])
@@ -56,8 +56,8 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles"):
         stripedata.close()
         pb.updatebar(float(files.index(f)+1)/float(len(files)) )
     data = np.array(data)
-    count, nStars, pb2 = 0, float(len(data[:,0])), pr.Progressbar(steps=100, 
-        prefix="Changing Coordinates:", suffix=None, symbol="#", active="=", 
+    count, nStars, pb2 = 0, float(len(data[:,0])), pr.Progressbar(steps=100,
+        prefix="Changing Coordinates:", suffix=None, symbol="#", active="=",
         brackets="[]", percent=True, size=40)
     for i in range(len(data[:,0])):
         count = count + 1
@@ -65,13 +65,51 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles"):
         data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
         if count % 100 == 0:  pb2.updatebar(float(count)/nStars)
     pb2.endbar()
-    allsky = pp.HistMaker(data[:,0], data[:,1], xsize=0.5, ysize=0.5, 
-        xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    #allsky.scale = 'sqrt'
-    allsky.varea = (0.0,200.0)
-    pp.PlotHist(allsky, "sgrall_GC.png")
-    allsky.savehist("SDSSnorthGC.csv")
+    if RGB==1:  RGB_plot(data)
+    else:
+        allsky = pp.HistMaker(data[:,0], data[:,1], xsize=0.5, ysize=0.5,
+            xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
+        #allsky.scale = 'sqrt'
+        allsky.varea = (0.0,200.0)
+        pp.PlotHist(allsky, "sgrall_GC.png")
+        allsky.savehist("SDSSnorthGC.csv")
     print "Ended Successfully"
+
+def RGB_plot(data):
+    #distance cutoffs
+    Wr, Br, Gr, Rr, Kr = 10.0, 20.0, 30.0, 40.0, 50.0
+    # bins for each color
+    W, B, G, R, K = [], [], [], [], []
+    for i in range(len(data[:,0])):
+        if   data[i,2] < Wr:  W.append(data[i,:])
+        elif data[i,2] < Br:  B.append(data[i,:])
+        elif data[i,2] < Gr:  G.append(data[i,:])
+        elif data[i,2] < Rr:  R.append(data[i,:])
+        else:  pass
+    B = np.array(B)
+    Bhist = pp.histmaker(B[:,0], B[:,1], xsize=0.5, ysize=0.5,
+            xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
+    Bhist.H = Bhist.H / np.ma.max(Bhist.H)  #Normalize
+    Bhist.varea = (0.0,200.0)
+    G = np.array(G)
+    Ghist = pp.histmaker(G[:,0], G[:,1], xsize=0.5, ysize=0.5,
+            xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
+    Ghist.H = Ghist.H / np.ma.max(Ghist.H)
+    Ghist.varea = (0.0,200.0)
+    R = np.array(R)
+    Rhist = pp.histmaker(R[:,0], R[:,1], xsize=0.5, ysize=0.5,
+            xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
+    Rhist.H = Rhist.H / np.ma.max(Rhist.H)
+    Rhist.varea = (0.0,200.0)
+    print Bhist.H.shape, Ghist.H.shape, Rhist.H.shape
+    RGB = numpy.dstack(Rhist.H, Ghist.H, Bhist.H)
+    np.savetxt(RGBout.txt, RGB, delimiter=",")
+    plt.figure(1)
+    plt.imshow(RGB)
+    plt.show()
+    plt.close('all')
+
+
 
 def make_diff_hist():
     """ Subtracts the simulated streams from the real data """
@@ -89,7 +127,7 @@ def make_diff_hist():
         for i in range(sim.shape[0]):
             for j in range(sim.shape[1]):
                 if data[i,j] < 1.0:  sim[i,j] = 0.0
-        sky = pp.HistMaker([1,2], [1,2], xsize=0.5, ysize=0.5, 
+        sky = pp.HistMaker([1,2], [1,2], xsize=0.5, ysize=0.5,
             xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
         #new = sim #data - sim
         new = data - sim
@@ -100,9 +138,9 @@ def make_diff_hist():
         #pp.PlotHist(sky, "data.png"); break
     #pp.PlotHist(sky, "streamgen_bif50Good_bwdiff.png")
     print "All done"
-   
+
 def get_bif():
-    bifra = [230.0, 220.0, 215.0, 210.0, 200.0, 190.0, 185.0, 180.0, 176.6, 173.3, 170.0, 160.0, 150.0, 140.0, 130.0]   
+    bifra = [230.0, 220.0, 215.0, 210.0, 200.0, 190.0, 185.0, 180.0, 176.6, 173.3, 170.0, 160.0, 150.0, 140.0, 130.0]
     bifdec = [2.0, 4.0, 6.5, 9.0, 12.0, 15.0, 18.0, 21.0, 23.0, 25.0, 27.0, 28.0, 29.0, 31.0, 31.2]
     stripes = range(9,24)
     for i in range(len(bifra)):
@@ -111,8 +149,8 @@ def get_bif():
             if test_primary(l,b,s,low=9,high=23) == 1:
                 mu, nu = ac.lb2GC(l,b,s)
                 print "RA {0}, dec {1}, is in stripe {2}; mu {3}, nu {4}".format(bifra[i], bifdec[i], s, mu, nu)
-        
-    
+
+
 def test_primary(l,b,wedge,low=9,high=23):
     """ Tests to see if a star is primary for its wedge number, by testing its
         nu against adjecent stripes """
@@ -125,20 +163,12 @@ def test_primary(l,b,wedge,low=9,high=23):
         if abs(nu2) < abs(nu0):  return 0
     return 1
 
-def make_color_map():
-    arr = np.zeros((256, 4), float)
-    #define stops:  line number (1 <= l <= 256), RGBA 
-    stops = [ [1, 0.0, 0.0, 0.0, 1.0], 
-              [127, 0.0, 1.0, 0.0, 1.0]
-            ]
-    
 
 if __name__ == "__main__":
     #make_sim_stream_plot()
-    #make_total_plot()
-    make_diff_hist()
+    make_total_plot(RGB=1)
+    #make_diff_hist()
     #get_bif()
-    #make_color_map()
 
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
