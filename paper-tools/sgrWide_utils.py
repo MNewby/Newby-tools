@@ -12,7 +12,7 @@ import astro_coordinates as ac
 import progress as pr
 import glob
 
-def make_sim_stream_plot():
+def make_sim_stream_plot(RGB=0):
     """ Makes the plot for the simulated streams
         /home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"""
     folder = "/home/newbym2/Dropbox/Research/sgrLetter/"
@@ -24,6 +24,7 @@ def make_sim_stream_plot():
     data2 = np.loadtxt(file2)
     for i in range(len(data2[:,0])):
         data2[i,0], data2[i,1] = ac.lbToEq(data2[i,0], data2[i,1])
+    if RGB==1:  print "NOT IMPLEMENTED YET!!!"  #IMPLEMENT THIS!!!
     sky = pp.HistMaker(np.concatenate([data[:,0],data2[:,0]]), np.concatenate([data[:,1],data2[:,1]]),
         xsize=0.5, ysize=0.5, xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
     sky.varea = (0.0,200.0)
@@ -87,25 +88,25 @@ def RGB_plot(data):
         elif data[i,2] < Rr:  R.append(data[i,:])
         else:  pass
     B = np.array(B)
-    Bhist = pp.histmaker(B[:,0], B[:,1], xsize=0.5, ysize=0.5,
+    Bhist = pp.HistMaker(B[:,0], B[:,1], xsize=0.5, ysize=0.5,
             xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
     Bhist.H = Bhist.H / np.ma.max(Bhist.H)  #Normalize
     Bhist.varea = (0.0,200.0)
     G = np.array(G)
-    Ghist = pp.histmaker(G[:,0], G[:,1], xsize=0.5, ysize=0.5,
+    Ghist = pp.HistMaker(G[:,0], G[:,1], xsize=0.5, ysize=0.5,
             xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
     Ghist.H = Ghist.H / np.ma.max(Ghist.H)
     Ghist.varea = (0.0,200.0)
     R = np.array(R)
-    Rhist = pp.histmaker(R[:,0], R[:,1], xsize=0.5, ysize=0.5,
+    Rhist = pp.HistMaker(R[:,0], R[:,1], xsize=0.5, ysize=0.5,
             xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
     Rhist.H = Rhist.H / np.ma.max(Rhist.H)
     Rhist.varea = (0.0,200.0)
     print Bhist.H.shape, Ghist.H.shape, Rhist.H.shape
-    RGB = numpy.dstack(Rhist.H, Ghist.H, Bhist.H)
-    np.savetxt(RGBout.txt, RGB, delimiter=",")
+    RGB = np.dstack( (Rhist.H, Ghist.H, Bhist.H) )
+    #np.savetxt("RGBout.txt", RGB, delimiter=",")
     plt.figure(1)
-    plt.imshow(RGB)
+    plt.imshow(RGB, origin='lower')
     plt.show()
     plt.close('all')
 

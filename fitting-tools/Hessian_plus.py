@@ -10,6 +10,7 @@ Matthew Newby (RPI), Oct 16, 2010
 http://www.physics.utah.edu/~detar/phys6720/handouts/curve_fit/curve_fit/node8.html
 N_data = number of data points in original data
 """
+# nohup python Hessian_plus.py &> dump.out &
 
 class results():
     # Need function, best-fit data
@@ -34,6 +35,56 @@ def mw_func(params):
     sts2 = sp.call("rm temp.lua", shell=True)
     sts3 = sp.call("rm stderr.txt", shell=True)
     return likelihood
+
+def do_MCMC(result, steps=1000):
+    #function, init_params, step_sizes, x, y, sigma, name, number_steps=1000, save=1):
+    #name is a list of strings of this form: run name, param name 1, param name 2, ...
+    np.random.seed( int(time.time()) )
+    lp, moves, positions = len(result.params), 0, []
+    best_RR = 10000000.0
+    best_params = sc.zeros()
+    current_params = sc.zeros(len(result.params))
+    for i in range(len(init_params)):  current_params[i] = init_params[i]
+    new_params = sc.zeros(len(init_params), float)
+    for i in range(number_steps):
+        #Record position
+        positions.append(current_params.tolist())
+        #Take a step
+        for j in range(len(init_params)):
+            new_params[j] = np.random.normal(current_params[j], step_sizes[j])
+        #Decide whether to move or not
+        current_RR = R_squared(function, current_params, x, y, sigma)
+        new_RR = R_squared(function, new_params, x, y, sigma)
+        compare = (current_RR / (new_RR*4.0))
+        #if (np.random.uniform() < (np.exp(-1.0*new_RR) / np.exp(-1.0*current_RR) ) ):
+        if ( (new_RR < current_RR) or (np.random.uniform() < compare) ):
+            moves = moves + 1
+            for j in range(len(init_params)):
+                current_params[j] = new_params[j]
+        """#Just move, dammit
+        new_RR = R_squared(function, new_params, x, y, sigma)
+        for j in range(len(init_params)):
+                current_params[j] = new_params[j]
+        moves = moves + 1
+        #Remove from 'dammit' to here to restore old functionality"""
+        #record best fitness
+        if (new_RR < best_RR):
+            best_RR = new_RR
+            for j in range(len(init_params)):
+                best_params[j] = new_params[j]
+        #if (i % 1000) == 0:
+        #    print 'At iteration', i, current_params
+    #make histogram
+    centers, deviations = plot_MCMC_hist(positions, name, save)
+    print '#---Mean parameters:', centers, 'Parameter deviations:', deviations
+    print '#---Best parameters:', best_params, best_RR
+    print '#---After:', moves, ' moves out of ', number_steps,'iterations'
+    #plot fit with function --- with both best and means?
+    #if (plot_function(x, y, function, params, x_err=None, y_err=sigma,
+    #              title=name[0], save=0, save_file=(name[0]+'_func_plot.ps') ) ==1):
+    #    print '#---data and MCMC function fit successfully plotted'
+    return centers, deviations, best_params
+
 
 def get_hessian_errors(result, verbose=1, like=1):
     length = len(result.params)
@@ -110,6 +161,7 @@ def modify_steps(result, scale, drag=0.9, tolerance=0.20):
 
 
 def smart_Hessian(result, loops=10, scale=0.5, tolerance=20.0):
+    """ This method is actually quite dumb """
     t0 = time.time()
     while loops > 0:
         printa("# - Starting Loop {0} (counting down); {1} seconds elapsed".format(loops, (time.time()-t0)))
@@ -170,7 +222,6 @@ def printa(string, filename=dumpfile):
     outfile.write(string+'\n')
     outfile.close()
 
-
 if __name__ == "__main__":
     result = results()
     result.params = read_lua(luafile)
@@ -180,6 +231,6 @@ if __name__ == "__main__":
         0.02,2.0,0.1,0.1,0.1,0.1 ]
     results.errors = []
     results.function = mw_func
-    smart_Hessian(result, loops=10)
+    smart_Hessian(result, loops=10) #change this line
     #print get_likelihood()
     
