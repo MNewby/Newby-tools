@@ -17,23 +17,27 @@ def make_sim_stream_plot(RGB=0):
         /home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"""
     folder = "/home/newbym2/Dropbox/Research/sgrLetter/"
     filename=folder+"streamgen_bifExtra.txt"
-    file2=folder+"streamgen_sgr_sim.txt"
+    #file2="/home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt" #"streamgen_sgr_sim.txt"
+    file2="streamgen_sgr_sim.txt"
     data = np.loadtxt(filename)
     for i in range(len(data[:,0])):
         data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
     data2 = np.loadtxt(file2)
     for i in range(len(data2[:,0])):
         data2[i,0], data2[i,1] = ac.lbToEq(data2[i,0], data2[i,1])
-    if RGB==1:  print "NOT IMPLEMENTED YET!!!"  #IMPLEMENT THIS!!!
-    sky = pp.HistMaker(np.concatenate([data[:,0],data2[:,0]]), np.concatenate([data[:,1],data2[:,1]]),
-        xsize=0.5, ysize=0.5, xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    sky.varea = (0.0,200.0)
-    sky.H = sky.H + np.random.normal(60.0, 15.0, sky.H.shape)
-    #for i in range(sky.H.shape[0]):
-    #    if i < 14:   sky.H[i,:] = sky.H[i,:]*0.0; continue
-    #    sky.H[i,:] = sky.H[i,:] + 45.0 - (0.5/1.0)*i
-    pp.PlotHist(sky, "streamgen_bifExtra_radec.png")
-    sky.savehist("streamgen_bifExtra.csv")
+    if RGB==1:  
+        data3 = np.concatenate((data,data2), axis=0)
+        RGB_plot(data3)
+    else:
+        sky = pp.HistMaker(np.concatenate([data[:,0],data2[:,0]]), np.concatenate([data[:,1],data2[:,1]]),
+            xsize=0.5, ysize=0.5, xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
+        sky.varea = (0.0,200.0)
+        sky.H = sky.H + np.random.normal(60.0, 15.0, sky.H.shape)
+        #for i in range(sky.H.shape[0]):
+        #    if i < 14:   sky.H[i,:] = sky.H[i,:]*0.0; continue
+        #    sky.H[i,:] = sky.H[i,:] + 45.0 - (0.5/1.0)*i
+        pp.PlotHist(sky, "streamgen_bifExtra_radec.png")
+        sky.savehist("streamgen_bifExtra.csv")
     print "Ended Successfully"
 
 def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0):
@@ -76,7 +80,7 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0):
         allsky.savehist("SDSSnorthGC.csv")
     print "Ended Successfully"
 
-def RGB_plot(data):
+def RGB_plot(data, normed=0):
     #distance cutoffs
     Wr, Br, Gr, Rr, Kr = 10.0, 20.0, 30.0, 40.0, 50.0
     # bins for each color
@@ -90,20 +94,35 @@ def RGB_plot(data):
     B = np.array(B)
     Bhist = pp.HistMaker(B[:,0], B[:,1], xsize=0.5, ysize=0.5,
             xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    Bhist.H = Bhist.H / np.ma.max(Bhist.H)  #Normalize
+    Bhist.H = Bhist.H + np.random.normal(20.0, 5.0, Bhist.H.shape)
     Bhist.varea = (0.0,200.0)
     G = np.array(G)
     Ghist = pp.HistMaker(G[:,0], G[:,1], xsize=0.5, ysize=0.5,
             xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    Ghist.H = Ghist.H / np.ma.max(Ghist.H)
+    Ghist.H = Ghist.H + np.random.normal(20.0, 5.0, Ghist.H.shape)
     Ghist.varea = (0.0,200.0)
     R = np.array(R)
     Rhist = pp.HistMaker(R[:,0], R[:,1], xsize=0.5, ysize=0.5,
             xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    Rhist.H = Rhist.H / np.ma.max(Rhist.H)
+    Rhist.H = Rhist.H + np.random.normal(20.0, 5.0, Rhist.H.shape)
     Rhist.varea = (0.0,200.0)
+    if normed == 1:
+        Bhist.H = Bhist.H / np.ma.max(Bhist.H)  #Normalize
+        Ghist.H = Ghist.H / np.ma.max(Ghist.H)
+        Rhist.H = Rhist.H / np.ma.max(Rhist.H)
+    else:
+        norm = max(np.ma.max(Bhist.H), np.ma.max(Ghist.H), np.ma.max(Rhist.H))
+        Bhist.H = Bhist.H / norm
+        Ghist.H = Ghist.H / norm
+        Rhist.H = Rhist.H / norm
     print Bhist.H.shape, Ghist.H.shape, Rhist.H.shape
     RGB = np.dstack( (Rhist.H, Ghist.H, Bhist.H) )
+    # Apply SDSS footprint mask
+    mask = np.loadtxt("SDSSnorth.csv", delimiter=",")
+    for i in range(len(mask[:,0])):
+        for j in range(len(mask[0,:])):
+            if mask[i,j] == 0.0:
+                RGB[i,j,:] = 0.0, 0.0, 0.0
     #np.savetxt("RGBout.txt", RGB, delimiter=",")
     plt.figure(1)
     plt.imshow(RGB, origin='lower')
@@ -166,7 +185,7 @@ def test_primary(l,b,wedge,low=9,high=23):
 
 
 if __name__ == "__main__":
-    #make_sim_stream_plot()
+    #make_sim_stream_plot(RGB=1)
     make_total_plot(RGB=1)
     #make_diff_hist()
     #get_bif()

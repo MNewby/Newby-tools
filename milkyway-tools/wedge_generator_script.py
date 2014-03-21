@@ -28,8 +28,8 @@ if __name__ == "__main__":
     # Make naked streams
     stripes = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
     nStars = [19386, 18734, 11095, 17044, 18736, 15409, 12519, 12248, 8853, 7328, 5479, 4450, 3486, 2425, 971]
-    #read params: "/home/newbym2/Dropbox/Research/sgrLetter/results_MW_easyread.txt"
-    paramfile = open("/home/newbym2/Dropbox/Research/sgrLetter/results_bif_easyread2.txt", "r")
+    paramfile = open("/home/newbym2/Dropbox/Research/sgrLetter/results_BG_easyread.txt", "r")
+    #paramfile = open("/home/newbym2/Dropbox/Research/sgrLetter/results_bif_easyread2.txt", "r")
     # "results_bif_easyread2.txt" shifts diskward stream ceters outward from Sgr
     p = []
     for line in paramfile:
@@ -56,6 +56,6 @@ if __name__ == "__main__":
         params.stripe = [(135.0, 240.0, 10), (-1.25, 1.25, 10), (16.0, outerg, 10)]
         params.update_refs()
         twg.stream_into_stripe(params, 0, int(nStars[i]), batch=1000, 
-            fileout="streamgen_bifShift.txt", detection=1, convolve=1, append=1)
+            fileout="streamgen_sgr_new.txt", detection=1, convolve=1, append=1)
     
 
