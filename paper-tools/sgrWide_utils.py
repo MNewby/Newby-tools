@@ -16,7 +16,7 @@ def make_sim_stream_plot(RGB=0):
     """ Makes the plot for the simulated streams
         /home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"""
     folder = "/home/newbym2/Dropbox/Research/sgrLetter/"
-    filename=folder+"streamgen_bifExtra.txt"
+    filename=folder+"stream_50shift.txt"
     #file2="/home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt" #"streamgen_sgr_sim.txt"
     file2="streamgen_sgr_sim.txt"
     data = np.loadtxt(filename)
@@ -107,7 +107,7 @@ def RGB_plot(data, normed=0):
     Rhist.H = Rhist.H + np.random.normal(20.0, 5.0, Rhist.H.shape)
     Rhist.varea = (0.0,200.0)
     if normed == 1:
-        Bhist.H = Bhist.H / np.ma.max(Bhist.H)  #Normalize
+        Bhist.H = Bhist.H / np.ma.max(Bhist.H)  #Normalize individually
         Ghist.H = Ghist.H / np.ma.max(Ghist.H)
         Rhist.H = Rhist.H / np.ma.max(Rhist.H)
     else:
@@ -115,7 +115,8 @@ def RGB_plot(data, normed=0):
         Bhist.H = Bhist.H / norm
         Ghist.H = Ghist.H / norm
         Rhist.H = Rhist.H / norm
-    print Bhist.H.shape, Ghist.H.shape, Rhist.H.shape
+    #print Bhist.H.shape, Ghist.H.shape, Rhist.H.shape
+    Bhist.savehist("Bhist.csv"); Ghist.savehist("Ghist.csv"); Rhist.savehist("Rhist.csv")
     RGB = np.dstack( (Rhist.H, Ghist.H, Bhist.H) )
     # Apply SDSS footprint mask
     mask = np.loadtxt("SDSSnorth.csv", delimiter=",")
@@ -183,13 +184,55 @@ def test_primary(l,b,wedge,low=9,high=23):
         if abs(nu2) < abs(nu0):  return 0
     return 1
 
+def get_sgr_curves():
+    #input in pixels
+    primary = np.array([[5.0, 4.4], [9.7, 3.6], [14.4, 1.35]])
+    secondary = np.array([[3.3,6.5],[10.4,5.0],[14.4,2.0]])
+    #convert pixels to ra/dec
+    for data in [primary, secondary]:
+        data[:,0] = data[:,0]*0.5*12.5 + 120.0
+        data[:,1] = data[:,1]*0.5*12.5 - 10.0
+        a, b = np.zeros((3,3)),  data[:,1]
+        for i in range(3):
+            a[i,:] = data[i,0]*data[i,0], data[i,0], 1.0
+        print a
+        print np.linalg.solve(a,b)
+    print primary
+    print secondary
+    # decl as a function of RA:  (decl = a*RA*RA + b*RA + c)
+    prime = [ -5.25124491e-03, 1.57254414e+00, -1.00216868e+02]
+    second = [ -7.76551199e-03, 2.31737724e+00, -1.41690141e+02]
+    t = np.arange(120.0, 250.0, 1.0)
+    u1 = t*t*prime[0] + t*prime[1] + prime[2]
+    u2 = t*t*second[0] + t*second[1] + second[2]
+    plt.figure()
+    plt.plot(t,u1)
+    plt.plot(t, u2)
+    plt.ylim(-5.0, 50.0)
+    plt.show()
+    plt.close('all')
+
+def shift_sgr():
+    prime = [ -5.25124491e-03, 1.57254414e+00, -1.00216868e+02]
+    second = [ -7.76551199e-03, 2.31737724e+00, -1.41690141e+02]
+    file1="/home/newbym2/Dropbox/Research/sgrLetter/streamgen_bif50Good.txt"
+    data = np.loadtxt(file1)
+    for i in range(len(data[:,0])):
+        data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
+        deldel = data[i,1] - (data[i,0]*data[i,0]*prime[0] + data[i,0]*prime[1] + prime[2])
+        data[i,1] = deldel + (data[i,0]*data[i,0]*second[0] + data[i,0]*second[1] + second[2])
+        data[i,0], data[i,1] = ac.EqTolb(data[i,0], data[i,1])
+    np.savetxt("stream_50shift.txt", data, delimiter=" ")
 
 if __name__ == "__main__":
-    #make_sim_stream_plot(RGB=1)
-    make_total_plot(RGB=1)
+    #shift_sgr()
+    make_sim_stream_plot(RGB=1)
+    #make_total_plot(RGB=1)
     #make_diff_hist()
     #get_bif()
-
+    #get_sgr_curves()
+    
+    
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
 RA 220.0, dec 4.0, is in stripe 12; mu 219.902390269, nu -0.0990566496675
