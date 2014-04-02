@@ -93,7 +93,7 @@ def generate_stream(num_stars, u_min, u_max, sigma):
     return u,v,w
 
 def stream_into_stripe(params, sn, N_stars, batch=1000, fileout="streamgen82.txt",
-                       detection=1, convolve=1, append=0, progbar=1):
+                       detection=1, convolve=1, append=0, progbar=1, primary=0):
     """ sn is stream number"""
     # Initialize file
     if append==0:
@@ -124,6 +124,8 @@ def stream_into_stripe(params, sn, N_stars, batch=1000, fileout="streamgen82.txt
                 if (mu1 > (mu_max-360.0)) and (mu1 < mu_min):  mu_killed=mu_killed+1; continue
             else:
                 if (mu1 < mu_min) or (mu1 > mu_max):  mu_killed=mu_killed+1; continue
+            if primary == 1:
+                if co.SDSS_primary(mu1,nu1,wedge,low=9,high=25) == 0:  continue
             # Convolve
             if convolve==1:
                 r1 = star_convolution(r1)
@@ -220,7 +222,7 @@ def get_stream_length(params, N=0, accuracy=0.0001):
 # Need to cut at borders?, apply convolution, rolloff
 
 def generate_background(num_stars, params, batch=1000, fail_quit=100,
-                        fileout="Backgen82.txt", detection=1, convolve=1, append=0):
+                        fileout="Backgen82.txt", detection=1, convolve=1, append=0, primary=0):
     """Density of smooth halo background, as a function of position"""
     # Initialize file
     if append==0:
@@ -250,6 +252,8 @@ def generate_background(num_stars, params, batch=1000, fail_quit=100,
                     m_g = co.getg(r1)
                     if np.random.uniform() > (sigmoid_error(m_g)):  continue
                 if (co.getg(r1) < g_min) or (co.getg(r1) > g_max): continue
+                if primary == 1:
+                    if co.SDSS_primary(l,b,wedge,fmt='lb',low=9,high=25) == 0:  continue
                 # Add to keepers
                 holder.append([round(l,6),round(b,6),round(r1,6)])
                 N_out = N_out + 1
@@ -310,7 +314,7 @@ def get_max_prob(params):
     return max_rho
 
 def generate_perturbation(num_stars, params, parameters, batch=1000, fail_quit=100,
-                          fileout="Pertgen82.txt", detection=1, convolve=1, append=0):
+                          fileout="Pertgen82.txt", detection=1, convolve=1, append=0, primary=0):
     """Density of perturbation added to background, as a function of position"""
     # Initialize file
     if append==0:
@@ -340,6 +344,8 @@ def generate_perturbation(num_stars, params, parameters, batch=1000, fail_quit=1
                     m_g = co.getg(r1)
                     if np.random.uniform() > (sigmoid_error(m_g)):  continue
                 if (co.getg(r1) < g_min) or (co.getg(r1) > g_max):  continue
+                if primary == 1:
+                    if co.SDSS_primary(l,b,wedge,fmt='lb',low=9,high=25) == 0:  continue
                 # Add to keepers
                 holder.append([round(l,6),round(b,6),round(r1,6)])
                 N_out = N_out + 1

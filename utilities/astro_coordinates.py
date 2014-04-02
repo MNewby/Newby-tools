@@ -474,6 +474,19 @@ def check (expected, test):
     if (expected - test) < arcsec:  return "YES - total error: "+str((expected - test)*3600.0)+" arcseconds"
     else:  return "NO - test Failed: "+str((expected - test)*3600.0)+" arcseconds"
 
+def SDSS_primary(aa,bb,wedge,fmt="GC",low=9,high=23):
+    """ Tests to see if a star is primary for its wedge number, by testing its
+        nu against adjecent stripes;  returns 0 if not primary """
+    if    fmt == 'lb':  mu0, nu0 = lb2GC(aa,bb,wedge); l,b = aa,bb
+    elif  fmt == 'GC':  mu0, nu0 = aa, bb;  l,b,r = GC2lbr(aa,bb,10.0,wedge)
+    else: print "!!! UNKNOWN FORMAT - ASSUMING MU, NU (GC)"
+    if wedge > low:
+        mu1, nu1 = lb2GC(l,b,wedge-1)
+        if abs(nu1) < abs(nu0):  return 0
+    if wedge < high:
+        mu2, nu2 = lb2GC(l,b,wedge+1)
+        if abs(nu2) < abs(nu0):  return 0
+    return 1
 
 """ ------------------ Rotation Matrices ------------------ """
 

@@ -58,6 +58,6 @@ if __name__ == "__main__":
         params.stripe = [(135.0, 240.0, 10), (-1.25, 1.25, 10), (16.0, outerg, 10)]
         params.update_refs()
         twg.stream_into_stripe(params, 0, int(nStars[i]), batch=1000, 
-            fileout="streamgen_sgrfid.txt", detection=1, convolve=1, append=1)
+            fileout="streamgen_sgrfidprim.txt", detection=1, convolve=1, append=1, primary=1)
     
 

@@ -16,7 +16,7 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
     """ Makes the plot for the simulated streams
         /home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"""
     folder = "/home/newbym2/Dropbox/Research/sgrLetter/"
-    filename=filein
+    filename=folder + filein
     #file2="/home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt" #"streamgen_sgr_sim.txt"
     file2="streamgen_sgr_sim.txt"
     data = np.loadtxt(filename)
@@ -26,7 +26,7 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
     for i in range(len(data2[:,0])):
         data2[i,0], data2[i,1] = ac.lbToEq(data2[i,0], data2[i,1])
     if RGB==1:  
-        data3 = np.concatenate((data,data2), axis=0)
+        data3 = data #np.concatenate((data,data2), axis=0)
         RGB_plot(data3, imfile=imfile)
     else:
         sky = pp.HistMaker(np.concatenate([data[:,0],data2[:,0]]), np.concatenate([data[:,1],data2[:,1]]),
@@ -181,18 +181,6 @@ def get_bif():
                 print "RA {0}, dec {1}, is in stripe {2}; mu {3}, nu {4}".format(bifra[i], bifdec[i], s, mu, nu)
 
 
-def test_primary(l,b,wedge,low=9,high=23):
-    """ Tests to see if a star is primary for its wedge number, by testing its
-        nu against adjecent stripes """
-    mu0, nu0 = ac.lb2GC(l,b,wedge)
-    if wedge > low:
-        mu1, nu1 = ac.lb2GC(l,b,wedge-1)
-        if abs(nu1) < abs(nu0):  return 0
-    if wedge < high:
-        mu2, nu2 = ac.lb2GC(l,b,wedge+1)
-        if abs(nu2) < abs(nu0):  return 0
-    return 1
-
 def get_sgr_curves():
     #input in pixels
     primary = np.array([[5.0, 4.4], [9.7, 3.6], [14.4, 1.35]])
@@ -244,8 +232,8 @@ def batch_shift():
         print "Done with {0}, {1}".format(infile, outfile)
 
 if __name__ == "__main__":
-    shift_sgr(filein="streamgen_sgrfid.txt", fileout="stream_shiftfid.txt")
-    make_sim_stream_plot(filein="stream_shiftfid.txt", RGB=1)
+    #shift_sgr(filein="streamgen_sgrfid.txt", fileout="stream_shiftfid.txt")
+    make_sim_stream_plot(filein="streamgen_sgrfidprim.txt", RGB=1, imfile="sgr_fidshiftprim.png")
     #make_total_plot(RGB=1)
     #make_diff_hist()
     #get_bif()
