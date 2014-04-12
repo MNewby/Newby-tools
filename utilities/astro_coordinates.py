@@ -2,13 +2,15 @@ import math as ma
 import numpy as np
 from numpy import linalg as LA
 import scipy as sc
-import files as f
+#import files as f
 import matplotlib
 #matplotlib.use('PS')
 import matplotlib.pyplot as plt
+import sgr_law as sl
 
 """ This is a translation of stCoords.c and atSurveyGeometry.c from the
-Milkyway@home code.  
+    Milkyway@home code. Other coordinate transforms have been added as 
+    needed, with sources cited appropriately.
 -Matthew Newby, RPI, Jun 15, 2011"""
 
 deg = 180.0 / ma.pi 
@@ -263,7 +265,7 @@ def lb2GC(l, b, wedge):
     
 def lb2sgr(l,b,r):
     x,y,z = lbr2xyz(l,b,r)
-    return law_xyz2sgr(x,y,z)
+    return sl.law_xyz2sgr_sun(x,y,z)
     
 def streamToGC(u,v,w, mu,r,theta,phi,wedge):
     x,y,z = stream2xyz(u,v,w, mu,r,theta,phi,wedge)

@@ -11,6 +11,7 @@ import plot_pack as pp
 import astro_coordinates as ac
 import progress as pr
 import glob
+import sgr_law as sgr
 
 def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
     """ Makes the plot for the simulated streams
@@ -18,16 +19,25 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
     folder = "/home/newbym2/Dropbox/Research/sgrLetter/"
     filename=folder + filein
     #file2="/home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt" #"streamgen_sgr_sim.txt"
-    file2="streamgen_sgr_sim.txt"
+    #file2="streamgen_sgr_sim.txt"
+    file2="streamgen_sgrfidprim.txt"
     data = np.loadtxt(filename)
+    data2 = []
     for i in range(len(data[:,0])):
-        data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
+        #data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
+        data[i,0], data[i,1] = (ac.lb2sgr(data[i,0], data[i,1], 10.0))[3:5]
+        lam, bet = new_shift_sgr(data[i,0], data[i,1])
+        data2.append([lam, bet, data[i,2]])
+    data2 = sc.array(data2)
+    """
     data2 = np.loadtxt(file2)
     for i in range(len(data2[:,0])):
-        data2[i,0], data2[i,1] = ac.lbToEq(data2[i,0], data2[i,1])
+        #data2[i,0], data2[i,1] = ac.lbToEq(data2[i,0], data2[i,1])
+        data2[i,0], data2[i,1] = (ac.lb2sgr(data2[i,0], data2[i,1], 10.0))[3:5]
+    """
     if RGB==1:  
-        data3 = data #np.concatenate((data,data2), axis=0)
-        RGB_plot(data3, imfile=imfile)
+        data3 = np.concatenate((data,data2), axis=0)
+        RGB_plot(data3, imfile=imfile, mask_data="Bhist_sgr.csv", muddle=1)
     else:
         sky = pp.HistMaker(np.concatenate([data[:,0],data2[:,0]]), np.concatenate([data[:,1],data2[:,1]]),
             xsize=0.5, ysize=0.5, xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
@@ -56,7 +66,7 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None):
             if line.strip()=="":  continue
             temp = line.split()
             for i in range(len(temp)):  temp[i] = float(temp[i])
-            if test_primary(temp[0],temp[1],wedge,low=9,high=27)==0:  continue
+            if ac.SDSS_primary(temp[0],temp[1],wedge,fmt="lb",low=9,high=27)==0:  continue
             data.append(temp)
         stripedata.close()
         pb.updatebar(float(files.index(f)+1)/float(len(files)) )
@@ -67,7 +77,8 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None):
     for i in range(len(data[:,0])):
         count = count + 1
         #data[i,0], data[i,1] = ac.lb2GC(data[i,0], data[i,1], 15)
-        data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
+        #data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
+        data[i,0], data[i,1] = (ac.lb2sgr(data[i,0], data[i,1], 10.0))[3:5]
         if count % 100 == 0:  pb2.updatebar(float(count)/nStars)
     pb2.endbar()
     if RGB==1:  RGB_plot(data, imfile=imfile)
@@ -80,7 +91,8 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None):
         allsky.savehist("SDSSnorthGC.csv")
     print "Ended Successfully"
 
-def RGB_plot(data, normed=0, imfile=None):
+def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
+    xa, ya = (200.0, 300.0), (-40.0, 30.0) #(120.0, 250.0), (-10.0, 50.0)
     #distance cutoffs
     Wr, Br, Gr, Rr, Kr = 10.0, 20.0, 30.0, 40.0, 50.0
     # bins for each color
@@ -93,19 +105,22 @@ def RGB_plot(data, normed=0, imfile=None):
         else:  pass
     B = np.array(B)
     Bhist = pp.HistMaker(B[:,0], B[:,1], xsize=0.5, ysize=0.5,
-            xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    Bhist.H = Bhist.H + np.absolute(np.random.normal(30.0, 10.0, Bhist.H.shape))
+            xarea=xa, yarea=ya)
+    if muddle==1:  Bhist.H = Bhist.H + np.absolute(np.random.normal(30.0, 10.0, Bhist.H.shape))
     Bhist.varea = (0.0,200.0)
+    Bhist.savehist("Bhist.csv") 
     G = np.array(G)
     Ghist = pp.HistMaker(G[:,0], G[:,1], xsize=0.5, ysize=0.5,
-            xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    Ghist.H = Ghist.H + np.absolute(np.random.normal(20.0, 7.0, Ghist.H.shape))
+            xarea=xa, yarea=ya)
+    if muddle==1:  Ghist.H = Ghist.H + np.absolute(np.random.normal(20.0, 7.0, Ghist.H.shape))
     Ghist.varea = (0.0,200.0)
+    Ghist.savehist("Ghist.csv")
     R = np.array(R)
     Rhist = pp.HistMaker(R[:,0], R[:,1], xsize=0.5, ysize=0.5,
-            xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
-    Rhist.H = Rhist.H + np.absolute(np.random.normal(10.0, 5.0, Rhist.H.shape))
+            xarea=xa, yarea=ya)
+    if muddle==1:  Rhist.H = Rhist.H + np.absolute(np.random.normal(10.0, 5.0, Rhist.H.shape))
     Rhist.varea = (0.0,200.0)
+    Rhist.savehist("Rhist.csv")
     if normed == 1:
         Bhist.H = Bhist.H / np.ma.max(Bhist.H)  #Normalize individually
         Ghist.H = Ghist.H / np.ma.max(Ghist.H)
@@ -115,30 +130,81 @@ def RGB_plot(data, normed=0, imfile=None):
         Bhist.H = Bhist.H / norm
         Ghist.H = Ghist.H / norm
         Rhist.H = Rhist.H / norm
-    #print Bhist.H.shape, Ghist.H.shape, Rhist.H.shape
-    Bhist.savehist("Bhist.csv"); Ghist.savehist("Ghist.csv"); Rhist.savehist("Rhist.csv")
     RGB = np.dstack( (Rhist.H, Ghist.H, Bhist.H) )
     # Apply SDSS footprint mask
-    mask = np.loadtxt("SDSSnorth.csv", delimiter=",")
-    for i in range(len(mask[:,0])):
-        for j in range(len(mask[0,:])):
-            if mask[i,j] == 0.0:
-                RGB[i,j,:] = 0.0, 0.0, 0.0
+    if mask_data != None:
+        mask = np.loadtxt(mask_data, delimiter=",")  #"SDSSnorth.csv"
+        for i in range(len(mask[:,0])):
+            for j in range(len(mask[0,:])):
+                if mask[i,j] == 0.0:
+                    RGB[i,j,:] = 0.0, 0.0, 0.0
     #np.savetxt("RGBout.txt", RGB, delimiter=",")
     plt.figure(1)
     plt.imshow(RGB, origin='lower')
-    xs = np.arange(120, 250, 10)
-    xlocs, xlabels = (xs - 120)*2, []
+    #xs = np.arange(120, 250, 10)
+    #xlocs, xlabels = (xs - 120)*2, []
+    #for x in xs:  xlabels.append(str(x))
+    #plt.xticks(xlocs, xlabels)
+    #ys = np.arange(-10, 51, 10)
+    #ylocs, ylabels = (ys + 10)*2, []
+    #for y in ys:  ylabels.append(str(y))
+    #plt.yticks(ylocs, ylabels)
+    if imfile == None:  plt.show()
+    else:  plt.savefig(imfile)
+    plt.close('all')
+
+def RGB_from_files(mask_data=None, imfile=None):
+    suffix = ""
+    Rfile = "Rhist"+suffix+".csv"
+    Gfile = "Ghist"+suffix+".csv"
+    Bfile = "Bhist"+suffix+".csv"
+    xa, ya = (200.0, 300.0), (-40.0, 30.0)
+    R = np.loadtxt(Rfile, delimiter=",")
+    G = np.loadtxt(Gfile, delimiter=",")
+    B = np.loadtxt(Bfile, delimiter=",")
+    R,G,B = process_image(R,G,B)
+    RGB = np.dstack( (R,G,B) )
+    # Apply SDSS footprint mask
+    if mask_data != None:
+        mask = np.loadtxt(mask_data, delimiter=",") #"SDSSnorth.csv"
+        for i in range(len(mask[:,0])):
+            for j in range(len(mask[0,:])):
+                if mask[i,j] == 0.0:
+                    RGB[i,j,:] = 0.0, 0.0, 0.0
+    #for Sgr;  Sgr coords
+    plt.figure(1)
+    plt.imshow(RGB) #, origin='lower')
+    xs = np.arange(xa[0], xa[1]+1, 20)
+    xlocs, xlabels = (xs - xa[0])*2, []
     for x in xs:  xlabels.append(str(x))
     plt.xticks(xlocs, xlabels)
-    ys = np.arange(-10, 51, 10)
-    ylocs, ylabels = (ys + 10)*2, []
+    ys = np.arange(ya[0], ya[1]+1, 20)
+    ylocs, ylabels = (ys - ya[0])*2, []
     for y in ys:  ylabels.append(str(y))
     plt.yticks(ylocs, ylabels)
     if imfile == None:  plt.show()
     else:  plt.savefig(imfile)
     plt.close('all')
-
+    
+def process_image(R,G,B, stretch=1):
+    """processes an RGB image"""
+    dialR, dialG, dialB = 1.0, 1.0, 1.0
+    gammaR, gammaG, gammaB = 1.0, 1.0, 1.0
+    for z in [R,G,B]:
+        for i in range(len(z[:,0])):
+            for j in range(len(z[0,:])):
+                if z[i,j] < 0.2:  z[i,j] = 0.0
+    R = (R**gammaR)*dialR
+    G = (G**gammaG)*dialG
+    B = (B**gammaB)*dialB
+    denom = np.ma.max(R) - np.ma.min(R)
+    R = (R / denom) - (np.ma.min(R) / denom)
+    denom = np.ma.max(G) - np.ma.min(G)
+    G = (G / denom) - (np.ma.min(G) / denom)
+    denom = np.ma.max(B) - np.ma.min(B)
+    B = (B / denom) - (np.ma.min(B) / denom)
+    return R, G, B
+    
 
 
 def make_diff_hist():
@@ -222,6 +288,15 @@ def shift_sgr(filein="streamgen_bif50Good.txt", fileout="stream_50shift.txt"):
         data[i,0], data[i,1] = ac.EqTolb(data[i,0], data[i,1])
     np.savetxt(fileout, data, delimiter=" ")
 
+def new_shift_sgr(lam, bet):
+    """ shifts Sgr according in Law/Majewski coords """
+    cm = (0.2*lam) - 40.0
+    cm = (-0.12*cm) + 3.2
+    lam = lam + (cm*5.0)
+    bet = bet + 10.0
+    return lam, bet
+    
+
 def batch_shift():
     infiles = ["streamgen_sgr_sim.txt", "streamgen_sgrwide.txt", "streamgen_sgrsmall.txt", "streamgen_sgrbig.txt"]
     outfiles = ["stream_shift.txt", "stream_shiftwide.txt", "stream_shiftsmall.txt", "stream_shiftbig.txt"]
@@ -232,13 +307,14 @@ def batch_shift():
         print "Done with {0}, {1}".format(infile, outfile)
 
 if __name__ == "__main__":
-    #shift_sgr(filein="streamgen_sgrfid.txt", fileout="stream_shiftfid.txt")
-    make_sim_stream_plot(filein="streamgen_sgrfidprim.txt", RGB=1, imfile="sgr_fidshiftprim.png")
+    #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
+    #make_sim_stream_plot(filein="stream_shiftfid.txt", RGB=1, imfile="sgr_new.png")
     #make_total_plot(RGB=1)
     #make_diff_hist()
     #get_bif()
     #get_sgr_curves()
     #batch_shift()
+    RGB_from_files(mask_data="Rhist_sgr.csv")
     
     
 """

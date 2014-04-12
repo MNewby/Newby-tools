@@ -41,18 +41,19 @@ def do_MCMC(result, steps=1000):
     #name is a list of strings of this form: run name, param name 1, param name 2, ...
     np.random.seed( int(time.time()) )
     lp, moves, positions = len(result.params), 0, []
-    best_RR = 10000000.0
-    best_params = sc.zeros()
-    current_params = sc.zeros(len(result.params))
-    for i in range(len(init_params)):  current_params[i] = init_params[i]
-    new_params = sc.zeros(len(init_params), float)
+    best_RR = 10000000.0   #XXXX
+    best_params = sc.zeros(lp)
+    current_params = sc.zeros(lp)
+    for i in range(lp):  current_params[i] = results.params[i]
+    new_params = sc.zeros(lp)
     for i in range(number_steps):
         #Record position
         positions.append(current_params.tolist())
         #Take a step
-        for j in range(len(init_params)):
-            new_params[j] = np.random.normal(current_params[j], step_sizes[j])
+        for j in range(lp):
+            new_params[j] = np.random.normal(current_params[j], results.steps[j])
         #Decide whether to move or not
+        # HERE
         current_RR = R_squared(function, current_params, x, y, sigma)
         new_RR = R_squared(function, new_params, x, y, sigma)
         compare = (current_RR / (new_RR*4.0))
