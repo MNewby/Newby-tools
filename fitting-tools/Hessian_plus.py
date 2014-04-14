@@ -18,7 +18,7 @@ class results():
         self.params = []
         self.steps = []
         self.errors = []
-	self.function = mw_func
+    self.function = mw_func
     def speak(self):
         #printa("Params: "+str(self.params)) 
         printa("Steps: "+str(self.steps))
@@ -41,7 +41,7 @@ def do_MCMC(result, steps=1000):
     #name is a list of strings of this form: run name, param name 1, param name 2, ...
     np.random.seed( int(time.time()) )
     lp, moves, positions = len(result.params), 0, []
-    best_RR = 10000000.0   #XXXX
+    best_RR = 10000000.0 
     best_params = sc.zeros(lp)
     current_params = sc.zeros(lp)
     for i in range(lp):  current_params[i] = results.params[i]
@@ -53,14 +53,13 @@ def do_MCMC(result, steps=1000):
         for j in range(lp):
             new_params[j] = np.random.normal(current_params[j], results.steps[j])
         #Decide whether to move or not
-        # HERE
-        current_RR = R_squared(function, current_params, x, y, sigma)
-        new_RR = R_squared(function, new_params, x, y, sigma)
-        compare = (current_RR / (new_RR*4.0))
+        current_RR = result.function(current_params) #R_squared(function, current_params, x, y, sigma)
+        new_RR = result.function(new_params) #R_squared(function, new_params, x, y, sigma)
+        compare = (current_RR / new_RR)
         #if (np.random.uniform() < (np.exp(-1.0*new_RR) / np.exp(-1.0*current_RR) ) ):
-        if ( (new_RR < current_RR) or (np.random.uniform() < compare) ):
+        if (np.random.uniform() < compare):
             moves = moves + 1
-            for j in range(len(init_params)):
+            for j in range(lp):
                 current_params[j] = new_params[j]
         """#Just move, dammit
         new_RR = R_squared(function, new_params, x, y, sigma)
@@ -71,11 +70,11 @@ def do_MCMC(result, steps=1000):
         #record best fitness
         if (new_RR < best_RR):
             best_RR = new_RR
-            for j in range(len(init_params)):
+            for j in range(lp):
                 best_params[j] = new_params[j]
         #if (i % 1000) == 0:
         #    print 'At iteration', i, current_params
-    #make histogram
+    #make histogram  HERE XXX
     centers, deviations = plot_MCMC_hist(positions, name, save)
     print '#---Mean parameters:', centers, 'Parameter deviations:', deviations
     print '#---Best parameters:', best_params, best_RR
