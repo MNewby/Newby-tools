@@ -18,17 +18,21 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
         /home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"""
     folder = "/home/newbym2/Dropbox/Research/sgrLetter/"
     filename=folder + filein
-    #file2="/home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt" #"streamgen_sgr_sim.txt"
-    #file2="streamgen_sgr_sim.txt"
-    file2="streamgen_sgrfidprim.txt"
+    #file2="/home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"
+    file2="streamgen_sgr_sim.txt"
+    #file2="streamgen_sgrfidprim.txt"
     data = np.loadtxt(filename)
     data2 = []
+    datasgr = np.loadtxt(file2)
     for i in range(len(data[:,0])):
         #data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
+        #if ac.SDSS_primary(temp[0],temp[1],wedge,fmt="lb",low=9,high=27)==0:  continue
         data[i,0], data[i,1] = (ac.lb2sgr(data[i,0], data[i,1], 10.0))[3:5]
         lam, bet = new_shift_sgr(data[i,0], data[i,1])
         data2.append([lam, bet, data[i,2]])
     data2 = sc.array(data2)
+    for i in range(len(datasgr[:,0])):
+        datasgr[i,0], datasgr[i,1] = (ac.lb2sgr(datasgr[i,0], datasgr[i,1], 10.0))[3:5]
     """
     data2 = np.loadtxt(file2)
     for i in range(len(data2[:,0])):
@@ -36,7 +40,7 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
         data2[i,0], data2[i,1] = (ac.lb2sgr(data2[i,0], data2[i,1], 10.0))[3:5]
     """
     if RGB==1:  
-        data3 = np.concatenate((data,data2), axis=0)
+        data3 = np.concatenate((datasgr,data), axis=0)
         RGB_plot(data3, imfile=imfile, mask_data="Bhist_sgr.csv", muddle=1)
     else:
         sky = pp.HistMaker(np.concatenate([data[:,0],data2[:,0]]), np.concatenate([data[:,1],data2[:,1]]),
@@ -103,16 +107,17 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
         elif data[i,2] < Gr:  G.append(data[i,:])
         elif data[i,2] < Rr:  R.append(data[i,:])
         else:  pass
+    if R == []:  R = [[0.0,0.0,0.0]]  #failsafe
     B = np.array(B)
     Bhist = pp.HistMaker(B[:,0], B[:,1], xsize=0.5, ysize=0.5,
             xarea=xa, yarea=ya)
-    if muddle==1:  Bhist.H = Bhist.H + np.absolute(np.random.normal(30.0, 10.0, Bhist.H.shape))
+    if muddle==1:  Bhist.H = Bhist.H + np.absolute(np.random.normal(20.0, 5.0, Bhist.H.shape))
     Bhist.varea = (0.0,200.0)
     Bhist.savehist("Bhist.csv") 
     G = np.array(G)
     Ghist = pp.HistMaker(G[:,0], G[:,1], xsize=0.5, ysize=0.5,
             xarea=xa, yarea=ya)
-    if muddle==1:  Ghist.H = Ghist.H + np.absolute(np.random.normal(20.0, 7.0, Ghist.H.shape))
+    if muddle==1:  Ghist.H = Ghist.H + np.absolute(np.random.normal(20.0, 5.0, Ghist.H.shape))
     Ghist.varea = (0.0,200.0)
     Ghist.savehist("Ghist.csv")
     R = np.array(R)
@@ -308,13 +313,13 @@ def batch_shift():
 
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
-    #make_sim_stream_plot(filein="stream_shiftfid.txt", RGB=1, imfile="sgr_new.png")
+    make_sim_stream_plot(filein="streamgen_sfp.txt", RGB=1) #, imfile="sgr_new.png")
     #make_total_plot(RGB=1)
     #make_diff_hist()
     #get_bif()
     #get_sgr_curves()
     #batch_shift()
-    RGB_from_files(mask_data="Rhist_sgr.csv")
+    #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
     
     
 """
