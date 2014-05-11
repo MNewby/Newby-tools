@@ -25,8 +25,8 @@ class results():
         printa("Errors: "+str(self.errors))
 
 """ STUFF TO CHANGE FOR EACH RUN """
-dumpfile = "modfit.out"
-luafile = "ModfitParams.lua"
+dumpfile = "newfit.out"
+luafile = "newfitParams.lua"
 def mw_func(params):
     write_lua(params, luafile)
     sts1 = sp.call("./milkyway_separation -f -i -s stars-15.txt -a temp.lua", shell=True)
@@ -40,7 +40,7 @@ def do_MCMC(result, steps=1000):
     #function, init_params, step_sizes, x, y, sigma, name, number_steps=1000, save=1):
     #name is a list of strings of this form: run name, param name 1, param name 2, ...
     np.random.seed( int(time.time()) )
-    lp, moves, positions = len(result.params), 0, []
+    lp, moves, positions = len(result.params), 0, []  #lp=length of parameters
     best_RR = 10000000.0 
     best_params = sc.zeros(lp)
     current_params = sc.zeros(lp)
@@ -74,16 +74,22 @@ def do_MCMC(result, steps=1000):
                 best_params[j] = new_params[j]
         #if (i % 1000) == 0:
         #    print 'At iteration', i, current_params
-    #make histogram  HERE XXX
-    centers, deviations = plot_MCMC_hist(positions, name, save)
-    print '#---Mean parameters:', centers, 'Parameter deviations:', deviations
-    print '#---Best parameters:', best_params, best_RR
-    print '#---After:', moves, ' moves out of ', number_steps,'iterations'
+    #make histogram 
+    #centers, deviations = plot_MCMC_hist(positions, name, save)
+    #print '#---Mean parameters:', centers, 'Parameter deviations:', deviations
+    #print '#---Best parameters:', best_params, best_RR
+    #print '#---After:', moves, ' moves out of ', number_steps,'iterations'
     #plot fit with function --- with both best and means?
     #if (plot_function(x, y, function, params, x_err=None, y_err=sigma,
     #              title=name[0], save=0, save_file=(name[0]+'_func_plot.ps') ) ==1):
     #    print '#---data and MCMC function fit successfully plotted'
-    return centers, deviations, best_params
+    pos_array = sc.array(positions)
+    printa("Original Parameters: {0}".format(result.params))
+    printa("New Best?: {0}".format(best_params))
+    for i in range(lp):
+        printa("Parameter {0}: {1}, {2}".format(i,sc.mean(pos_array[:,i]),
+                sc.std(pos_array[:,i]) ) )
+    return -1 #centers, deviations, best_params
 
 
 def get_hessian_errors(result, verbose=1, like=1):

@@ -49,7 +49,7 @@ if __name__ == "__main__":
         print params.streams
         for j in range(len(params.streams[0])):
             if j==1:  params.streams[0][j] = float(params.streams[0][j])
-            elif j==5:  params.streams[0][j] = float(params.streams[0][j])
+            elif j==5:  params.streams[0][j] = float(params.streams[0][j])*2.0
             else:     params.streams[0][j] = float(params.streams[0][j])
             #params.streams[0][j] = float(params.streams[0][j])
         if stripes[i] > 12:  outerg = 22.5
@@ -57,7 +57,7 @@ if __name__ == "__main__":
         else:  outerg = 23.5
         params.stripe = [(135.0, 240.0, 10), (-1.25, 1.25, 10), (16.0, outerg, 10)]
         params.update_refs()
-        twg.stream_into_stripe(params, 0, int(nStars[i]), batch=1000, 
-            fileout="streamgen_sfp.txt", detection=1, convolve=1, append=1, primary=1)
+        twg.stream_into_stripe(params, 0, int(nStars[i]*1.5), batch=1000, 
+            fileout="streamgen_sfp_bigish.txt", detection=1, convolve=1, append=1, primary=1)
     
 
