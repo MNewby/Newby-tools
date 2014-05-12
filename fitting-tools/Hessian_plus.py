@@ -12,21 +12,25 @@ N_data = number of data points in original data
 """
 # nohup python Hessian_plus.py &> dump.out &
 
+sts0 = sp.call("rm temp.lua", shell=True)
+sts00 = sp.call("rm stderr.txt", shell=True)
+
 class results():
     # Need function, best-fit data
     def __init__(self):
         self.params = []
         self.steps = []
         self.errors = []
-    self.function = mw_func
+        self.function = mw_func
     def speak(self):
         #printa("Params: "+str(self.params)) 
         printa("Steps: "+str(self.steps))
         printa("Errors: "+str(self.errors))
 
 """ STUFF TO CHANGE FOR EACH RUN """
-dumpfile = "newfit.out"
-luafile = "newfitParams.lua"
+dumpfile = "modfit.out"
+sts000 = sp.call("rm {0}".format(dumpfile), shell=True)
+luafile = "ModfitParams.lua"
 def mw_func(params):
     write_lua(params, luafile)
     sts1 = sp.call("./milkyway_separation -f -i -s stars-15.txt -a temp.lua", shell=True)
@@ -36,7 +40,7 @@ def mw_func(params):
     sts3 = sp.call("rm stderr.txt", shell=True)
     return likelihood
 
-def do_MCMC(result, steps=1000):
+def do_MCMC(result, n_steps=1000):
     #function, init_params, step_sizes, x, y, sigma, name, number_steps=1000, save=1):
     #name is a list of strings of this form: run name, param name 1, param name 2, ...
     np.random.seed( int(time.time()) )
@@ -44,14 +48,15 @@ def do_MCMC(result, steps=1000):
     best_RR = 10000000.0 
     best_params = sc.zeros(lp)
     current_params = sc.zeros(lp)
-    for i in range(lp):  current_params[i] = results.params[i]
+    for i in range(lp):  current_params[i] = result.params[i]
     new_params = sc.zeros(lp)
-    for i in range(number_steps):
+    for i in range(n_steps):
         #Record position
         positions.append(current_params.tolist())
+        printa("{0}".format(current_params))
         #Take a step
         for j in range(lp):
-            new_params[j] = np.random.normal(current_params[j], results.steps[j])
+            new_params[j] = np.random.normal(current_params[j], result.steps[j])
         #Decide whether to move or not
         current_RR = result.function(current_params) #R_squared(function, current_params, x, y, sigma)
         new_RR = result.function(new_params) #R_squared(function, new_params, x, y, sigma)
@@ -237,6 +242,7 @@ if __name__ == "__main__":
         0.02,2.0,0.1,0.1,0.1,0.1 ]
     results.errors = []
     results.function = mw_func
-    smart_Hessian(result, loops=10) #change this line
+    #smart_Hessian(result, loops=10) #change this line
     #print get_likelihood()
+    do_MCMC(result, n_steps=1000)
     

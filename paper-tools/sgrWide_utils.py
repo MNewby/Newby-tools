@@ -114,7 +114,7 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
     xa, ya = (200.0, 300.0), (-40.0, 30.0) #(120.0, 250.0), (-10.0, 50.0)
     #distance cutoffs
     #Wr, Br, Gr, Rr, Kr = 10.0, 20.0, 30.0, 40.0, 50.0
-    Wr, Br, Gr, Rr, Kr = 20.0, 20.66, 21.33, 22.0, 23.0  #Belokurov 2006
+    Wr, Br, Gr, Rr, Kr = 20.0+0.25, 20.66+0.25, 21.33+0.25, 22.0+0.25, 23.0+0.25  #Belokurov 2006 + g-r=0.25
     # bins for each color
     W, B, G, R, K = [], [], [], [], []
     for i in range(len(data[:,0])):
