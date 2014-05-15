@@ -13,6 +13,67 @@ import progress as pr
 import glob
 import sgr_law as sgr
 
+def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
+    files = glob.glob(path+"/stars*")
+    #print files
+    data=[]
+    pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
+        symbol="#", active="=", brackets="[]", percent=True, size=40)
+    for f in files:
+        wedge = int(f.split("-")[1].split(".")[0])
+        count=0
+        stripedata = open(f, "r")
+        for line in stripedata:
+            count = count + 1
+            if count==1:  continue
+            if line.strip()=="":  continue
+            temp = line.split()
+            for i in range(len(temp)):  temp[i] = float(temp[i])
+            if (temp[2] < 20.0) or (temp[2] > 45.0):  continue
+            if ac.SDSS_primary(temp[0],temp[1],wedge,fmt="lb",low=9,high=27)==0:  continue
+            data.append(temp)
+        stripedata.close()
+        pb.updatebar(float(files.index(f)+1)/float(len(files)) )
+    data = np.array(data)
+    count, nStars, pb2 = 0, float(len(data[:,0])), pr.Progressbar(steps=100,
+        prefix="Changing Coordinates:", suffix=None, symbol="#", active="=",
+        brackets="[]", percent=True, size=40)
+    for i in range(len(data[:,0])):
+        count = count + 1
+        #data[i,0], data[i,1] = ac.lb2GC(data[i,0], data[i,1], 15)
+        #data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
+        data[i,0], data[i,1] = (ac.lb2sgr(data[i,0], data[i,1], 10.0))[3:5]
+        data[i,2] = ac.getg(data[i,2], 4.2)
+        if count % 100 == 0:  pb2.updatebar(float(count)/nStars)
+    pb2.endbar()
+    # loop over Lambda slices and plot Beta histograms
+    pb3 = pr.Progressbar(steps=len(files), prefix="Making Slices:", suffix=None,
+        symbol="#", active="=", brackets="[]", percent=True, size=40)
+    Ls = (200.0, 300.0, 2.5)
+    Lsteps = int((Ls[1]-Ls[0])/Ls[2])
+    for i in range(Lsteps):
+        Lname = str(Ls[0]+(Ls[2]*i) )[:6]
+        new = []
+        for j in range(len(data[:,0])):
+            if data[j,0] < Ls[0]+(Ls[2]*i):  continue
+            if data[j,0] > Ls[0]+(Ls[2]*(i+1)):  continue
+            new.append(data[j,1])
+        new = np.array(new)
+        Lhist, Ledges = np.histogram(new, 70, (-30.0, 40.0))
+        #output to file
+        outstuff = sc.array(zip(Ledges+0.5, Lhist))
+        np.savetxt(Lname+".out", outstuff)
+        #plot
+        plt.figure(1)
+        plt.bar(Ledges[:-1], Lhist, 1.0)
+        plt.title(Lname)
+        plt.xlabel("B")
+        plt.savefig(Lname+".png")
+        plt.close('all')
+        pb3.updatebar(float(i)/float(Lsteps))
+    print "Ended Successfully"    
+    
+
 def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
     """ Makes the plot for the simulated streams
         /home/newbym2/Dropbox/Research/sgrnorth_paper/sgr_separated_stars_MRT.txt"""
@@ -330,12 +391,13 @@ def batch_shift():
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
     #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
-    make_total_plot(RGB=1)
+    #make_total_plot(RGB=1)
     #make_diff_hist()
     #get_bif()
     #get_sgr_curves()
     #batch_shift()
-    RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
+    #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
+    plot_profiles()
     
     
 """

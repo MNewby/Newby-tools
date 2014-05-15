@@ -50,28 +50,23 @@ def do_MCMC(result, n_steps=1000):
     current_params = sc.zeros(lp)
     for i in range(lp):  current_params[i] = result.params[i]
     new_params = sc.zeros(lp)
+    current_RR = result.function(current_params) #R_squared(function, current_params, x, y, sigma)
     for i in range(n_steps):
         #Record position
         positions.append(current_params.tolist())
-        printa("{0}".format(current_params))
         #Take a step
         for j in range(lp):
             new_params[j] = np.random.normal(current_params[j], result.steps[j])
         #Decide whether to move or not
-        current_RR = result.function(current_params) #R_squared(function, current_params, x, y, sigma)
         new_RR = result.function(new_params) #R_squared(function, new_params, x, y, sigma)
         compare = (current_RR / new_RR)
         #if (np.random.uniform() < (np.exp(-1.0*new_RR) / np.exp(-1.0*current_RR) ) ):
         if (np.random.uniform() < compare):
             moves = moves + 1
+            current_RR = new_RR
             for j in range(lp):
                 current_params[j] = new_params[j]
-        """#Just move, dammit
-        new_RR = R_squared(function, new_params, x, y, sigma)
-        for j in range(len(init_params)):
-                current_params[j] = new_params[j]
-        moves = moves + 1
-        #Remove from 'dammit' to here to restore old functionality"""
+        printa("{0} : {1}".format(current_params, current_RR))
         #record best fitness
         if (new_RR < best_RR):
             best_RR = new_RR
@@ -90,10 +85,10 @@ def do_MCMC(result, n_steps=1000):
     #    print '#---data and MCMC function fit successfully plotted'
     pos_array = sc.array(positions)
     printa("Original Parameters: {0}".format(result.params))
-    printa("New Best?: {0}".format(best_params))
+    printa("New Best?: {0} : {1}".format(best_params, best_RR))
     for i in range(lp):
-        printa("Parameter {0}: {1}, {2}".format(i,sc.mean(pos_array[:,i]),
-                sc.std(pos_array[:,i]) ) )
+        printa("Parameter {0}: {1}, {2}".format(i,sc.mean(pos_array[100:,i]),
+                sc.std(pos_array[100:,i]) ) )
     return -1 #centers, deviations, best_params
 
 
@@ -234,6 +229,7 @@ def printa(string, filename=dumpfile):
     outfile.close()
 
 if __name__ == "__main__":
+    t0 = time.time()
     result = results()
     result.params = read_lua(luafile)
     result.steps = [0.01,0.5, 
@@ -245,4 +241,4 @@ if __name__ == "__main__":
     #smart_Hessian(result, loops=10) #change this line
     #print get_likelihood()
     do_MCMC(result, n_steps=1000)
-    
+    printa("Minutes Elapsed: {0}".format((time.time()-t0)/60.0) )

@@ -32,6 +32,7 @@ def gauss_plus_floor(x_in, params):
 
 def get_2gauss_y (x, parameters):
     #Creates Y values for given x values for a double-sided gaussian function.
+    # that is, a Gaussian with different sigma's on either side of the mean
     # From "gaus_fit_enc.py"
     length = len(x)
     mu, sigma_left, sigma_right, amplitude = parameters
@@ -96,6 +97,16 @@ def double_gaussian(x, params):
     G1 = A1*A1*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig1*sig1) )
     G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
     return G1 + G2
+
+def quad_fat_gaussians(x, params):
+    """ Fits two pairs of Gaussians to data;  each pair has the same mean.
+        10 parameters """
+    A1, mu1, sig1, A2, mu2, sig2, A3, sig3, A4, sig4 = params
+    G1 = A1*A1*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig1*sig1) )
+    G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
+    G3 = A3*A3*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig3*sig3) )
+    G4 = A4*A4*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig4*sig4) )
+    return G1 + G2 + G3 + G4
 
 def gaussian_constmean(x_in, params):
     """Fits only sigma and amplitude, holding the mean constant"""
