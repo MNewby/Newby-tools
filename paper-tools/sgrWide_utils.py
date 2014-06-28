@@ -29,7 +29,7 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
             if line.strip()=="":  continue
             temp = line.split()
             for i in range(len(temp)):  temp[i] = float(temp[i])
-            if (temp[2] < 20.0) or (temp[2] > 45.0):  continue
+            if (temp[2] < 30.0) or (temp[2] > 45.0):  continue
             if ac.SDSS_primary(temp[0],temp[1],wedge,fmt="lb",low=9,high=27)==0:  continue
             data.append(temp)
         stripedata.close()
@@ -59,13 +59,13 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
             if data[j,0] > Ls[0]+(Ls[2]*(i+1)):  continue
             new.append(data[j,1])
         new = np.array(new)
-        Lhist, Ledges = np.histogram(new, 70, (-30.0, 40.0))
+        Lhist, Ledges = np.histogram(new, 140, (-30.0, 40.0))
         #output to file
-        outstuff = sc.array(zip(Ledges+0.5, Lhist))
+        outstuff = sc.array(zip(Ledges+0.25, Lhist))
         np.savetxt(Lname+".out", outstuff)
         #plot
         plt.figure(1)
-        plt.bar(Ledges[:-1], Lhist, 1.0)
+        plt.bar(Ledges[:-1], Lhist, 0.5)
         plt.title(Lname)
         plt.xlabel("B")
         plt.savefig(Lname+".png")
@@ -397,8 +397,7 @@ if __name__ == "__main__":
     #get_sgr_curves()
     #batch_shift()
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
-    plot_profiles()
-    
+    plot_profiles()    
     
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
