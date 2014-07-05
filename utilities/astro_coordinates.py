@@ -320,29 +320,30 @@ def equal_area_projection(lam, phi, acc=0.0002777778):
 	for i in range(len(lam)):  #Newton-Ralphson method to get auxiliary angle "t"
 		if (abs(phi[i])-90.0) < acc:  theta.append(phi[i]*rad); continue  #Takes care of singularities at poles
 		t = phi[i]*rad	#theta in radians for the trig functions
-		while (2.0*t + ma.sin(2.0*t) - ma.pi*ma.sin(phi)) > acc:
-			t = t - ( (2.0*t + ma.sin(2.0*t) - ma.pi*ma.sin(phi))/(2.0 + 2.0*ma.cos(2.0*t)) )
+		while (2.0*t + ma.sin(2.0*t) - ma.pi*ma.sin(phi*rad)) > acc:
+			t = t - ( (2.0*t + ma.sin(2.0*t) - ma.pi*ma.sin(phi*rad))/(2.0 + 2.0*ma.cos(2.0*t)) )
 		theta.append(t)
 	theta = sc.array(theta)
-	x = xm*lam*sc.cos(theta)
+	x = xm*lam*rad*sc.cos(theta)
 	y = ym*sc.sin(theta)
 	if len(x)==1:  x, y = x[0], y[0]
-	return x, y
+	return x*deg, y*deg
 	
 def tripel_projection(lam, phi, phi1=ma.acos(2.0/ma.pi)):
-	""" Winkel tripel projection (Wikipedia); minimizes distortion in three categories.
+    """ Winkel tripel projection (Wikipedia); minimizes distortion in three categories.
 		lam:  longitude from central meridian
 		phi:  latitude from equator
 		phi1:  standard parallel, in radians;  default is Winkel's proposal"""
-	if type(lam) != type(arr):  lam = sc.array([lam])
-	if type(phi) != type(arr):  phi = sc.array([phi])
-	lam, phi = lam*rad, phi*rad  #convert to radians
-	alpha = np.arccos(np.cos(phi)*np.cos(lam*0.5))
-	# MIGHT NEED LAM, PHI IN DEGREES HERE
-	x = 0.5*(lam*np.cos(phi1) + (2.0*np.cos(phi)*np*sin(lam*0.5)/(unsinc(alpha) )))  
-	y = 0.5*(phi + (np.sin(phi)/unsinc(alpha)) )
-	if len(x)==1:  x, y = x[0], y[0]
-	return x, y
+    if type(lam) != type(arr):  lam = sc.array([lam])
+    if type(phi) != type(arr):  phi = sc.array([phi])
+    lam, phi = lam*rad, phi*rad
+    alpha = np.arccos(np.cos(phi)*np.cos(lam*0.5))
+    x1 = lam*np.cos(phi1)
+    x2 = (2.0*np.cos(phi)*np.sin(lam*0.5)) / unsinc(alpha)
+    x = 0.5*(x1 + x2)
+    y = 0.5*(phi + (np.sin(phi) / unsinc(alpha)) )
+    if len(x)==1:  x, y = x[0], y[0]
+    return x, y
 
 def sin_projection(lam, phi):
 	""" Sinusoidal Projection (Wikipedia); equal-area projection, distorts shapes

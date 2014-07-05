@@ -388,6 +388,59 @@ def batch_shift():
         make_sim_stream_plot(filein=outfile, RGB=1, imfile=outfile[:-4]+".png")
         print "Done with {0}, {1}".format(infile, outfile)
 
+
+def sgr_rv():
+    data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
+    a,b,c, lsgr, bsgr, d = ac.lb2sgr(data[:,2], data[:,3], data[:,0])
+    #lam = sc.arange(180.0, 360.0, 0.1)
+    #bet = sc.zeros(len(lam))
+    RV = []
+    for i in range(len(data[:,0])):
+        if abs(bsgr[i]) < 2.5:  
+            #if data[i,0] > 20.0:
+            RV.append(data[i,4])
+    hist, edges = np.histogram(np.array(RV), bins=40, range=(-200.0, 200.0))
+    fig = plt.figure()
+    plt.bar(edges[:-1], hist, width=10.0)
+    #sp = plt.subplot (111)
+    #xx, yy = ac.equal_area_projection(lsgr-180.0, bsgr)
+    #ll, bb = ac.equal_area_projection(lam-180.0, bet)
+    #plt.scatter(xx, yy, marker="o", s=1, c="k")
+    #plt.plot(ll,bb)
+    #plt.xlim(0.0,120.0)
+    #sp.set_aspect('equal')
+    #plt.xlabel(r"$\Lambda$")
+    #plt.ylabel(r"B")
+    plt.show()
+    plt.close()    
+    
+    
+def proj_test():
+    #data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
+    x = sc.arange(0.0, 359.0, 0.1)
+    y = sc.zeros(len(x))
+    y2 = sc.arange(-90.0, 90.0, 0.1)
+    x2 = sc.zeros(len(y2))
+    y3 = sc.arange(-90.0, 90.0, 0.1)
+    x3 = 180.0*sc.ones(len(y3))
+    y4 = sc.arange(-90.0, 90.0, 0.1)
+    x4 = 359.0*sc.ones(len(y4))
+    newx = np.append(x,x2)
+    newx = np.append(newx, x3)
+    newx = np.append(newx, x4)
+    newy = np.append(y,y2)
+    newy = np.append(newy, y3)
+    newy = np.append(newy, y4)
+    fig = plt.figure()
+    #xx, yy = ac.equirec_projection(newx-180.0, newy)
+    xx, yy = ac.equal_area_projection(newx-180.0, newy)
+    #xx, yy = ac.tripel_projection(newx-180.0, newy)
+    #xx, yy = ac.sin_projection(newx-180.0, newy)
+    plt.scatter(xx, yy, marker="o", s=1, c="k")
+    plt.show()
+    plt.close()
+    
+
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
     #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
@@ -397,7 +450,9 @@ if __name__ == "__main__":
     #get_sgr_curves()
     #batch_shift()
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
-    plot_profiles()    
+    #plot_profiles()    
+    #proj_test()
+    sgr_rv()
     
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
