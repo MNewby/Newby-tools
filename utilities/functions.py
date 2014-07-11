@@ -96,8 +96,16 @@ def double_gaussian(x, params):
     A1, mu1, sig1, A2, mu2, sig2 = params
     G1 = A1*A1*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig1*sig1) )
     G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
-    y = (2.0*x) + 160.0 #offset for virgo
-    return G1 + G2 + y
+    #y = (2.0*x) + 160.0 #offset for virgo
+    return G1 + G2 
+
+def double_gaussian_one_fixed(x, params):
+    # 6 parameters, 4 fit;  holds the mean and sigma constant for 2nd gaussian
+    A1, mu1, sig1, A2, mu2, sig2 = params
+    G1 = A1*A1*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig1*sig1) )
+    G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
+    return G1 + G2 
+
 
 def quad_fat_gaussians(x, params):
     """ Fits two pairs of Gaussians to data;  each pair has the same mean.

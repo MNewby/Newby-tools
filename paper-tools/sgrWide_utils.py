@@ -1,6 +1,7 @@
 import sys
 sys.path.insert(0, '../plotting-tools')
 sys.path.insert(0, '../utilities')
+sys.path.insert(0, '../fitting-tools')
 import math as ma
 import numpy as np
 import scipy as sc
@@ -12,6 +13,8 @@ import astro_coordinates as ac
 import progress as pr
 import glob
 import sgr_law as sgr
+import fit as fit
+import functions as func
 
 def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
     files = glob.glob(path+"/stars*")
@@ -391,28 +394,48 @@ def batch_shift():
 
 def sgr_rv():
     data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
-    a,b,c, lsgr, bsgr, d = ac.lb2sgr(data[:,2], data[:,3], data[:,0])
-    #lam = sc.arange(180.0, 360.0, 0.1)
-    #bet = sc.zeros(len(lam))
-    RV = []
-    for i in range(len(data[:,0])):
-        if abs(bsgr[i]) < 2.5:  
-            #if data[i,0] > 20.0:
-            RV.append(data[i,4])
-    hist, edges = np.histogram(np.array(RV), bins=40, range=(-200.0, 200.0))
-    fig = plt.figure()
-    plt.bar(edges[:-1], hist, width=10.0)
-    #sp = plt.subplot (111)
-    #xx, yy = ac.equal_area_projection(lsgr-180.0, bsgr)
-    #ll, bb = ac.equal_area_projection(lam-180.0, bet)
-    #plt.scatter(xx, yy, marker="o", s=1, c="k")
-    #plt.plot(ll,bb)
-    #plt.xlim(0.0,120.0)
-    #sp.set_aspect('equal')
-    #plt.xlabel(r"$\Lambda$")
-    #plt.ylabel(r"B")
-    plt.show()
-    plt.close()    
+    #dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR
+    g0, r0 = data[:,0], data[:,1]
+    l, b = data[:,2], data[:,3]
+    rv, rv_err = data[:,4], data[:,5]
+    d = ac.getr(g0)
+    # Transform to vgsr from Yanny+ 2009
+    vgsr = ac.rv_to_vgsr(rv,l,b)
+    X,Y,Z, lsgr, bsgr, r_sgr = ac.lb2sgr(l, b, d)
+    for w in [0.5, 1.0, 2.5, 5.0, 7.5, 10.0, 15.0, 20.0, 25.0, 30.0, 50.0]:
+        keep = []
+        for i in range(len(data[:,0])):
+            if abs(bsgr[i]) < w:  
+                if g0[i] < 20.0:  continue
+                if g0[i] > 23.0:  continue
+                keep.append(vgsr[i])
+        hist, edges = np.histogram(np.array(keep), bins=60, range=(-300.0, 300.0))
+        y, x = hist, edges[:-1] 
+        e = func.poisson_errors(y)
+        fitter = fit.ToFit(x,y,e)
+        fitter.function=func.double_gaussian_one_fixed
+        fitter.update_params([3.0, -120.0, 30.0, 2.0, 0.0, 120.0])
+        fitter.step = [1.0, 10.0, 1.0, 1.0, 0.0, 0.0]
+        fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma"]
+        path1 = fit.gradient_descent(fitter, its=10000, line_search=0)
+        path2 = fit.MCMC(fitter)
+        new_params=fitter.params
+        xx = sc.arange(-300.0, 300.0, 1.0)
+        yy = func.double_gaussian_one_fixed(xx, new_params)
+        y1 = func.gaussian_function(xx, new_params[:3])
+        y2 = func.gaussian_function(xx, new_params[3:])
+        fig = plt.figure()
+        plt.bar(edges[:-1], hist, width=10.0, color="white")
+        plt.plot(xx,yy, "k-")
+        plt.plot(xx,y1, "k--")
+        plt.plot(xx,y2, "k--")
+        plt.title("cut width = "+str(w))
+        plt.xlabel(r"$v_{\rm gsr}$", fontsize=16)
+        plt.ylabel(r"Counts")
+        #plt.ylim(0.0, 60.0)
+        #plt.show()
+        plt.savefig("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec/r_cut_relative"+str(w)+".png")
+        plt.close()    
     
     
 def proj_test():

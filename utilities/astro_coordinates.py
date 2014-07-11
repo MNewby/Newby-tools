@@ -359,6 +359,15 @@ def sin_projection(lam, phi):
 
 """ ------------------ Utilities ------------------ """
 
+def rv_to_vgsr(rv, l, b):
+    # From Yanny et al., 2009
+    # vgsr = rv + 10.1 cosb cosl + 224.0 cosbsinl + 6.7 sinb km/s
+    part1 = rv + 10.1*np.cos(b*rad) * np.cos(l*rad) 
+    part2 = 224.0 * np.cos(b*rad) * np.sin(l*rad)
+    part3 = 6.7*np.sin(b*rad)
+    vgsr = part1 + part2 + part3
+    return vgsr
+
 def cross(a, b):
     """ returns the cross-product of two 3-vectors"""
     c1 = a[1]*b[2] - a[2]*b[1]

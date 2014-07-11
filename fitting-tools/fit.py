@@ -202,6 +202,7 @@ def MCMC(fitter, iters=1000, annealing=0, verbose=0, seed=None):
     l = len(new)
     while loops < iters:
         for i in range(l):
+            if fitter.step[i] == 0.0:  continue
             new[i] = np.random.normal(fitter.params[i], fitter.step[i])
         if validate == 1:   # Check new params against bounds, get new params if bad
             if is_move_valid(fitter, new, verbose) == 0:
