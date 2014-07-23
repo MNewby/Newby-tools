@@ -392,7 +392,7 @@ def batch_shift():
         print "Done with {0}, {1}".format(infile, outfile)
 
 
-def sgr_rv():
+def sgr_rv_fits():
     data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
     #dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR
     g0, r0 = data[:,0], data[:,1]
@@ -437,7 +437,110 @@ def sgr_rv():
         plt.savefig("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec/r_cut_relative"+str(w)+".png")
         plt.close()    
     
+def sgr_rv_skyplot():
+    data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
+    #dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR
+    g0, r0 = data[:,0], data[:,1]
+    l, b = data[:,2], data[:,3]
+    rv, rv_err = data[:,4], data[:,5]
+    d = ac.getr(g0)
+    # Transform to vgsr from Yanny+ 2009
+    vgsr = ac.rv_to_vgsr(rv,l,b)
+    X,Y,Z, lsgr, bsgr, r_sgr = ac.lb2sgr(l, b, d)
+    mean, stdev, nsig = -118.233333, 30.222222, 2.0
+    locs = []
+    for i in range(len(data[:,0])):
+        if g0[i] < 20.0:  continue
+        if g0[i] > 23.0:  continue
+        locs.append([lsgr[i], bsgr[i], vgsr[i]])
+    locs = np.array(locs)
+    sgr = []
+    for i in range(len(locs[:,0])):
+        if locs[i,2] < (mean - stdev*nsig):  continue
+        if locs[i,2] > (mean + stdev*nsig):  continue
+        sgr.append([locs[i,0], locs[i,1]])
+    sgr = np.array(sgr)
+    plt.figure()
+    """
+    plt.scatter(locs[:,0], locs[:,1], c="k", s=1)
+    plt.scatter(sgr[:,0], sgr[:,1], c='r', s=30)
+    plt.plot([190.0, 320.0], [0.0, 0.0], "b--")
+    plt.text(195.0, 33.0, "$\mu=$-118.2, $\sigma=$30.2\n{0} stars in {1}$\sigma$".format(len(sgr), nsig), fontsize=16)
+    plt.xlim(190.0, 320.0)
+    plt.ylim(-75.0, 40.0)
+    plt.xlabel(r"$\Lambda$", fontsize=16)
+    plt.ylabel(r"$B$", fontsize=16)
+    plt.show()"""
+    hist, edges = np.histogram(sgr[:,1], bins=23, range=(-75.0, 40.0))
+    plt.bar(edges[:-1], hist, width=5.0, color="grey")
+    plt.xlabel("B", fontsize=16)
+    plt.text(-70.0, 50.0, r"Stars within "+str(nsig)+r"$\sigma$ of mean $v_{\rm gsr}$", fontsize=14)
+    plt.show()
+    plt.close()
+
+
+def sgr_rv_cut():
+    data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
+    #dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR
+    g0, r0 = data[:,0], data[:,1]
+    l, b = data[:,2], data[:,3]
+    rv, rv_err = data[:,4], data[:,5]
+    d = ac.getr(g0)
+    # Transform to vgsr from Yanny+ 2009
+    vgsr = ac.rv_to_vgsr(rv,l,b)
+    X,Y,Z, lsgr, bsgr, r_sgr = ac.lb2sgr(l, b, d)
+    mean, stdev, nsig = -118.233333, 30.222222, 2.0
+    keep = []
+    for i in range(len(data[:,0])):
+        if abs(bsgr[i]) < 10.0:  
+            if g0[i] < 20.0:  continue
+            if g0[i] > 23.0:  continue
+            if vgsr[i] < (mean - stdev*nsig):  continue
+            if vgsr[i] > (mean + stdev*nsig):  continue
+            keep.append([(g0[i]-r0[i]), g0[i]])
+    keep = np.array(keep)
+    plt.figure()
+    plt.scatter(keep[:,0], keep[:,1], s=1)
+    lims = plt.ylim()
+    plt.ylim(lims[1], lims[0])
+    plt.ylabel(r"$g_0$")
+    plt.xlabel(r"$(g-r)_0$")
+    plt.show()
+    plt.close()
+
+
+if __name__ == "__main__":
+    #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
+    #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
+    #make_total_plot(RGB=1)
+    #make_diff_hist()
+    #get_bif()
+    #get_sgr_curves()
+    #batch_shift()
+    #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
+    #plot_profiles()    
+    #proj_test()
+    #sgr_rv_skyplot()
+    sgr_rv_cut()
     
+"""
+RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
+RA 220.0, dec 4.0, is in stripe 12; mu 219.902390269, nu -0.0990566496675
+RA 215.0, dec 6.5, is in stripe 13; mu 214.787585638, nu -0.00444745570075
+RA 210.0, dec 9.0, is in stripe 14; mu 209.671526225, nu -0.0792531928135
+RA 200.0, dec 12.0, is in stripe 15; mu 199.664792156, nu -0.0866711273422
+RA 190.0, dec 15.0, is in stripe 16; mu 189.829219533, nu 0.0545069430007
+RA 185.0, dec 18.0, is in stripe 17; mu 185.0, nu 0.5
+RA 180.0, dec 21.0, is in stripe 18; mu 180.332045544, nu 1.06962833929
+RA 176.6, dec 23.0, is in stripe 19; mu 177.271410366, nu 0.716530158374
+RA 173.3, dec 25.0, is in stripe 20; mu 174.409199595, nu 0.455971801713
+RA 170.0, dec 27.0, is in stripe 21; mu 171.666854115, nu 0.303227642608
+RA 160.0, dec 28.0, is in stripe 22; mu 163.089514843, nu 0.370314382846
+RA 150.0, dec 29.0, is in stripe 23; mu 154.880506976, nu 1.37166887545
+RA 140.0, dec 31.0, is in stripe 23; mu 147.430539542, nu 6.24134308136
+RA 130.0, dec 31.2, is in stripe 23; mu 139.648046388, nu 9.97924011117
+"""
+
 def proj_test():
     #data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
     x = sc.arange(0.0, 359.0, 0.1)
@@ -463,34 +566,3 @@ def proj_test():
     plt.show()
     plt.close()
     
-
-if __name__ == "__main__":
-    #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
-    #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
-    #make_total_plot(RGB=1)
-    #make_diff_hist()
-    #get_bif()
-    #get_sgr_curves()
-    #batch_shift()
-    #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
-    #plot_profiles()    
-    #proj_test()
-    sgr_rv()
-    
-"""
-RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
-RA 220.0, dec 4.0, is in stripe 12; mu 219.902390269, nu -0.0990566496675
-RA 215.0, dec 6.5, is in stripe 13; mu 214.787585638, nu -0.00444745570075
-RA 210.0, dec 9.0, is in stripe 14; mu 209.671526225, nu -0.0792531928135
-RA 200.0, dec 12.0, is in stripe 15; mu 199.664792156, nu -0.0866711273422
-RA 190.0, dec 15.0, is in stripe 16; mu 189.829219533, nu 0.0545069430007
-RA 185.0, dec 18.0, is in stripe 17; mu 185.0, nu 0.5
-RA 180.0, dec 21.0, is in stripe 18; mu 180.332045544, nu 1.06962833929
-RA 176.6, dec 23.0, is in stripe 19; mu 177.271410366, nu 0.716530158374
-RA 173.3, dec 25.0, is in stripe 20; mu 174.409199595, nu 0.455971801713
-RA 170.0, dec 27.0, is in stripe 21; mu 171.666854115, nu 0.303227642608
-RA 160.0, dec 28.0, is in stripe 22; mu 163.089514843, nu 0.370314382846
-RA 150.0, dec 29.0, is in stripe 23; mu 154.880506976, nu 1.37166887545
-RA 140.0, dec 31.0, is in stripe 23; mu 147.430539542, nu 6.24134308136
-RA 130.0, dec 31.2, is in stripe 23; mu 139.648046388, nu 9.97924011117
-"""
