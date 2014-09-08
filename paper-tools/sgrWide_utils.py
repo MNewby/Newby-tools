@@ -20,6 +20,7 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
     files = glob.glob(path+"/stars*")
     #print files
     data=[]
+    r_cut_low, r_cut_high = ac.getr(20.0), ac.getr(20.5) #30.0, 45.0
     pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
@@ -32,7 +33,7 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
             if line.strip()=="":  continue
             temp = line.split()
             for i in range(len(temp)):  temp[i] = float(temp[i])
-            if (temp[2] < 30.0) or (temp[2] > 45.0):  continue
+            if (temp[2] < r_cut_low) or (temp[2] > r_cut_high):  continue
             if ac.SDSS_primary(temp[0],temp[1],wedge,fmt="lb",low=9,high=27)==0:  continue
             data.append(temp)
         stripedata.close()
@@ -121,7 +122,7 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
         sky.savehist("streamgen_bifExtra.csv")
     print "Ended Successfully"
 
-def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None):
+def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None, rcut=None):
     files = glob.glob(path+"/stars*")
     #print files
     data=[]
@@ -137,6 +138,9 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None):
             if line.strip()=="":  continue
             temp = line.split()
             for i in range(len(temp)):  temp[i] = float(temp[i])
+            if rcut != None:
+                if temp[2] < rcut[0]:  continue
+                if temp[2] > rcut[1]:  continue
             if ac.SDSS_primary(temp[0],temp[1],wedge,fmt="lb",low=9,high=27)==0:  continue
             data.append(temp)
         stripedata.close()
@@ -156,9 +160,11 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None):
     if RGB==1:  RGB_plot(data, imfile=imfile)
     else:
         allsky = pp.HistMaker(data[:,0], data[:,1], xsize=0.5, ysize=0.5,
-            xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
+            xarea=(200.0, 300.0), yarea=(-40.0, 30.0))
+            #xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
         #allsky.scale = 'sqrt'
-        allsky.varea = (0.0,200.0)
+        allsky.yflip = 1
+        allsky.varea = (0.0,20.0)
         pp.PlotHist(allsky, "sgrall_GC.png")
         allsky.savehist("SDSSnorthGC.csv")
     print "Ended Successfully"
@@ -438,21 +444,28 @@ def sgr_rv_fits():
         plt.close()    
     
 def sgr_rv_skyplot():
-    data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
-    #dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR
+    data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec_all.csv", delimiter=",")
+    #dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR,plate,p_ra,p_dec
     g0, r0 = data[:,0], data[:,1]
     l, b = data[:,2], data[:,3]
     rv, rv_err = data[:,4], data[:,5]
+    plates = data[:,6]
+    p_ra, p_dec = data[:,7], data[:,8]
     d = ac.getr(g0)
     # Transform to vgsr from Yanny+ 2009
     vgsr = ac.rv_to_vgsr(rv,l,b)
     X,Y,Z, lsgr, bsgr, r_sgr = ac.lb2sgr(l, b, d)
-    mean, stdev, nsig = -118.233333, 30.222222, 2.0
+    pl,pb = ac.EqTolb(p_ra, p_dec)
+    pd = 20.0*sc.ones(len(pl))
+    pX,pY,pZ, plsgr, pbsgr, pr_sgr = ac.lb2sgr(pl, pb, pd)
+    mean, stdev, nsig = -118.233333, 30.222222, 1.0
+    #plates = plate_center_utils()
     locs = []
     for i in range(len(data[:,0])):
         if g0[i] < 20.0:  continue
         if g0[i] > 23.0:  continue
-        locs.append([lsgr[i], bsgr[i], vgsr[i]])
+        #if lsgr[i] > 230.0:  continue
+        locs.append([lsgr[i], bsgr[i], vgsr[i], plsgr[i], pbsgr[i] ])
     locs = np.array(locs)
     sgr = []
     for i in range(len(locs[:,0])):
@@ -461,30 +474,34 @@ def sgr_rv_skyplot():
         sgr.append([locs[i,0], locs[i,1]])
     sgr = np.array(sgr)
     plt.figure()
-    """
     plt.scatter(locs[:,0], locs[:,1], c="k", s=1)
-    plt.scatter(sgr[:,0], sgr[:,1], c='r', s=30)
+    plt.scatter(sgr[:,0], sgr[:,1], c='r', s=10)
+    plt.scatter(locs[:,3], locs[:,4], c='b', s=10)
+    plt.plot([190.0, 250.0, 250.0, 190.0],[10.0, 10.0, -10.0, -10.0], "b-")
     plt.plot([190.0, 320.0], [0.0, 0.0], "b--")
     plt.text(195.0, 33.0, "$\mu=$-118.2, $\sigma=$30.2\n{0} stars in {1}$\sigma$".format(len(sgr), nsig), fontsize=16)
     plt.xlim(190.0, 320.0)
     plt.ylim(-75.0, 40.0)
     plt.xlabel(r"$\Lambda$", fontsize=16)
     plt.ylabel(r"$B$", fontsize=16)
-    plt.show()"""
+    plt.show()
+    """
     hist, edges = np.histogram(sgr[:,1], bins=23, range=(-75.0, 40.0))
     plt.bar(edges[:-1], hist, width=5.0, color="grey")
     plt.xlabel("B", fontsize=16)
-    plt.text(-70.0, 50.0, r"Stars within "+str(nsig)+r"$\sigma$ of mean $v_{\rm gsr}$", fontsize=14)
-    plt.show()
+    plt.text(-50.0, 25.0, "Stars within "+str(nsig)+r"$\sigma$ of mean $v_{\rm gsr}$; $\Lambda<230$", fontsize=12)
+    plt.show()"""
     plt.close()
-
+    
 
 def sgr_rv_cut():
-    data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
-    #dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR
+    data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec_all.csv", delimiter=",")
+    #dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR,plate,p_ra,p_dec
     g0, r0 = data[:,0], data[:,1]
     l, b = data[:,2], data[:,3]
     rv, rv_err = data[:,4], data[:,5]
+    plates = data[:,6]
+    p_ra, p_dec = data[:,7], data[:,8]
     d = ac.getr(g0)
     # Transform to vgsr from Yanny+ 2009
     vgsr = ac.rv_to_vgsr(rv,l,b)
@@ -497,7 +514,7 @@ def sgr_rv_cut():
             if g0[i] > 23.0:  continue
             if vgsr[i] < (mean - stdev*nsig):  continue
             if vgsr[i] > (mean + stdev*nsig):  continue
-            keep.append([(g0[i]-r0[i]), g0[i]])
+            keep.append([(g0[i]-r0[i]), g0[i]], p_ra[i], p_dec[i])
     keep = np.array(keep)
     plt.figure()
     plt.scatter(keep[:,0], keep[:,1], s=1)
@@ -508,20 +525,101 @@ def sgr_rv_cut():
     plt.show()
     plt.close()
 
+def split_by_plate():
+    # dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR,plate,p_ra,p_dec
+    data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec_all.csv", delimiter=",")
+    mean, stdev, nsig = -118.233333, 30.222222, 1.0
+    plates, pos = [], []
+    for i in range(len(data[:,0])):
+        if plates.count(data[i,6]) > 0:  continue
+        plates.append(data[i,6])
+        pos.append([data[i,7], data[i,8]])
+    out = []
+    for i, plate in enumerate(plates):
+        # get stars for plate
+        stars = []
+        for j in range(len(data[:,0])):
+            if data[j,6] == plate:  stars.append(data[j,:])
+        if stars == []:  continue
+        # apply cuts
+        keep = []
+        for star in stars:
+            if star[0] < 20.0:  continue
+            if star[0] > 20.5:  continue  #using stricter cut
+            X,Y,Z, lsgr, bsgr, r_sgr = ac.lb2sgr(star[2], star[3], ac.getr(star[0]))
+            if lsgr < 190.0:  continue
+            if lsgr > 250.0:  continue
+            if abs(bsgr) > 10.0:  continue
+            vgsr = ac.rv_to_vgsr(star[4],star[2],star[3])
+            keep.append([lsgr, bsgr, vgsr])
+        if keep == []:  continue
+        # vgsr selection
+        yes, no = 0, 0
+        for k in keep:
+            if k[2] < (mean - stdev*nsig):  no += 1;  continue
+            if k[2] > (mean + stdev*nsig):  no += 1;  continue
+            yes += 1
+        print "Plate {0}:  In {1} of Sgr versus out:  {2}, {3}".format(
+            plate, nsig, yes, no)
+        # compile plate info positions
+        out.append([plate, pos[i][0], pos[i][1], yes, no])
+    savename = "/home/newbym2/Dropbox/Research/sgrLetter/plate_stars.csv"
+    np.savetxt(savename, sc.array(out), delimiter=",")
+        
 
+def photo_spec_analysis():
+    # l, b, r;  plate #, p_ra, p_dec, in Sgr, out Sgr
+    path="/home/newbym2/Desktop/starfiles"
+    wd="/home/newbym2/Dropbox/Research/sgrLetter/"
+    files = glob.glob(path+"/stars*")
+    plates = np.loadtxt(wd+"plate_stars.csv", delimiter=",")
+    radius = 1.49
+    for i, plate in enumerate(plates[:,0]):
+        print "starting plate", str(plate).split(".")[0], plates[i,3], plates[i,4]
+        p_ra, p_dec = plates[i,1], plates[i,2]
+        pl, pb = ac.EqTolb(p_ra, p_dec)
+        print pl, pb
+        stars = []
+        for f in files:
+            data = open(f, "r") #np.loadtxt(f) #, delimiter="\t")
+            print "    starting file", f
+            wedge = int(f.split("-")[1].split(".")[0])
+            skip = 0
+            for line in data:
+                if skip < 1:  skip =+ 1;  continue
+                if line.strip()=="":  continue
+                temp = line.split()
+                ll, bb, g0 = float(temp[0]), float(temp[1]), ac.getg(float(temp[2]))                
+                if g0 < 20.0:  continue
+                if g0 > 20.5:  continue
+                del_l, del_b = (ll-pl), (bb-pb)
+                dd = ma.sqrt( (del_l*del_l) + (del_b*del_b) )
+                if dd > radius: continue
+                if ac.SDSS_primary(ll,bb,wedge,fmt="lb",low=9,high=27)==0:  continue
+                stars.append([ll,bb,g0])
+            data.close()
+        svname = wd+"plate_"+str(plate).split(".")[0]+"_stars.csv"
+        np.savetxt(svname, sc.array(stars), delimiter=",")
+        print "saved {0}".format(svname)
+    
+    
+    
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
     #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
     #make_total_plot(RGB=1)
+    #make_total_plot(RGB=0, rcut=(ac.getr(20.0), ac.getr(20.5) ) )
     #make_diff_hist()
     #get_bif()
     #get_sgr_curves()
     #batch_shift()
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
-    #plot_profiles()    
+    plot_profiles()    
     #proj_test()
     #sgr_rv_skyplot()
-    sgr_rv_cut()
+    #sgr_rv_cut()
+    #split_by_plate()
+    #photo_spec_analysis()
     
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
