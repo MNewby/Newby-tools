@@ -10,7 +10,8 @@ import fit as fit
 import matplotlib
 import matplotlib.pyplot as plt
 
-path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins"
+path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_spec_cut"
+#path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins"
 #path = "/home/newbym2/Dropbox/Research/sgrLetter/hists_r30_cutoff"
 files = glob.glob(path+"/*.out")
 print files
@@ -30,7 +31,7 @@ def clean_data(data):
 
 for f in files:
     # load in data
-    name = f[-9:-4]
+    name = f[-18:-13]
     data = clean_data(np.loadtxt(f) )
     if len(data)<2:  continue
     # Set up data
@@ -38,13 +39,14 @@ for f in files:
     e = func.poisson_errors(y)
     #fit it
     fitter = fit.ToFit(x,y,e)
+    
     fitter.function=func.double_gaussian
-    fitter.update_params([20.0, 10.0, 5.0, 20.0, 0.0, 10.0])
+    fitter.update_params([6.0, 10.0, 5.0, 6.0, -10.0, 10.0])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma"]
     """
     fitter.function=func.quad_fat_gaussians
-    fitter.update_params([20.0, 10.0, 1.0, 18.0, 0.0, 1.0, 10.0, 10.0, 10.0, 10.0])
+    fitter.update_params([6.0, 10.0, 1.0, 6.0, -10.0, 1.0, 5.0, 10.0, 5.0, 10.0])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "amp","sigma", "amp","sigma"]
     """
@@ -67,12 +69,13 @@ for f in files:
     plt.xlabel("B")
     plt.ylabel("counts")
     plt.title(name, fontsize=8 )
-    out_name = name+"_plot_"+".png"
+    out_name = name+"_plot"+".png"
     #plt.show()
     plt.savefig(out_name)
     plt.close('all')
     # counter allows for a series of uniquely-named plots        
         
+
 
 #fitter.range = [(0, 0.0, 5.1, 0.25), (1, 80.0, 181.0, 1.0), (2, 5.0, 55.5, 0.5), (3, 0.0, 5.1, 0.05)]
 #yi, xi = 1, 2

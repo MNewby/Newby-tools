@@ -96,8 +96,9 @@ def double_gaussian(x, params):
     A1, mu1, sig1, A2, mu2, sig2 = params
     G1 = A1*A1*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig1*sig1) )
     G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
-    #y = (2.0*x) + 160.0 #offset for virgo
-    return G1 + G2 
+    y = (0.315*x) + 34.2 #offset for virgo, 20-20.5 cut
+    #y = (2.0*x) + 160.0 #offset for virgo, full cut
+    return G1 + G2 + y
 
 def double_gaussian_one_fixed(x, params):
     # 6 parameters, 4 fit;  holds the mean and sigma constant for 2nd gaussian
@@ -115,7 +116,8 @@ def quad_fat_gaussians(x, params):
     G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
     G3 = A3*A3*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig3*sig3) )
     G4 = A4*A4*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig4*sig4) )
-    y = (2.0*x) + 160.0 #offset for virgo
+    y = (0.315*x) + 34.2 #offset for virgo, 20-20.5 cut
+    #y = (2.0*x) + 160.0 #offset for virgo, full cut
     return G1 + G2 + G3 + G4 + y
 
 def gaussian_constmean(x_in, params):

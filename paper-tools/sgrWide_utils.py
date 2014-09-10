@@ -56,7 +56,7 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
     Ls = (200.0, 300.0, 2.5)
     Lsteps = int((Ls[1]-Ls[0])/Ls[2])
     for i in range(Lsteps):
-        Lname = str(Ls[0]+(Ls[2]*i) )[:6]
+        Lname = str(Ls[0]+(Ls[2]*i) )[:6]+"_spec_cut"
         new = []
         for j in range(len(data[:,0])):
             if data[j,0] < Ls[0]+(Ls[2]*i):  continue
@@ -601,9 +601,28 @@ def photo_spec_analysis():
         svname = wd+"plate_"+str(plate).split(".")[0]+"_stars.csv"
         np.savetxt(svname, sc.array(stars), delimiter=",")
         print "saved {0}".format(svname)
-    
-    
-    
+
+def make_tables():
+    f = "backfunc_spec_cut/quad_gauss/AA_hist_fits.txt"
+    wd="/home/newbym2/Dropbox/Research/sgrLetter/"
+    results = open(wd+f, "r")
+    table, entry = [], 0
+    for line in results:
+        if line.strip()=="":  continue
+        if (len(line.strip()) < 10):
+            if entry != 0:  table.append(entry) 
+            entry = line.strip().strip(":")
+        if line[4:8] == "MCMC":
+            temp = line.split("[")[1].split("]")[0]
+            entry = entry+", "+temp
+        if line[4:9] == "Value":
+            temp = line.split("[")[1].split("]")[0]
+            entry = entry+", "+temp
+    table.append(entry)
+    print table
+        
+
+        
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
     #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
@@ -614,12 +633,13 @@ if __name__ == "__main__":
     #get_sgr_curves()
     #batch_shift()
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
-    plot_profiles()    
+    #plot_profiles()    
     #proj_test()
     #sgr_rv_skyplot()
     #sgr_rv_cut()
     #split_by_plate()
     #photo_spec_analysis()
+    make_tables()
     
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
