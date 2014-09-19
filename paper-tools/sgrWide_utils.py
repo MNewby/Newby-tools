@@ -163,8 +163,9 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None, 
             xarea=(200.0, 300.0), yarea=(-40.0, 30.0))
             #xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
         #allsky.scale = 'sqrt'
+        allsky.cmap="bw"
         allsky.yflip = 1
-        allsky.varea = (0.0,20.0)
+        allsky.varea = (0.0,200.0)
         pp.PlotHist(allsky, "sgrall_GC.png")
         allsky.savehist("SDSSnorthGC.csv")
     print "Ended Successfully"
@@ -184,7 +185,8 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
     xa, ya = (200.0, 300.0), (-40.0, 30.0) #(120.0, 250.0), (-10.0, 50.0)
     #distance cutoffs
     #Wr, Br, Gr, Rr, Kr = 10.0, 20.0, 30.0, 40.0, 50.0
-    Wr, Br, Gr, Rr, Kr = 20.0+0.25, 20.66+0.25, 21.33+0.25, 22.0+0.25, 23.0+0.25  #Belokurov 2006 + g-r=0.25
+    #Wr, Br, Gr, Rr, Kr = 20.0+0.25, 20.66+0.25, 21.33+0.25, 22.0+0.25, 23.0+0.25  #Belokurov 2006 + g-r=0.25
+    Wr, Br, Gr, Rr, Kr = 20.0, 20.1, 20.4, 20.5, 50.0 #spec cut limits
     # bins for each color
     W, B, G, R, K = [], [], [], [], []
     for i in range(len(data[:,0])):
@@ -194,6 +196,8 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
         elif data[i,2] < Rr:  R.append(data[i,:])
         else:  pass
     if R == []:  R = [[0.0,0.0,0.0]]  #failsafe
+    if G == []:  G = [[0.0,0.0,0.0]]  #failsafe
+    if B == []:  B = [[0.0,0.0,0.0]]  #failsafe
     B = np.array(B)
     Bhist = pp.HistMaker(B[:,0], B[:,1], xsize=0.5, ysize=0.5,
             xarea=xa, yarea=ya)
@@ -244,8 +248,10 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
     else:  plt.savefig(imfile)
     plt.close('all')
 
-def RGB_from_files(mask_data=None, imfile=None):
-    suffix = ""
+def RGB_from_files(mask_data=None, imfile=None, fitfile=False):
+    wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
+    fname = "back_sliding_quad.txt"
+    suffix = "_sgr2"
     Rfile = "Rhist"+suffix+".csv"
     Gfile = "Ghist"+suffix+".csv"
     Bfile = "Bhist"+suffix+".csv"
@@ -263,16 +269,35 @@ def RGB_from_files(mask_data=None, imfile=None):
                 if mask[i,j] == 0.0:
                     RGB[i,j,:] = 0.0, 0.0, 0.0
     #for Sgr;  Sgr coords
-    plt.figure(1)
-    plt.imshow(RGB) #, origin='lower')
-    xs = np.arange(xa[0], xa[1]+1, 20)
+    plt.figure(1, figsize=(12,9), dpi=100)
+    plt.imshow(RGB, zorder=1) #, origin='lower')
+    if fitfile:
+        fitdata = np.loadtxt(wd+fname, delimiter=",")
+        lams = (fitdata[:,0] - 200.0) / 0.5
+        bet1 = (fitdata[:,2] + 40.0) / 0.5
+        bet1e = fitdata[:,3] / 0.5
+        bet1ee = fitdata[:,8] / 0.5
+        bet2 = (fitdata[:,5] + 40.0) / 0.5
+        bet2e = fitdata[:,6] / 0.5
+        bet2ee = fitdata[:,10] / 0.5
+        plt.errorbar(lams, bet1, yerr=bet1e, ecolor="white", marker="o", 
+                     mec='black', mfc='white', ms=2, ls=" ", mew=0.5, zorder=3)
+        plt.errorbar(lams, bet1, yerr=bet1ee, ecolor="cyan", fmt=None, capsize=5.0, zorder=2)
+        plt.errorbar(lams, bet2, yerr=bet2e, ecolor="white", marker="o", 
+                     mec='black', mfc='white', ms=2, ls=" ", mew=0.5, zorder=3)
+        plt.errorbar(lams, bet2, yerr=bet2ee, ecolor="magenta", fmt=None, capsize=5.0, zorder=2)
+    xs = np.arange(xa[0], xa[1]+1, 10)
     xlocs, xlabels = (xs - xa[0])*2, []
-    for x in xs:  xlabels.append(str(x))
+    for x in xs:  xlabels.append(str(int(x)))
     plt.xticks(xlocs, xlabels)
-    ys = np.arange(ya[0], ya[1]+1, 20)
+    ys = np.arange(ya[0], ya[1]+1, 10)
     ylocs, ylabels = (ys - ya[0])*2, []
-    for y in ys:  ylabels.append(str(y))
+    for y in ys:  ylabels.append(str(int(y)))
     plt.yticks(ylocs, ylabels)
+    plt.xlabel(r"$\Lambda$")
+    plt.ylabel(r"$B$")
+    plt.xlim(0.0, 200.0)
+    plt.ylim(140.0, 0.0)
     if imfile == None:  plt.show()
     else:  plt.savefig(imfile)
     plt.close('all')
@@ -481,7 +506,8 @@ def sgr_rv_skyplot():
     plt.plot([190.0, 320.0], [0.0, 0.0], "b--")
     plt.text(195.0, 33.0, "$\mu=$-118.2, $\sigma=$30.2\n{0} stars in {1}$\sigma$".format(len(sgr), nsig), fontsize=16)
     plt.xlim(190.0, 320.0)
-    plt.ylim(-75.0, 40.0)
+    #plt.ylim(-75.0, 40.0)
+    plt.ylim(40.0, -75.0)
     plt.xlabel(r"$\Lambda$", fontsize=16)
     plt.ylabel(r"$B$", fontsize=16)
     plt.show()
@@ -602,44 +628,176 @@ def photo_spec_analysis():
         np.savetxt(svname, sc.array(stars), delimiter=",")
         print "saved {0}".format(svname)
 
-def make_tables():
-    f = "backfunc_spec_cut/quad_gauss/AA_hist_fits.txt"
+def compile_tables():
+    # cycle through files using a list of destinations and names
+    rnames = ["virgo_B-slice_all",
+              "back_m2b160_all",
+              "flatsub_100_all",
+              "cutoff_R30_all",
+              "virgo_B-slice_spec",
+              "back_m2b160_spec",
+              "flatsub_100_spec",
+              "back_sliding"
+              ]
     wd="/home/newbym2/Dropbox/Research/sgrLetter/"
-    results = open(wd+f, "r")
-    table, entry = [], 0
-    for line in results:
-        if line.strip()=="":  continue
-        if (len(line.strip()) < 10):
-            if entry != 0:  table.append(entry) 
-            entry = line.strip().strip(":")
-        if line[4:8] == "MCMC":
-            temp = line.split("[")[1].split("]")[0]
-            entry = entry+", "+temp
-        if line[4:9] == "Value":
-            temp = line.split("[")[1].split("]")[0]
-            entry = entry+", "+temp
-    table.append(entry)
-    print table
-        
+    folder = ["no_virgo_B_slice_smallbins/",
+              "backfunc_smallbins/",
+              "hist_fits_flatsub100/",
+              "hists_r30_cutoff/",
+              "no_virgo_B_slice_spec_cut/",
+              "backfunc_spec_cut/",
+              "hist_fits_spec_cut_flatsub30/",
+              "fits_sliding_line"
+              ]
+    subfolder = ["double_gaussian/", "quad_gaussian/"]
+    fname = "AA_hist_fits.txt"
+    outf = "fit_results/"
+    for i, f in enumerate(folder):
+        for sf in subfolder:
+            run = rnames[i]+"_"+sf.split("_")[0]
+            results = open(wd+f+sf+fname, "r")
+            table, entry = [], 0
+            for line in results:
+                if line.strip()=="":  continue
+                if (len(line.strip()) < 10):
+                    if entry != 0:  table.append(entry) 
+                    entry = line.strip().strip(":")
+                if line[4:8] == "MCMC":
+                    temp = line.split("[")[1].split("]")[0]
+                    entry = entry+", "+temp
+                if line[4:9] == "Value":
+                    temp = line.split("[")[1].split("]")[0]
+                    entry = entry+", "+temp
+            table.append(entry)
+            results.close
+            outfile = open(wd+outf+run+".txt", "w")
+            for thing in table:
+                outfile.write(thing+"\n")
+            outfile.close
+            #print table #.sort()
 
-        
+def plot_ganged_hists():
+    # Make 4x3 blocks of histgram fits
+    wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
+    fname = "back_sliding_double.txt"
+    r = np.loadtxt(wd+fname, delimiter=",")
+    results = r[np.lexsort( (r[:,0], r[:,0]) )]
+    path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins/"
+    #files = glob.glob(path+"/*.out")
+    plate_info = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/plate_data.csv", delimiter=",")
+    # range of plots
+    b_range = (-30, 30)
+    N_range = (0, 450)
+    # subplot organization
+    px, py = 3, 4
+    #p1 = [9,5,1,10,11,12,2,3,4,6,7,8]
+    # initialize plot info
+    if fname[-8:-4] == "quad":  function = func.quad_fat_gauss_line
+    else:  function = func.double_gauss_line
+    # Panes which skip labelling axes
+    nox = [1,2,3,4,5,6,7,8,9]
+    noy = [2,3,5,6,8,9,11,12]
+    x = np.arange(b_range[0], b_range[1], 0.1)
+    # get this bastard going
+    for i in range(len(results[:,0])):
+        if i == 0:
+            fig1 = plt.figure(num=1, figsize=(12,9), dpi=100)
+            plt.subplots_adjust(hspace=0.001, wspace=0.001)
+            oo = 0  #offset
+        if i == 12:  
+            fig2 = plt.figure(num=2, figsize=(12,9), dpi=100)
+            plt.subplots_adjust(hspace=0.001, wspace=0.001)
+            oo = -12
+        if i == 24:
+            fig3 = plt.figure(num=3, figsize=(12,9), dpi=100)
+            plt.subplots_adjust(hspace=0.001, wspace=0.001)
+            oo = -24
+        if i == 36:
+            fig4 = plt.figure(num=4, figsize=(8,4.5), dpi=100)
+            plt.subplots_adjust(hspace=0.001, wspace=0.001)
+            px, py = 2, 2
+            nox, noy = [1,2], [2,4]
+            oo = -36
+        Lslice = results[i,0]
+        # spec stuff
+        holder = []
+        for j in range(len(plate_info[:,0])):
+            if abs(plate_info[j,0]-Lslice) > 1.25:  continue
+            holder.append([plate_info[j,0], plate_info[j,1], plate_info[j,2], plate_info[j,3]])
+        # get histogram
+        hist=np.loadtxt(path+str(results[i,0])+".out")
+        #Make plot
+        sp = plt.subplot(py,px,(i+1+oo))
+        sp.bar(hist[:,0], hist[:,1], 0.5, align='center', color='w', zorder=1)
+        if fname[-8:-4] == "quad":
+            plt.plot(x, function(x, results[i,1:13]), 'k-', zorder=2)
+        else: plt.plot(x, function(x, results[i,1:9]), 'k-', zorder=2)
+        plt.plot(x, func.gaussian_function(x, results[i,1:4]), 'k:', zorder=2)
+        plt.plot(x, func.gaussian_function(x, results[i,4:7]), 'k:', zorder=2)
+        if fname[-8:-4] == "quad":
+            plt.plot(x, func.gaussian_function(x, [results[i,7], results[i,2], results[i,8]]), 'k:', zorder=2)
+            plt.plot(x, func.gaussian_function(x, [results[i,9], results[i,5], results[i,10]]), 'k:', zorder=2)
+        # spec stuff
+        if holder != []:
+            hold=np.array(holder)
+            if fname[-8:-4] == "quad":  norm = function(hold[:,1], results[i,1:13])
+            else:  norm = function(hold[:,1], results[i,1:9])
+            plt.scatter(hold[:,1], norm*hold[:,2], c="red", marker="s", zorder=5)
+            #plt.errorbar(hold[:,1], norm*hold[:,2], yerr= norm*(np.sqrt(1+(hold[:,2]*hold[:,3]))+1), 
+            #    marker=None, ls=" ", zorder=4, ecolor="red")
+            plt.scatter(hold[:,1], norm, c="green", marker="s", zorder=4)
+            #plt.errorbar(hold[:,1], norm, yerr= norm*(np.sqrt(1+((1-hold[:,2])*hold[:,3]))+1), 
+            #    marker=None, ls=" ", zorder=3, ecolor="green")
+            for k in range(len(hold[:,0])):
+                plt.text(hold[k,1], 400, str(int(hold[k,3])), fontsize=8)
+        #plt.title(name, fontsize=8 )
+        plt.text(-25, 375, r"$\Lambda$="+str(Lslice), fontsize=12)
+        plt.xlim(b_range[0], b_range[1])
+        plt.ylim(N_range[0], N_range[1])
+        # i+1 corresponds to plot number starting from 1
+        if (i+1+oo) in nox:  plt.setp(sp.get_xticklabels(), visible=False)
+        else:  
+            plt.xlabel("B")
+            plt.xticks(np.arange(-30.0, 30.0, 5.0), ["-30","","-20","","-10","","0","","10","","20","",""])
+        if (i+1+oo) in noy:  plt.setp(sp.get_yticklabels(), visible=False)
+        else:  
+            plt.ylabel("N")
+            plt.yticks(np.arange(0.0, 450.0, 50.0), ["","","100","","200","","300", "","400"])
+    plt.show()
+    plt.close()
+
+def process_spec():
+    pp = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/plate_stars.csv", delimiter=",")
+    pl,pb = ac.EqTolb(pp[:,1], pp[:,2])
+    pd = 20.0
+    pX,pY,pZ, plsgr, pbsgr, pr_sgr = ac.lb2sgr(pl, pb, pd)
+    norm = pp[:,3] + pp[:,4]
+    out = []
+    for i in range(len(pp[:,0])):
+        out.append([plsgr[i], pbsgr[i], pp[i,4]/norm[i], norm[i]])
+    np.savetxt("/home/newbym2/Dropbox/Research/sgrLetter/plate_data.csv", np.array(out), delimiter=",")
+          
+            
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
     #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
-    #make_total_plot(RGB=1)
+    #make_total_plot(RGB=0)
     #make_total_plot(RGB=0, rcut=(ac.getr(20.0), ac.getr(20.5) ) )
     #make_diff_hist()
     #get_bif()
     #get_sgr_curves()
     #batch_shift()
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
+    RGB_from_files(mask_data="Rhist_sgr.csv", imfile=None, fitfile=True)
     #plot_profiles()    
     #proj_test()
     #sgr_rv_skyplot()
     #sgr_rv_cut()
     #split_by_plate()
     #photo_spec_analysis()
-    make_tables()
+    #compile_tables()
+    #process_spec()
+    #plot_ganged_hists()
     
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
@@ -657,7 +815,7 @@ RA 160.0, dec 28.0, is in stripe 22; mu 163.089514843, nu 0.370314382846
 RA 150.0, dec 29.0, is in stripe 23; mu 154.880506976, nu 1.37166887545
 RA 140.0, dec 31.0, is in stripe 23; mu 147.430539542, nu 6.24134308136
 RA 130.0, dec 31.2, is in stripe 23; mu 139.648046388, nu 9.97924011117
-"""
+
 
 def proj_test():
     #data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec.csv", delimiter=",")
@@ -684,3 +842,4 @@ def proj_test():
     plt.show()
     plt.close()
     
+"""

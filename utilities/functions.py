@@ -90,15 +90,26 @@ def plane_fit(data, params):
 def plummer_density(x, params):
     stuff = (1.0 + (x*x)/(params[1]*params[1]) )**(-5/2)
     return (params[0])/(params[1]*params[1]*params[1])*stuff
+
     
 def double_gaussian(x, params):
     # 6 parameters
     A1, mu1, sig1, A2, mu2, sig2 = params
     G1 = A1*A1*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig1*sig1) )
     G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
-    y = (0.315*x) + 34.2 #offset for virgo, 20-20.5 cut
+    #y = (0.315*x) + 34.2 #offset for virgo, 20-20.5 cut
     #y = (2.0*x) + 160.0 #offset for virgo, full cut
+    return G1 + G2 #+ y
+
+
+def double_gauss_line(x, params):
+    # 8 parameters
+    A1, mu1, sig1, A2, mu2, sig2, aa, bb = params
+    G1 = A1*A1*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig1*sig1) )
+    G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
+    y = (aa*x) + bb
     return G1 + G2 + y
+
 
 def double_gaussian_one_fixed(x, params):
     # 6 parameters, 4 fit;  holds the mean and sigma constant for 2nd gaussian
@@ -116,9 +127,22 @@ def quad_fat_gaussians(x, params):
     G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
     G3 = A3*A3*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig3*sig3) )
     G4 = A4*A4*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig4*sig4) )
-    y = (0.315*x) + 34.2 #offset for virgo, 20-20.5 cut
+    #y = (0.315*x) + 34.2 #offset for virgo, 20-20.5 cut
     #y = (2.0*x) + 160.0 #offset for virgo, full cut
+    return G1 + G2 + G3 + G4 #+ y
+
+
+def quad_fat_gauss_line(x, params):
+    """ Fits two pairs of Gaussians to data;  each pair has the same mean.
+        12 parameters """
+    A1, mu1, sig1, A2, mu2, sig2, A3, sig3, A4, sig4, aa, bb = params
+    G1 = A1*A1*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig1*sig1) )
+    G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
+    G3 = A3*A3*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig3*sig3) )
+    G4 = A4*A4*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig4*sig4) )
+    y = (aa*x) + bb
     return G1 + G2 + G3 + G4 + y
+
 
 def gaussian_constmean(x_in, params):
     """Fits only sigma and amplitude, holding the mean constant"""

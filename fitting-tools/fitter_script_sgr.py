@@ -10,8 +10,8 @@ import fit as fit
 import matplotlib
 import matplotlib.pyplot as plt
 
-path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_spec_cut"
-#path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins"
+#path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_spec_cut"
+path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins"
 #path = "/home/newbym2/Dropbox/Research/sgrLetter/hists_r30_cutoff"
 files = glob.glob(path+"/*.out")
 print files
@@ -19,9 +19,10 @@ print files
 def clean_data(data):
     mask = sc.zeros(len(data[:,0]), dtype=bool)
     for i in range(len(data[:,0])):
-        #data[i,1] = data[i,1] - 50.0
+        #data[i,1] = data[i,1] - 30.0  #spec_cut
+        #data[i,1] = data[i,1] - 100.0 # all data
         #data[i,1] = data[i,1] - (1.6*data[i,0] +140.0)
-        if data[i,1] < 0.0:  mask[i] = 1  #flag zeros
+        if data[i,1] <= 0.0:  mask[i] = 1  #flag zeros
         #if data[i,0] > 15.0:  mask[i] = 1 #flag virgo-ish bits in flat bg subtraction       
     # make new array that contains only mask==0
     data_out = []
@@ -31,20 +32,37 @@ def clean_data(data):
 
 for f in files:
     # load in data
-    name = f[-18:-13]
+    #name = f[-18:-13]  #spec_cut
+    name = f[-9:-4]  #all_data
     data = clean_data(np.loadtxt(f) )
     if len(data)<2:  continue
     # Set up data
     x, y = data[:,0], data[:,1]
     e = func.poisson_errors(y)
+    # make a line, using the average of 6 bins on each end as the anchor points
+    xi, yi = np.mean(x[:10]), np.mean(y[:10])
+    xf, yf = np.mean(x[-10:]), np.mean(y[-10:])
+    aa = (yf-yi)/(xf-xi)
+    bb = yf - (aa*xf)
     #fit it
     fitter = fit.ToFit(x,y,e)
+    """
+    fitter.function=func.double_gauss_line
+    fitter.update_params([6.0, 0.0, 5.0, 6.0, -10.0, 5.0, aa, bb])
+    fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
+    fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "slope", "intercept"]
+    """
+    fitter.function=func.quad_fat_gauss_line
+    fitter.update_params([6.0, 10.0, 1.0, 6.0, -10.0, 1.0, 5.0, 10.0, 5.0, 10.0, aa, bb])
+    fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
+    fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "amp","sigma", "amp","sigma","slope","intercept"]
     
+    """
     fitter.function=func.double_gaussian
-    fitter.update_params([6.0, 10.0, 5.0, 6.0, -10.0, 10.0])
+    fitter.update_params([6.0, 0.0, 5.0, 6.0, -10.0, 5.0])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma"]
-    """
+
     fitter.function=func.quad_fat_gaussians
     fitter.update_params([6.0, 10.0, 1.0, 6.0, -10.0, 1.0, 5.0, 10.0, 5.0, 10.0])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
@@ -64,8 +82,8 @@ for f in files:
     print new_params[:4]
     plt.plot(fitter.x, func.gaussian_function(fitter.x, new_params[:3]), 'k--')
     plt.plot(fitter.x, func.gaussian_function(fitter.x, new_params[3:6]), 'k--')
-    #plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[6], new_params[1], new_params[7]]), 'k--')
-    #plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[8], new_params[4], new_params[9]]), 'k--')
+    plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[6], new_params[1], new_params[7]]), 'k--')
+    plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[8], new_params[4], new_params[9]]), 'k--')
     plt.xlabel("B")
     plt.ylabel("counts")
     plt.title(name, fontsize=8 )
