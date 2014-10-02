@@ -250,7 +250,7 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
 
 def RGB_from_files(mask_data=None, imfile=None, fitfile=False):
     wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
-    fname = "back_sliding_quad.txt"
+    fname = "smart_sliding_back_double.txt"
     suffix = "_sgr2"
     Rfile = "Rhist"+suffix+".csv"
     Gfile = "Ghist"+suffix+".csv"
@@ -282,10 +282,10 @@ def RGB_from_files(mask_data=None, imfile=None, fitfile=False):
         bet2ee = fitdata[:,10] / 0.5
         plt.errorbar(lams, bet1, yerr=bet1e, ecolor="white", marker="o", 
                      mec='black', mfc='white', ms=2, ls=" ", mew=0.5, zorder=3)
-        plt.errorbar(lams, bet1, yerr=bet1ee, ecolor="cyan", fmt=None, capsize=5.0, zorder=2)
+        #plt.errorbar(lams, bet1, yerr=bet1ee, ecolor="cyan", fmt=None, capsize=5.0, zorder=2)
         plt.errorbar(lams, bet2, yerr=bet2e, ecolor="white", marker="o", 
                      mec='black', mfc='white', ms=2, ls=" ", mew=0.5, zorder=3)
-        plt.errorbar(lams, bet2, yerr=bet2ee, ecolor="magenta", fmt=None, capsize=5.0, zorder=2)
+        #plt.errorbar(lams, bet2, yerr=bet2ee, ecolor="magenta", fmt=None, capsize=5.0, zorder=2)
     xs = np.arange(xa[0], xa[1]+1, 10)
     xlocs, xlabels = (xs - xa[0])*2, []
     for x in xs:  xlabels.append(str(int(x)))
@@ -630,7 +630,8 @@ def photo_spec_analysis():
 
 def compile_tables():
     # cycle through files using a list of destinations and names
-    rnames = ["virgo_B-slice_all",
+    rnames = ["smart_sliding_back"]
+    """rnames = ["virgo_B-slice_all",
               "back_m2b160_all",
               "flatsub_100_all",
               "cutoff_R30_all",
@@ -638,9 +639,10 @@ def compile_tables():
               "back_m2b160_spec",
               "flatsub_100_spec",
               "back_sliding"
-              ]
+              ]"""
     wd="/home/newbym2/Dropbox/Research/sgrLetter/"
-    folder = ["no_virgo_B_slice_smallbins/",
+    folder = ["fits_smart_slide/"]
+    """folder = ["no_virgo_B_slice_smallbins/",
               "backfunc_smallbins/",
               "hist_fits_flatsub100/",
               "hists_r30_cutoff/",
@@ -648,7 +650,7 @@ def compile_tables():
               "backfunc_spec_cut/",
               "hist_fits_spec_cut_flatsub30/",
               "fits_sliding_line"
-              ]
+              ]"""
     subfolder = ["double_gaussian/", "quad_gaussian/"]
     fname = "AA_hist_fits.txt"
     outf = "fit_results/"
@@ -677,9 +679,9 @@ def compile_tables():
             #print table #.sort()
 
 def plot_ganged_hists():
-    # Make 4x3 blocks of histgram fits
+    # Make 4x3 blocks of histgram fits;  only have to change next line
+    fname = "smart_sliding_back_quad.txt"
     wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
-    fname = "back_sliding_double.txt"
     r = np.loadtxt(wd+fname, delimiter=",")
     results = r[np.lexsort( (r[:,0], r[:,0]) )]
     path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins/"
@@ -776,7 +778,34 @@ def process_spec():
     for i in range(len(pp[:,0])):
         out.append([plsgr[i], pbsgr[i], pp[i,4]/norm[i], norm[i]])
     np.savetxt("/home/newbym2/Dropbox/Research/sgrLetter/plate_data.csv", np.array(out), delimiter=",")
-          
+
+def spec_area():
+    """ Returns the ration of in-Sgr stars to non-Sgr stars 
+        within 1-sigma of the Sgr mean, given fits to data within +/-10.0 Beta """
+    fit = [3.1707598689912997, -113.54662564418646, 29.872019523468833, 3.539017234542301, 0.0, 120.0]
+    x0, xf = (-118.2-30.2), (-118.2+30.2)
+    sgr = func.integrate_gaussian(x0, xf, mu=-118.2, sig=30.2, amp=(fit[0]*fit[0]) )
+    sgrlost = func.integrate_gaussian(x0-60.4, xf+60.4, mu=-118.2, sig=30.2, amp=(fit[0]*fit[0]) ) - sgr
+    notsgr = func.integrate_gaussian(x0, xf, mu=0.0, sig=120.0, amp=(fit[3]*fit[3]) )
+    #notsgr = func.integrate_gaussian((-500.0), (500.0), mu=0.0, sig=120.0, amp=(fit[3]*fit[3]) )
+    print sgr, notsgr, sgr/notsgr
+    print sgrlost, sgrlost/notsgr
+    """ 367.393783337 329.186581635 1.1160654894
+        169.309797526 0.514327761127"""
+
+def make_heatmap():
+    """ produces a heatmap showing probability of star detection for each pixel"""
+    fname = "smart_sliding_back_double.txt"
+    mask = "Rhist_sgr.csv"
+    wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
+    r = np.loadtxt(wd+fname, delimiter=",")
+    fitdata = r[np.lexsort( (r[:,0], r[:,0]) )]
+    mask = np.loadtxt(mask_data, delimiter=",")
+    lmin, lmax, lstep = 200.0, 300.0, 0.5
+    bmin, bmax, bstep = -40.0, 30.0, 0.5
+    lbinsize, bbinsize = 2.5, 0.5
+    
+    
             
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
@@ -788,7 +817,7 @@ if __name__ == "__main__":
     #get_sgr_curves()
     #batch_shift()
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
-    RGB_from_files(mask_data="Rhist_sgr.csv", imfile=None, fitfile=True)
+    #RGB_from_files(mask_data="Rhist_sgr.csv", imfile=None, fitfile=True)
     #plot_profiles()    
     #proj_test()
     #sgr_rv_skyplot()
@@ -798,6 +827,7 @@ if __name__ == "__main__":
     #compile_tables()
     #process_spec()
     #plot_ganged_hists()
+    spec_area()
     
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591

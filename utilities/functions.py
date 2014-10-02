@@ -305,3 +305,14 @@ def poisson_errors(n, rigorous=False):
     #poisson error:
     lambda_up = np.sqrt(n+1.0) + 1.0
     return lambda_up
+
+def integrate_gaussian(x1, x2, mu=0.0, sig=1.0, amp=1.0):
+    """ Provides the area under a gaussian between two points. 
+        Defaults to a standard normal distribution"""
+    import scipy.special as ss
+    sq2 = m.sqrt(2)
+    sqpi = m.sqrt(m.pi)
+    n1 = (x1 - mu)/sig
+    n2 = (x2 - mu)/sig
+    prefix = 0.5*amp*abs(sig)*sqpi 
+    return prefix*(ss.erf(n2/sq2) - ss.erf(n1/sq2))

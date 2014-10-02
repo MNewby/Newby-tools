@@ -23,7 +23,7 @@ def clean_data(data):
         #data[i,1] = data[i,1] - 100.0 # all data
         #data[i,1] = data[i,1] - (1.6*data[i,0] +140.0)
         if data[i,1] <= 0.0:  mask[i] = 1  #flag zeros
-        #if data[i,0] > 15.0:  mask[i] = 1 #flag virgo-ish bits in flat bg subtraction       
+        #if data[i,0] > 15.0:  mask[i] = 1 #flag virgo-ish bits in flat bg subtraction
     # make new array that contains only mask==0
     data_out = []
     for i in range(len(data[:,0])):
@@ -39,9 +39,20 @@ for f in files:
     # Set up data
     x, y = data[:,0], data[:,1]
     e = func.poisson_errors(y)
-    # make a line, using the average of 6 bins on each end as the anchor points
-    xi, yi = np.mean(x[:10]), np.mean(y[:10])
-    xf, yf = np.mean(x[-10:]), np.mean(y[-10:])
+    # make a line, using the average of 10 bins on each end as the anchor points
+    x0, y0, x1, y1 = [], [], [], []
+    i = 0
+    while len(x0) < 5:
+        if y[i] > 99.0:  x0.append(x[i]);  y0.append(y[i])
+        i += 1
+    i = -1
+    while len(x1) < 5:
+        if y[i] > 99.0:  x1.append(x[i]);  y1.append(y[i])
+        i -= 1
+    xi, yi = np.mean(x0), np.mean(y0)
+    xf, yf = np.mean(x1), np.mean(y1)
+    #xi, yi = np.mean(x[2:6]), np.mean(y[2:6])
+    #xf, yf = np.mean(x[-7:-3]), np.mean(y[-7:-3])
     aa = (yf-yi)/(xf-xi)
     bb = yf - (aa*xf)
     #fit it
@@ -56,10 +67,9 @@ for f in files:
     fitter.update_params([6.0, 10.0, 1.0, 6.0, -10.0, 1.0, 5.0, 10.0, 5.0, 10.0, aa, bb])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "amp","sigma", "amp","sigma","slope","intercept"]
-    
     """
     fitter.function=func.double_gaussian
-    fitter.update_params([6.0, 0.0, 5.0, 6.0, -10.0, 5.0])
+    fitter.update_params([20.0, 0.0, 5.0, 20.0, 20.0, 15.0])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma"]
 
