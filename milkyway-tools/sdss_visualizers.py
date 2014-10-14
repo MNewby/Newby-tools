@@ -343,14 +343,14 @@ def test_primary(l,b,wedge,low=9,high=23):
 """ ----------------- plot_stripe_mur ----------------------"""
 
 def plot_stripe_mur(data, wedge, outname=None, mag=0, scale=0, color=1,
-                    mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1):
+                    mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1, raw_coords=0):
     fig = plt.figure(1, frameon=False)
     sp = single_stripe_mur(data, wedge, mag, scale, color, 111, mu_lim, 
-		r_lim, vm, nu_flatten, bar)
+		r_lim, vm, nu_flatten, bar, raw_coords)
     """ Draw Plot """
     if outname == None:  plt.show()
     else:  
-		plt.savefig((outname+".ps"), papertype='letter')
+		#plt.savefig((outname+".ps"), papertype='letter')
 		plt.savefig((outname+".png"))
     plt.close('all')
 
@@ -428,7 +428,7 @@ def plot_stripe_results(param_string, wedge, data=None, outname=None, mag=0,
     plt.close('all')
 
 def single_stripe_mur(data, wedge, mag=0, scale=0, color=1, position=111,
-         mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1, ring=1):
+         mu_lim=None, r_lim=None, vm=None, nu_flatten=0, bar=1, ring=1, raw_coords=0):
     """ change 'scale' to a string tag:  None, sqrt, flatten, log? """
     #l, b = data[:,0], data[:,1]
     x_size, y_size = 0.5, 0.5
@@ -436,8 +436,10 @@ def single_stripe_mur(data, wedge, mag=0, scale=0, color=1, position=111,
     else:       r = data[:,2]
     print len(r)
     if r_lim == None:  r_lim = (np.ma.min(r), np.ma.max(r))
-    ra, dec = coor.lbToEq(data[:,0],data[:,1])
-    mu, nu = coor.EqToGC(ra, dec, wedge)
+    if raw_coords == 0:
+        ra, dec = coor.lbToEq(data[:,0],data[:,1])
+        mu, nu = coor.EqToGC(ra, dec, wedge)
+    else:   mu, nu = data[:,0], data[:,1]
     if mu_lim==None:  mu_lim = [np.ma.min(mu), np.ma.max(mu)]
     #Checks if limits straddle mu=0.0
     if (mu_lim[0] < 1.0) and (mu_lim[1] > 359.0):  

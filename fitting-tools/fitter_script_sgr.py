@@ -45,7 +45,10 @@ for f in files:
     while len(x0) < 5:
         if y[i] > 99.0:  x0.append(x[i]);  y0.append(y[i])
         i += 1
-    i = -1
+    if eval(name) > 291:  i = -20
+    elif eval(name) > 274:  i = -40
+    elif eval(name) < 201:  i = -20
+    else:  i = -1
     while len(x1) < 5:
         if y[i] > 99.0:  x1.append(x[i]);  y1.append(y[i])
         i -= 1
@@ -64,7 +67,7 @@ for f in files:
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "slope", "intercept"]
     """
     fitter.function=func.quad_fat_gauss_line
-    fitter.update_params([6.0, 10.0, 1.0, 6.0, -10.0, 1.0, 5.0, 10.0, 5.0, 10.0, aa, bb])
+    fitter.update_params([6.0, 5.0, 1.0, 6.0, -5.0, 1.0, 5.0, 10.0, 5.0, 10.0, aa, bb])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "amp","sigma", "amp","sigma","slope","intercept"]
     """

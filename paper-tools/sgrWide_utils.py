@@ -16,11 +16,11 @@ import sgr_law as sgr
 import fit as fit
 import functions as func
 
-def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
+def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False):
     files = glob.glob(path+"/stars*")
     #print files
     data=[]
-    r_cut_low, r_cut_high = ac.getr(20.0), ac.getr(20.5) #30.0, 45.0
+    r_cut_low, r_cut_high = ac.getr(16.0), ac.getr(22.5) #30.0, 45.0
     pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
@@ -38,7 +38,8 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
             data.append(temp)
         stripedata.close()
         pb.updatebar(float(files.index(f)+1)/float(len(files)) )
-    data = np.array(data)
+    datar = np.array(data)
+    data = np.zeros(datar.shape, float)
     count, nStars, pb2 = 0, float(len(data[:,0])), pr.Progressbar(steps=100,
         prefix="Changing Coordinates:", suffix=None, symbol="#", active="=",
         brackets="[]", percent=True, size=40)
@@ -46,8 +47,8 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
         count = count + 1
         #data[i,0], data[i,1] = ac.lb2GC(data[i,0], data[i,1], 15)
         #data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
-        data[i,0], data[i,1] = (ac.lb2sgr(data[i,0], data[i,1], 10.0))[3:5]
-        data[i,2] = ac.getg(data[i,2], 4.2)
+        data[i,0], data[i,1] = (ac.lb2sgr(datar[i,0], datar[i,1], 10.0))[3:5]
+        data[i,2] = ac.getg(datar[i,2], 4.2)
         if count % 100 == 0:  pb2.updatebar(float(count)/nStars)
     pb2.endbar()
     # loop over Lambda slices and plot Beta histograms
@@ -56,24 +57,28 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles"):
     Ls = (200.0, 300.0, 2.5)
     Lsteps = int((Ls[1]-Ls[0])/Ls[2])
     for i in range(Lsteps):
-        Lname = str(Ls[0]+(Ls[2]*i) )[:6]+"_spec_cut"
+        Lname = str(Ls[0]+(Ls[2]*i) )[:6]+"_NEW"
         new = []
         for j in range(len(data[:,0])):
             if data[j,0] < Ls[0]+(Ls[2]*i):  continue
             if data[j,0] > Ls[0]+(Ls[2]*(i+1)):  continue
-            new.append(data[j,1])
+            if savewedge:  new.append([datar[j,0], datar[j,1], data[j,2]])
+            else:  new.append(data[j,1])
         new = np.array(new)
-        Lhist, Ledges = np.histogram(new, 140, (-30.0, 40.0))
-        #output to file
-        outstuff = sc.array(zip(Ledges+0.25, Lhist))
-        np.savetxt(Lname+".out", outstuff)
-        #plot
-        plt.figure(1)
-        plt.bar(Ledges[:-1], Lhist, 0.5)
-        plt.title(Lname)
-        plt.xlabel("B")
-        plt.savefig(Lname+".png")
-        plt.close('all')
+        if savewedge:
+            np.savetxt("stars-lambda-"+("00"+str(i))[-2:]+".txt", new, fmt='%.6f')
+        else:
+            Lhist, Ledges = np.histogram(new, 140, (-30.0, 40.0))
+            #output to file
+            outstuff = sc.array(zip(Ledges+0.25, Lhist))
+            np.savetxt(Lname+".out", outstuff)
+            #plot
+            plt.figure(1)
+            plt.bar(Ledges[:-1], Lhist, 0.5)
+            plt.title(Lname)
+            plt.xlabel("B")
+            plt.savefig(Lname+".png")
+            plt.close('all')
         pb3.updatebar(float(i)/float(Lsteps))
     print "Ended Successfully"    
     
@@ -122,7 +127,8 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
         sky.savehist("streamgen_bifExtra.csv")
     print "Ended Successfully"
 
-def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None, rcut=None):
+def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None, 
+                    rcut=None, outfile=None):
     files = glob.glob(path+"/stars*")
     #print files
     data=[]
@@ -165,9 +171,10 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None, 
         #allsky.scale = 'sqrt'
         allsky.cmap="bw"
         allsky.yflip = 1
-        allsky.varea = (0.0,200.0)
-        pp.PlotHist(allsky, "sgrall_GC.png")
-        allsky.savehist("SDSSnorthGC.csv")
+        allsky.varea = (0.0,100.0)
+        if outfile==None:  pp.PlotHist(allsky, "sgrall_GC.png")
+        else:  pp.PlotHist(allsky, outfile)
+        #allsky.savehist("SDSSnorthGC.csv")
     print "Ended Successfully"
 
 def make_single_stream_plot(filename):
@@ -250,7 +257,7 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
 
 def RGB_from_files(mask_data=None, imfile=None, fitfile=False):
     wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
-    fname = "smart_sliding_back_double.txt"
+    fname = "smarter_slide_back_quad.txt"
     suffix = "_sgr2"
     Rfile = "Rhist"+suffix+".csv"
     Gfile = "Ghist"+suffix+".csv"
@@ -271,6 +278,11 @@ def RGB_from_files(mask_data=None, imfile=None, fitfile=False):
     #for Sgr;  Sgr coords
     plt.figure(1, figsize=(12,9), dpi=100)
     plt.imshow(RGB, zorder=1) #, origin='lower')
+    # lambda slices to skip primary or secondary stream plots
+    #skip1 = [295.0]  #double
+    #skip2 = [210.0]  #double
+    skip1 = [297.5, 295.0, 292.5, 290.0] #quad:  
+    skip2 = [200.0, 202.5, 212.5, 297.5] #quad:
     if fitfile:
         fitdata = np.loadtxt(wd+fname, delimiter=",")
         lams = (fitdata[:,0] - 200.0) / 0.5
@@ -280,22 +292,29 @@ def RGB_from_files(mask_data=None, imfile=None, fitfile=False):
         bet2 = (fitdata[:,5] + 40.0) / 0.5
         bet2e = fitdata[:,6] / 0.5
         bet2ee = fitdata[:,10] / 0.5
-        plt.errorbar(lams, bet1, yerr=bet1e, ecolor="white", marker="o", 
+        # Elminate fits with small amplitudes
+        for i in range(len(lams)):
+            if (abs(fitdata[i,1]) > 5.0) and (fitdata[i,0] not in skip1):  
+                plt.errorbar(lams[i], bet1[i], yerr=bet1e[i], ecolor="white", marker="o", 
                      mec='black', mfc='white', ms=2, ls=" ", mew=0.5, zorder=3)
-        #plt.errorbar(lams, bet1, yerr=bet1ee, ecolor="cyan", fmt=None, capsize=5.0, zorder=2)
-        plt.errorbar(lams, bet2, yerr=bet2e, ecolor="white", marker="o", 
+            if (abs(fitdata[i,4]) > 5.0) and (fitdata[i,0] not in skip2):
+                plt.errorbar(lams[i], bet2[i], yerr=bet2e[i], ecolor="white", marker="o", 
                      mec='black', mfc='white', ms=2, ls=" ", mew=0.5, zorder=3)
-        #plt.errorbar(lams, bet2, yerr=bet2ee, ecolor="magenta", fmt=None, capsize=5.0, zorder=2)
+            if fname[-8:-4] == "quad":
+                if (abs(fitdata[i,7]) > 5.0) and (fitdata[i,0] not in skip1):
+                    plt.errorbar(lams[i], bet1[i], yerr=bet1ee[i], ecolor="red", fmt=None, capsize=10.0, zorder=2)
+                if (abs(fitdata[i,9]) > 5.0) and (fitdata[i,0] not in skip2):
+                    plt.errorbar(lams[i], bet2[i], yerr=bet2ee[i], ecolor="magenta", fmt=None, capsize=10.0, zorder=2) 
     xs = np.arange(xa[0], xa[1]+1, 10)
     xlocs, xlabels = (xs - xa[0])*2, []
     for x in xs:  xlabels.append(str(int(x)))
-    plt.xticks(xlocs, xlabels)
+    plt.xticks(xlocs, xlabels, fontsize=15)
     ys = np.arange(ya[0], ya[1]+1, 10)
     ylocs, ylabels = (ys - ya[0])*2, []
     for y in ys:  ylabels.append(str(int(y)))
-    plt.yticks(ylocs, ylabels)
-    plt.xlabel(r"$\Lambda$")
-    plt.ylabel(r"$B$")
+    plt.yticks(ylocs, ylabels, fontsize=15)
+    plt.xlabel(r"$\Lambda$", fontsize=20)
+    plt.ylabel(r"$B$", rotation='horizontal', fontsize=20)
     plt.xlim(0.0, 200.0)
     plt.ylim(140.0, 0.0)
     if imfile == None:  plt.show()
@@ -630,7 +649,8 @@ def photo_spec_analysis():
 
 def compile_tables():
     # cycle through files using a list of destinations and names
-    rnames = ["smart_sliding_back"]
+    rnames = ["smarter_slide_back"]
+    #rnames = ["smart_sliding_back"]
     """rnames = ["virgo_B-slice_all",
               "back_m2b160_all",
               "flatsub_100_all",
@@ -641,7 +661,8 @@ def compile_tables():
               "back_sliding"
               ]"""
     wd="/home/newbym2/Dropbox/Research/sgrLetter/"
-    folder = ["fits_smart_slide/"]
+    folder = ["fits_smarter_slide/"]
+    #folder = ["fits_smart_slide/"]
     """folder = ["no_virgo_B_slice_smallbins/",
               "backfunc_smallbins/",
               "hist_fits_flatsub100/",
@@ -680,7 +701,7 @@ def compile_tables():
 
 def plot_ganged_hists():
     # Make 4x3 blocks of histgram fits;  only have to change next line
-    fname = "smart_sliding_back_quad.txt"
+    fname = "smarter_slide_back_quad.txt"
     wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
     r = np.loadtxt(wd+fname, delimiter=",")
     results = r[np.lexsort( (r[:,0], r[:,0]) )]
@@ -780,7 +801,7 @@ def process_spec():
     np.savetxt("/home/newbym2/Dropbox/Research/sgrLetter/plate_data.csv", np.array(out), delimiter=",")
 
 def spec_area():
-    """ Returns the ration of in-Sgr stars to non-Sgr stars 
+    """ Returns the ratio of in-Sgr stars to non-Sgr stars 
         within 1-sigma of the Sgr mean, given fits to data within +/-10.0 Beta """
     fit = [3.1707598689912997, -113.54662564418646, 29.872019523468833, 3.539017234542301, 0.0, 120.0]
     x0, xf = (-118.2-30.2), (-118.2+30.2)
@@ -804,8 +825,235 @@ def make_heatmap():
     lmin, lmax, lstep = 200.0, 300.0, 0.5
     bmin, bmax, bstep = -40.0, 30.0, 0.5
     lbinsize, bbinsize = 2.5, 0.5
+
+def count_stars_in_rcut():
+    rmin, rmax = ac.getr(16.0), ac.getr(23.5)
+    print rmin, rmax
+    path="/home/newbym2/Desktop/starfiles"
+    files = glob.glob(path+"/stars*")
+    total = 0
+    for f in files:
+        wedge = int(f.split("-")[1].split(".")[0])
+        count = 0
+        data = np.loadtxt(f, skiprows=1)
+        for i in range(len(data[:,0])):
+            if data[i,2] < rmin:  continue
+            if data[i,2] > rmax:  continue
+            if ac.SDSS_primary(data[i,0],data[i,1],wedge,fmt="lb",low=9,high=27)==0:  continue
+            count = count + 1
+            total = total + 1
+        print count, len(data[:,2]), np.ma.min(data[:,2]), np.ma.max(data[:,2])
+    print "Final Count:", total
     
+
+def count_stars():
+    fname = "smart_sliding_back_quad.txt"
+    wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
+    r = np.loadtxt(wd+fname, delimiter=",")
+    data = r[np.lexsort( (r[:,0], r[:,0]) )]
+    path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins/"
+    sgr1, sgr2, virgo, back = 0, 0, 0, 0
+    if fname[-8:-4] == "quad":  sgr1b, sgr2b = 0, 0
+    dt, dL = 0.5, 2.5
+    all_stars = 0
+    for i in range(len(data[:,0])):
+        hist = np.loadtxt(path+str(data[i,0])+".out")
+        all_stars = all_stars + sum(hist[:,1])*dL
+        #print np.sum(hist[:,1])
+        #get range of data
+        j,x = -1, 0  
+        while x < 100:  x = hist[j,1]; j -= 1
+        high = hist[j,0]
+        j,x = 0,0  
+        while x < 100:  x = hist[j,1]; j += 1
+        low = hist[j,0]
+        #Integrate to get total stars
+        if fname[-8:-4] == "quad":  aa, bb = data[i,11], data[i,12]
+        else:  aa, bb = data[i,7], data[i,8]
+        if aa < 0:
+            newback = (aa*low + bb)*(high-low)/dt
+            newvirgo = 0
+        else:
+            newback = (aa*low + bb)*(high-low)/dt
+            newvirgo = (aa*high - aa*low)*(high - low)/(2.0*dt)
+        newsgr1 = func.integrate_gaussian(low, high, mu=data[i,2], sig=data[i,3], 
+            amp=(data[i,1]*data[i,1]) )/dt
+        newsgr2 = func.integrate_gaussian(low, high, mu=data[i,5], sig=data[i,6], 
+            amp=(data[i,4]*data[i,4]) )/dt
+        if fname[-8:-4] == "quad":
+            newsgr1b = func.integrate_gaussian(low, high, mu=data[i,2], sig=data[i,8], 
+                amp=(data[i,7]*data[i,7]) )/dt
+            newsgr2b = func.integrate_gaussian(low, high, mu=data[i,5], sig=data[i,10], 
+                amp=(data[i,9]*data[i,9]) )/dt
+        back = back + abs(newback)*dL
+        virgo = virgo + abs(newvirgo)*dL
+        sgr1 = sgr1 + abs(newsgr1)*dL
+        sgr2 = sgr2 + abs(newsgr2)*dL
+        if fname[-8:-4] == "quad":
+            sgr1b = sgr1b + abs(newsgr1b)*dL
+            sgr2b = sgr2b + abs(newsgr2b)*dL
+    if fname[-8:-4] == "quad":
+        total = (sgr1+sgr1b+sgr2+sgr2b+virgo+back)
+        print "Sgr1a: {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
+        print "Sgr1b: {0:8.1f},  {1:.3f}".format(sgr1b, sgr1b/total)
+        print "Sgr2a: {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
+        print "Sgr2b: {0:8.1f},  {1:.3f}".format(sgr2b, sgr2b/total)
+        print "Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
+        print "Back : {0:8.1f},  {1:.3f}".format(back, back/total)
+        print "Total: {0:8.1f}".format(total)
+    else:
+        total = (sgr1+sgr2+virgo+back)
+        print "Sgr1 : {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
+        print "Sgr2 : {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
+        print "Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
+        print "Back : {0:8.1f},  {1:.3f}".format(back, back/total)
+        print "Total: {0:8.1f}".format(total)
+    print "All Stars: {0}".format(int(all_stars))
     
+
+def make_data_tables():
+    fname = "smarter_slide_back_quad.txt"
+    wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
+    r = np.loadtxt(wd+fname, delimiter=",")
+    data = r[np.lexsort( (r[:,0], r[:,0]) )]
+    #set offset index for errors
+    if fname[-8:-4] == "quad":  
+        de = 12
+        print "slice\t A1\t mu1\t sig1\t A2\t mu2\t sig2\t A1b\t sig1b\t A2b\t sig2b\t aa\t bb"
+    else:  
+        de = 8
+        print "slice\t A1\t mu1\t sig1\t A2\t mu2\t sig2\t aa\t bb"
+    #print data[0,:]
+    pm = u"\u00B1"  #unicode plus-minus symbol
+    for i in range(len(data[:,0])):
+        out = ""
+        out = out+str(data[i,0])+" "
+        for j in range(1, de+1):
+            out = out+"{0:6.1f}".format(data[i,j])+pm+"{0:.2f}".format(data[i,(j+de)])
+        print out
+        
+def sgr_plot3D():
+    from mpl_toolkits.mplot3d import Axes3D
+    from matplotlib import cm
+    fname = "smarter_slide_back_quad.txt"
+    wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
+    r = np.loadtxt(wd+fname, delimiter=",")
+    data = r[np.lexsort( (r[:,0], r[:,0]) )]
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    #fig = plt.figure()
+    #ax = fig.add_subplot(111, projection='3d')
+    z = np.arange(200.0, 300.0, 2.5)    
+    virgox, virgoy = [], []
+    for i in range(len(data[:,0])):
+        xs = np.arange(-30.0, 30.0, 0.1)
+        if fname[-8:-4] == "quad":  
+            ys = func.quad_fat_gauss_line(xs, data[i,1:13])
+        else:  
+            ys = func.double_gauss_line(xs, data[i,1:9])
+        zz = z[i] #(z[i]-200.0)*10.0
+        ax.plot(xs, ys, zs=zz, zdir='y', alpha=0.8, color="black")
+        virgox.append(zz)
+        virgoy.append(ys[-1])
+    """# build contour plot
+    path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins"
+    files = glob.glob(path+"/*.out")
+    X, Y, Z = [], [], []
+    for f in files:
+        name = f[-9:-4]
+        zslice = float(name)
+        hist = np.loadtxt(f)
+        tempy, tempz = [], []
+        X.append(hist[:,0])
+        for j in range(len(hist[:,0]) ):
+            tempy.append(zslice)
+            tempz.append(hist[j,1])
+        Y.append(tempy)
+        Z.append(tempz)
+    X, Y, Z = np.array(X), np.array(Y), np.array(Z)
+    Z = np.sqrt(Z)
+    con1 = ax.contourf(X, Y, Z, zdir='z', offset=0.0, cmap=pp.spectral_wb) """
+    #    ax.bar(hist[:,0], hist[:,1], zs=float(name), zdir='y', alpha=0.8, color="white")
+    #vout = np.transpose(np.vstack((np.array(virgox), np.array(virgoy) ) ) )
+    #print vout, vout.shape
+    #np.savetxt("virgo_edge_points.txt", vout, fmt='%.6f') 
+    ax.plot(virgox, virgoy, zs=30.0, zdir='x', alpha=0.8, color="red")
+    ax.plot(virgox, func.gauss_plus_floor(virgox, [13.0, 267., 20.5, 137.]), zs=30.0, zdir='x', alpha=0.8, color="cyan")
+    ax.set_xlabel('B')
+    ax.set_ylabel(r'$\Lambda$')
+    ax.set_zlabel('N')
+    ax.set_xlim(-30.0, 30.0)
+    ax.set_ylim(200.0, 300.0)
+    ax.set_zlim(0.0, 600.0)
+    plt.show()
+
+def tomography():
+    cutstep = 0.5
+    gcuts = np.arange(16.0, 24.0, cutstep)
+    for i in range(len(gcuts)):
+        rmin, rmax = ac.getr(gcuts[i]), ac.getr(gcuts[i]+cutstep)
+        outname = "SDSSN_gslice_{0:.1f}_{1:.1f}.png".format(rmin, rmax)
+        make_total_plot(RGB=0, rcut=(rmin, rmax), outfile=outname )
+    print "DONE"
+
+def crotus_cut(path="/home/newbym2/Desktop/starfiles", cdata=None):
+    if cdata == None:
+        files = glob.glob(path+"/stars*")
+        data=[]
+        r_cut_low, r_cut_high = ac.getr(16.0), ac.getr(23.5) #30.0, 45.0
+        pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
+            symbol="#", active="=", brackets="[]", percent=True, size=40)
+        for f in files:
+            wedge = int(f.split("-")[1].split(".")[0])
+            sdata = np.loadtxt(f, skiprows=1)
+            for i in range(sdata.shape[0]):
+                if (sdata[i,2] < r_cut_low) or (sdata[i,2] > r_cut_high):  continue
+                if ac.SDSS_primary(sdata[i,0],sdata[i,1],wedge,fmt="lb",low=9,high=27)==0:  continue
+                lam, bet = (ac.lb2sgr(sdata[i,0], sdata[i,1], 10.0))[3:5]
+                if (lam <230.0) or (lam > 255.0):  continue
+                data.append([sdata[i,0], sdata[i,1], sdata[i,2], lam, bet])
+            pb.updatebar(float(files.index(f)+1)/float(len(files)) )
+        pb.endbar()
+        data = np.array(data)
+        np.savetxt("crotus_data.txt", data, fmt='%.6f')
+    else:  
+        data = []
+        rdata = np.loadtxt(cdata)
+        rlim0 = 28.5  #ac.getr(22.5)
+        rlim1 = 45.0
+        for i in range(rdata.shape[0]):
+            if rdata[i,2] < rlim0:  continue
+            if rdata[i,2] > rlim1:  continue
+            data.append(rdata[i,:])
+        data = np.array(data)
+    #Now do analysis
+    sky = pp.HistMaker(data[:,3], data[:,4], xsize=0.25, ysize=0.25, 
+        xarea=(230.0, 255.0), yarea=(-10.0, 15.0))
+    sky.varea = (0.0, 60.0)
+    sky.cmap="color"
+    #sky.scale = 'sqrt'
+    sky.yflip = 1
+    pp.PlotHist(sky, "crotus_cut.png")
+    #sky.savehist("streamgen_bifExtra.csv")
+    print "### - Done"
+          
+def lam_wedges():
+    sys.path.insert(0, '../milkyway-tools')
+    import sdss_visualizers as sdss
+    path = "/home/newbym2/Desktop/lam_starfiles/"
+    files = glob.glob(path+"/stars*")
+    for f in files:
+        # get lambdas from naming scheme
+        wedge = float(f[-6:-4])
+        name = "lam-"+str(200.0 + (wedge*2.5) )[:6]
+        stars = np.loadtxt(f)
+        print "Loaded ", f
+        for i in range(stars.shape[0]):
+            stars[i,0], stars[i,1] = (ac.lb2sgr(stars[i,0], stars[i,1], 30.0))[3:5]
+        sdss.plot_stripe_mur(stars, wedge, outname=name, mag=1, scale=1, color=1,
+                    mu_lim=None, r_lim=(0.0, 50.0), vm=10.0, nu_flatten=0, bar=1, raw_coords=1)
+        print "Finished file {0} of {1}:".format(files.index(f)+1, len(files) )
+    print "### - Done"
             
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
@@ -818,7 +1066,8 @@ if __name__ == "__main__":
     #batch_shift()
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile=None, fitfile=True)
-    #plot_profiles()    
+    plot_profiles()    
+    #plot_profiles(savewedge=True)
     #proj_test()
     #sgr_rv_skyplot()
     #sgr_rv_cut()
@@ -827,7 +1076,14 @@ if __name__ == "__main__":
     #compile_tables()
     #process_spec()
     #plot_ganged_hists()
-    spec_area()
+    #spec_area()
+    #make_data_tables()
+    #count_stars()
+    #count_stars_in_rcut()
+    #sgr_plot3D()
+    #tomography()
+    #crotus_cut(cdata="crotus_data.txt")
+    #lam_wedges()
     
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
