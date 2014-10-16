@@ -97,6 +97,7 @@ class HistMaker:
         self.varea = (0.0,None)  # Sets contrast range for pixels
         self.scale = None        # Special scaling, such as 'sqrt' or 'log'
         self.labels = [None, None]  # Labels for x,y axes
+        self.ticks = [None, None]  # Tick Locations for x,y axes
         self.xflip, self.yflip = 0, 0   # Set=1 to flip respective axis
     def savehist(self, outfile):
         np.savetxt(outfile, self.H, delimiter=",") #, header=" pyplot image output, in y,x. "+\
@@ -270,18 +271,31 @@ def PlotHist(field, imfile=None):
     plt.imshow(H, cmap=cmap, norm=None, aspect=None, interpolation='nearest',
                alpha=None, vmin=vmin, vmax=vmax, origin='lower', extent=None)
     cbar = plt.colorbar() #May need to adjust these ticks...
-    # Add Ticks and labels
-    xlocs, xlabels = np.arange(0.0, field.xbins+0.000001, (field.xbins/6.0) ), []
-    for loc in xlocs:  xlabels.append(str(round((loc*field.xsize + field.xmin),2)  )  )
-    if field.xflip == 1:  plt.xticks(xlocs, xlabels[::-1])
-    else:                 plt.xticks(xlocs, xlabels)
+    # Add xTicks and labels
+    xlocs, xlabels, ylocs, ylabels = [], [], [], []
+    if field.ticks[0] == None:  
+        xpos = np.arange(field.xmin, field.xmax+0.000001, ((field.xmax-field.xmin)/10.0) )
+    else:   
+        xpos = field.ticks[0]
+    for pos in xpos:
+        xlocs.append((pos-field.xmin)/field.xsize)
+        xlabels.append("${0:.1f}$".format(pos))
+    if field.xflip == 1:  plt.xticks(xlocs, xlabels[::-1], rotation=45, fontsize=14)
+    else:                 plt.xticks(xlocs, xlabels, rotation=45, fontsize=14)
+    # Add yTicks and labels
+    if field.ticks[1] == None:  
+        ypos = np.arange(field.ymin, field.ymax+0.000001, ((field.ymax-field.ymin)/10.0) )
+    else:   
+        ypos = field.ticks[1]
+    for pos in ypos:
+        ylocs.append((pos-field.ymin)/field.ysize)
+        ylabels.append("${0:.1f}$".format(pos))
+    if field.yflip == 1:  plt.yticks(ylocs, ylabels[::-1], rotation=0, fontsize=14)
+    else:                 plt.yticks(ylocs, ylabels, rotation=0, fontsize=14)
+    # Add axes labels
     if field.labels[0] != None:  plt.xlabel(field.labels[0])
-    ylocs, ylabels = np.arange(0.0, field.ybins+0.000001, (field.ybins/6.0) ), []
-    for loc in ylocs:  ylabels.append(str(round((loc*field.ysize + field.ymin),2)  )  )
-    if field.yflip == 1:  plt.yticks(ylocs, ylabels[::-1])
-    else:                 plt.yticks(ylocs, ylabels)
     if field.labels[1] != None:  plt.ylabel(field.labels[1])
     # Save file, if outfile declared
-    if imfile != None:  plt.savefig(imfile, papertype="letter")
+    if imfile != None:  plt.savefig(imfile)
     else:  plt.show()
     plt.close('all')

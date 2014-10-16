@@ -18,9 +18,9 @@ import functions as func
 
 def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False):
     files = glob.glob(path+"/stars*")
-    #print files
+    print files
     data=[]
-    r_cut_low, r_cut_high = ac.getr(16.0), ac.getr(22.5) #30.0, 45.0
+    r_cut_low, r_cut_high = 20.0, 45.0 #ac.getr(16.0), ac.getr(22.5) #30.0, 45.0
     pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
@@ -47,7 +47,7 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False):
         count = count + 1
         #data[i,0], data[i,1] = ac.lb2GC(data[i,0], data[i,1], 15)
         #data[i,0], data[i,1] = ac.lbToEq(data[i,0], data[i,1])
-        data[i,0], data[i,1] = (ac.lb2sgr(datar[i,0], datar[i,1], 10.0))[3:5]
+        data[i,0], data[i,1] = (ac.lb2sgr(datar[i,0], datar[i,1], 30.0))[3:5]
         data[i,2] = ac.getg(datar[i,2], 4.2)
         if count % 100 == 0:  pb2.updatebar(float(count)/nStars)
     pb2.endbar()
@@ -62,8 +62,10 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False):
         for j in range(len(data[:,0])):
             if data[j,0] < Ls[0]+(Ls[2]*i):  continue
             if data[j,0] > Ls[0]+(Ls[2]*(i+1)):  continue
-            if savewedge:  new.append([datar[j,0], datar[j,1], data[j,2]])
-            else:  new.append(data[j,1])
+            if savewedge:  
+                new.append([datar[j,0], datar[j,1], data[j,2]])
+                continue
+            new.append(data[j,1])
         new = np.array(new)
         if savewedge:
             np.savetxt("stars-lambda-"+("00"+str(i))[-2:]+".txt", new, fmt='%.6f')
@@ -128,14 +130,15 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
     print "Ended Successfully"
 
 def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None, 
-                    rcut=None, outfile=None):
+                    rcut=None, vrange=None, outfile=None):
+    """ Makes a 2D histogram """
     files = glob.glob(path+"/stars*")
-    #print files
+    print files
     data=[]
     pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
-        wedge = int(f.split("-")[1].split(".")[0])
+        if ws:  wedge = int(f.split("-")[1].split(".")[0])
         count=0
         stripedata = open(f, "r")
         for line in stripedata:
@@ -171,7 +174,7 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None,
         #allsky.scale = 'sqrt'
         allsky.cmap="bw"
         allsky.yflip = 1
-        allsky.varea = (0.0,100.0)
+        if vrange != None:  allsky.varea = (vrange[0], vrange[1])
         if outfile==None:  pp.PlotHist(allsky, "sgrall_GC.png")
         else:  pp.PlotHist(allsky, outfile)
         #allsky.savehist("SDSSnorthGC.csv")
@@ -1054,6 +1057,53 @@ def lam_wedges():
                     mu_lim=None, r_lim=(0.0, 50.0), vm=10.0, nu_flatten=0, bar=1, raw_coords=1)
         print "Finished file {0} of {1}:".format(files.index(f)+1, len(files) )
     print "### - Done"
+
+def bhb_tools(infile="/home/newbym2/Desktop/sdssN-stars/sgr_bhbs.csv", out=[]):
+    """ bhb stuff """
+    data = np.loadtxt(infile, delimiter=",", skiprows=1)
+    ff = 1
+    if "c-c" in out:
+        ug0 = data[:,2] - data[:,3]
+        gr0 = data[:,3] - data[:,4]
+        plt.figure(ff);  ff+=1
+        plt.scatter(gr0, ug0, c="k", s=2)
+        plt.xlabel(r"$(g-r)_0$");  plt.ylabel(r"$(u-g)_0$")
+        plt.xlim(-0.5, 1.5);  plt.ylim(3.0, 0.0)
+    plt.show()
+    if "c-mag" in out:
+        #rr = ac.getr(data[:,3], 0.7)  ## BHB M  #Not working right?
+        gr0 = data[:,3] - data[:,4]
+        cmag = pp.HistMaker(gr0,data[:,3], 0.01, 0.1)
+        cmag.yflip=1
+        cmag.scale='sqrt'
+        cmag.varea=(0.0, 2000.0)
+        cmag.plot()
+    if "sgrplot" in out:
+        # use only primaries
+        sgr = []
+        for i in range(data.shape[0]):
+            #if ac.SDSS_primary(data[i,0],data[i,1],wedge,fmt="lb",low=9,high=27)==0:  continue
+            if data[i,3] > 20.5:  continue
+            if data[i,3] < 16.5:  continue
+            sgr.append([data[i,0], data[i,1]])
+        sgr = np.array(sgr)
+        lam, bet = (ac.lb2sgr(sgr[:,0], sgr[:,1], 30.0))[3:5]
+        hist = pp.HistMaker(lam, bet, 1.0, 1.0, xarea=(200.0, 300.0), yarea=(-40.0, 30.0))
+        hist.yflip=1
+        hist.varea=(0.0, 30.0)
+        #hist.ticks = [[],[]]
+        # mask the data
+        if "mask" in out:
+            mask = np.loadtxt("Rhist_sgr.csv", delimiter=",")
+            for i in range(len(mask[:,0])):
+                for j in range(len(mask[0,:])):
+                    if mask[i,j] == 0.0:  hist.H[i,j] = 0.0
+        hist.plot()
+            
+def rgb_tools(infile="/home/newbym2/Desktop/sdssN-stars/giants_spec.csv", out=[]):
+    """ rgb stuff """
+    return -1
+    
             
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
@@ -1066,7 +1116,7 @@ if __name__ == "__main__":
     #batch_shift()
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile=None, fitfile=True)
-    plot_profiles()    
+    #plot_profiles()    
     #plot_profiles(savewedge=True)
     #proj_test()
     #sgr_rv_skyplot()
@@ -1084,6 +1134,7 @@ if __name__ == "__main__":
     #tomography()
     #crotus_cut(cdata="crotus_data.txt")
     #lam_wedges()
+    bhb_tools(out=["sgrplot"])
     
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591

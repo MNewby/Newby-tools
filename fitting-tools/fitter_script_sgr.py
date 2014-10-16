@@ -11,8 +11,9 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 #path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_spec_cut"
-path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins"
+#path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins"
 #path = "/home/newbym2/Dropbox/Research/sgrLetter/hists_r30_cutoff"
+path = "/home/newbym2/Dropbox/Research/sgrLetter/fits_rlim_line"
 files = glob.glob(path+"/*.out")
 print files
 
@@ -33,8 +34,9 @@ def clean_data(data):
 for f in files:
     # load in data
     #name = f[-18:-13]  #spec_cut
-    name = f[-9:-4]  #all_data
-    data = clean_data(np.loadtxt(f) )
+    #name = f[-9:-4]  #all_data
+    name = f.split("/")[-1][0:5]
+    data = clean_data(np.loadtxt(f) ) 
     if len(data)<2:  continue
     # Set up data
     x, y = data[:,0], data[:,1]
@@ -43,11 +45,11 @@ for f in files:
     x0, y0, x1, y1 = [], [], [], []
     i = 0
     while len(x0) < 5:
-        if y[i] > 99.0:  x0.append(x[i]);  y0.append(y[i])
+        if y[i] > 200.0:  x0.append(x[i]);  y0.append(y[i])
         i += 1
-    if eval(name) > 291:  i = -20
+    if eval(name) > 291:  i = -10 #-20
     elif eval(name) > 274:  i = -40
-    elif eval(name) < 201:  i = -20
+    #elif eval(name) < 201:  i = -20
     else:  i = -1
     while len(x1) < 5:
         if y[i] > 99.0:  x1.append(x[i]);  y1.append(y[i])
@@ -62,12 +64,12 @@ for f in files:
     fitter = fit.ToFit(x,y,e)
     """
     fitter.function=func.double_gauss_line
-    fitter.update_params([6.0, 0.0, 5.0, 6.0, -10.0, 5.0, aa, bb])
+    fitter.update_params([6.0, 0.0, 5.0, 6.0, -6.0, 5.0, aa, bb])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "slope", "intercept"]
     """
     fitter.function=func.quad_fat_gauss_line
-    fitter.update_params([6.0, 5.0, 1.0, 6.0, -5.0, 1.0, 5.0, 10.0, 5.0, 10.0, aa, bb])
+    fitter.update_params([6.0, 5.0, 1.0, 6.0, -10.0, 1.0, 5.0, 10.0, 5.0, 10.0, aa, bb])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "amp","sigma", "amp","sigma","slope","intercept"]
     """
@@ -75,7 +77,7 @@ for f in files:
     fitter.update_params([20.0, 0.0, 5.0, 20.0, 20.0, 15.0])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma"]
-
+    
     fitter.function=func.quad_fat_gaussians
     fitter.update_params([6.0, 10.0, 1.0, 6.0, -10.0, 1.0, 5.0, 10.0, 5.0, 10.0])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
