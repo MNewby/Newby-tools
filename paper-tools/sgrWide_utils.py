@@ -16,11 +16,12 @@ import sgr_law as sgr
 import fit as fit
 import functions as func
 
-def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False):
+def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False, suffix=""):
     files = glob.glob(path+"/stars*")
     print files
+    suffix = "_rcut_IV"
     data=[]
-    r_cut_low, r_cut_high = 20.0, 45.0 #ac.getr(16.0), ac.getr(22.5) #30.0, 45.0
+    r_cut_low, r_cut_high = 40.0, ac.getr(22.5) #ac.getr(16.0), ac.getr(22.5) #20.0 OR 30.0, 45.0
     pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
@@ -57,7 +58,7 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False):
     Ls = (200.0, 300.0, 2.5)
     Lsteps = int((Ls[1]-Ls[0])/Ls[2])
     for i in range(Lsteps):
-        Lname = str(Ls[0]+(Ls[2]*i) )[:6]+"_NEW"
+        Lname = str(Ls[0]+(Ls[2]*i) )[:6]+suffix
         new = []
         for j in range(len(data[:,0])):
             if data[j,0] < Ls[0]+(Ls[2]*i):  continue
@@ -138,7 +139,7 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None,
     pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
-        if ws:  wedge = int(f.split("-")[1].split(".")[0])
+        wedge = int(f.split("-")[1].split(".")[0])
         count=0
         stripedata = open(f, "r")
         for line in stripedata:
@@ -169,8 +170,8 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None,
     if RGB==1:  RGB_plot(data, imfile=imfile)
     else:
         allsky = pp.HistMaker(data[:,0], data[:,1], xsize=0.5, ysize=0.5,
-            xarea=(200.0, 300.0), yarea=(-40.0, 30.0))
-            #xarea=(120.0, 250.0), yarea=(-10.0, 50.0))
+            #xarea=(200.0, 300.0), yarea=(-40.0, 30.0))
+            xarea=(230.0, 255.0), yarea=(-10.0, 15.0))
         #allsky.scale = 'sqrt'
         allsky.cmap="bw"
         allsky.yflip = 1
@@ -195,8 +196,8 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
     xa, ya = (200.0, 300.0), (-40.0, 30.0) #(120.0, 250.0), (-10.0, 50.0)
     #distance cutoffs
     #Wr, Br, Gr, Rr, Kr = 10.0, 20.0, 30.0, 40.0, 50.0
-    #Wr, Br, Gr, Rr, Kr = 20.0+0.25, 20.66+0.25, 21.33+0.25, 22.0+0.25, 23.0+0.25  #Belokurov 2006 + g-r=0.25
-    Wr, Br, Gr, Rr, Kr = 20.0, 20.1, 20.4, 20.5, 50.0 #spec cut limits
+    Wr, Br, Gr, Rr, Kr = 20.0+0.25, 20.66+0.25, 21.33+0.25, 22.0+0.25, 23.0+0.25  #Belokurov 2006 + g-r=0.25
+    #Wr, Br, Gr, Rr, Kr = 20.0, 20.1, 20.4, 20.5, 50.0 #spec cut limits
     # bins for each color
     W, B, G, R, K = [], [], [], [], []
     for i in range(len(data[:,0])):
@@ -1058,57 +1059,12 @@ def lam_wedges():
         print "Finished file {0} of {1}:".format(files.index(f)+1, len(files) )
     print "### - Done"
 
-def bhb_tools(infile="/home/newbym2/Desktop/sdssN-stars/sgr_bhbs.csv", out=[]):
-    """ bhb stuff """
-    data = np.loadtxt(infile, delimiter=",", skiprows=1)
-    ff = 1
-    if "c-c" in out:
-        ug0 = data[:,2] - data[:,3]
-        gr0 = data[:,3] - data[:,4]
-        plt.figure(ff);  ff+=1
-        plt.scatter(gr0, ug0, c="k", s=2)
-        plt.xlabel(r"$(g-r)_0$");  plt.ylabel(r"$(u-g)_0$")
-        plt.xlim(-0.5, 1.5);  plt.ylim(3.0, 0.0)
-    plt.show()
-    if "c-mag" in out:
-        #rr = ac.getr(data[:,3], 0.7)  ## BHB M  #Not working right?
-        gr0 = data[:,3] - data[:,4]
-        cmag = pp.HistMaker(gr0,data[:,3], 0.01, 0.1)
-        cmag.yflip=1
-        cmag.scale='sqrt'
-        cmag.varea=(0.0, 2000.0)
-        cmag.plot()
-    if "sgrplot" in out:
-        # use only primaries
-        sgr = []
-        for i in range(data.shape[0]):
-            #if ac.SDSS_primary(data[i,0],data[i,1],wedge,fmt="lb",low=9,high=27)==0:  continue
-            if data[i,3] > 20.5:  continue
-            if data[i,3] < 16.5:  continue
-            sgr.append([data[i,0], data[i,1]])
-        sgr = np.array(sgr)
-        lam, bet = (ac.lb2sgr(sgr[:,0], sgr[:,1], 30.0))[3:5]
-        hist = pp.HistMaker(lam, bet, 1.0, 1.0, xarea=(200.0, 300.0), yarea=(-40.0, 30.0))
-        hist.yflip=1
-        hist.varea=(0.0, 30.0)
-        #hist.ticks = [[],[]]
-        # mask the data
-        if "mask" in out:
-            mask = np.loadtxt("Rhist_sgr.csv", delimiter=",")
-            for i in range(len(mask[:,0])):
-                for j in range(len(mask[0,:])):
-                    if mask[i,j] == 0.0:  hist.H[i,j] = 0.0
-        hist.plot()
-            
-def rgb_tools(infile="/home/newbym2/Desktop/sdssN-stars/giants_spec.csv", out=[]):
-    """ rgb stuff """
-    return -1
-    
             
 if __name__ == "__main__":
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
     #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
-    #make_total_plot(RGB=0)
+    #make_total_plot(RGB=1)
+    #make_total_plot(RGB=0, rcut=(ac.getr(16.0), ac.getr(22.5) ), vrange=(0.0, 150.0))
     #make_total_plot(RGB=0, rcut=(ac.getr(20.0), ac.getr(20.5) ) )
     #make_diff_hist()
     #get_bif()
@@ -1134,7 +1090,7 @@ if __name__ == "__main__":
     #tomography()
     #crotus_cut(cdata="crotus_data.txt")
     #lam_wedges()
-    bhb_tools(out=["sgrplot"])
+    
     
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591

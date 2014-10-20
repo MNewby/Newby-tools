@@ -62,7 +62,7 @@ for f in files:
     bb = yf - (aa*xf)
     #fit it
     fitter = fit.ToFit(x,y,e)
-    """
+    
     fitter.function=func.double_gauss_line
     fitter.update_params([6.0, 0.0, 5.0, 6.0, -6.0, 5.0, aa, bb])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
@@ -72,7 +72,7 @@ for f in files:
     fitter.update_params([6.0, 5.0, 1.0, 6.0, -10.0, 1.0, 5.0, 10.0, 5.0, 10.0, aa, bb])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "amp","sigma", "amp","sigma","slope","intercept"]
-    """
+    
     fitter.function=func.double_gaussian
     fitter.update_params([20.0, 0.0, 5.0, 20.0, 20.0, 15.0])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
@@ -97,8 +97,8 @@ for f in files:
     print new_params[:4]
     plt.plot(fitter.x, func.gaussian_function(fitter.x, new_params[:3]), 'k--')
     plt.plot(fitter.x, func.gaussian_function(fitter.x, new_params[3:6]), 'k--')
-    plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[6], new_params[1], new_params[7]]), 'k--')
-    plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[8], new_params[4], new_params[9]]), 'k--')
+    #plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[6], new_params[1], new_params[7]]), 'k--')
+    #plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[8], new_params[4], new_params[9]]), 'k--')
     plt.xlabel("B")
     plt.ylabel("counts")
     plt.title(name, fontsize=8 )
