@@ -19,9 +19,9 @@ import functions as func
 def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False, suffix=""):
     files = glob.glob(path+"/stars*")
     print files
-    suffix = "_rcut_IV"
+    suffix = "_bhbs"
     data=[]
-    r_cut_low, r_cut_high = 40.0, ac.getr(22.5) #ac.getr(16.0), ac.getr(22.5) #20.0 OR 30.0, 45.0
+    r_cut_low, r_cut_high = ac.getr(16.0), ac.getr(22.5) #20.0 OR 30.0, 45.0
     pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
@@ -1089,7 +1089,7 @@ if __name__ == "__main__":
     #sgr_plot3D()
     #tomography()
     #crotus_cut(cdata="crotus_data.txt")
-    #lam_wedges()
+    lam_wedges()
     
     
 """

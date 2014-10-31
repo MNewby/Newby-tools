@@ -251,7 +251,7 @@ def getb(sig, a, p):
     return part3
 
     
-def PlotHist(field, imfile=None):
+def PlotHist(field, imfile=None, cbarO='vertical', cax=None):
     """ field is a HistMaker object """
     H = field.H
     # Scale and flip if necessary
@@ -267,10 +267,10 @@ def PlotHist(field, imfile=None):
     elif field.cmap == 'color_c':  cmap = spec_center
     elif field.cmap == 'bw':  cmap = 'gist_yarg'
     else:  cmap = field.cmap
-    plt.figure()
-    plt.imshow(H, cmap=cmap, norm=None, aspect=None, interpolation='nearest',
+    fig = plt.figure(dpi=120)
+    ax1 = fig.add_subplot(111)
+    im = ax1.imshow(H, cmap=cmap, norm=None, aspect=None, interpolation='nearest',
                alpha=None, vmin=vmin, vmax=vmax, origin='lower', extent=None)
-    cbar = plt.colorbar() #May need to adjust these ticks...
     # Add xTicks and labels
     xlocs, xlabels, ylocs, ylabels = [], [], [], []
     if field.ticks[0] == None:  
@@ -279,9 +279,9 @@ def PlotHist(field, imfile=None):
         xpos = field.ticks[0]
     for pos in xpos:
         xlocs.append((pos-field.xmin)/field.xsize)
-        xlabels.append("${0:.1f}$".format(pos))
-    if field.xflip == 1:  plt.xticks(xlocs, xlabels[::-1], rotation=45, fontsize=14)
-    else:                 plt.xticks(xlocs, xlabels, rotation=45, fontsize=14)
+        xlabels.append("${0:.0f}$".format(pos))
+    if field.xflip == 1:  plt.xticks((field.xbins-np.array(xlocs))[::-1], xlabels[::-1], rotation=45, fontsize=12)
+    else:                 plt.xticks(xlocs, xlabels, rotation=45, fontsize=12)
     # Add yTicks and labels
     if field.ticks[1] == None:  
         ypos = np.arange(field.ymin, field.ymax+0.000001, ((field.ymax-field.ymin)/10.0) )
@@ -289,12 +289,14 @@ def PlotHist(field, imfile=None):
         ypos = field.ticks[1]
     for pos in ypos:
         ylocs.append((pos-field.ymin)/field.ysize)
-        ylabels.append("${0:.1f}$".format(pos))
-    if field.yflip == 1:  plt.yticks(ylocs, ylabels[::-1], rotation=0, fontsize=14)
-    else:                 plt.yticks(ylocs, ylabels, rotation=0, fontsize=14)
+        ylabels.append("${0:.0f}$".format(pos))
+    if field.yflip == 1:  plt.yticks((field.ybins-np.array(ylocs))[::-1], ylabels[::-1], rotation=0, fontsize=12)
+    else:                 plt.yticks(ylocs, ylabels, rotation=0, fontsize=12)
     # Add axes labels
-    if field.labels[0] != None:  plt.xlabel(field.labels[0])
-    if field.labels[1] != None:  plt.ylabel(field.labels[1])
+    if field.labels[0] != None:  plt.xlabel(field.labels[0], fontsize=16)
+    if field.labels[1] != None:  plt.ylabel(field.labels[1], rotation=0, fontsize=16)
+    if cax == None:  cbar = plt.colorbar(mappable=im, aspect=30, orientation=cbarO) #May need to adjust these ticks...
+    else:  cbax = fig.add_axes(cax); cb = plt.colorbar(mappable=im, ax=ax1, cax=cbax, orientation=cbarO)
     # Save file, if outfile declared
     if imfile != None:  plt.savefig(imfile)
     else:  plt.show()

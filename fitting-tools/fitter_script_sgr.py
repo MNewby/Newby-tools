@@ -13,8 +13,10 @@ import matplotlib.pyplot as plt
 #path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_spec_cut"
 #path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins"
 #path = "/home/newbym2/Dropbox/Research/sgrLetter/hists_r30_cutoff"
-path = "/home/newbym2/Dropbox/Research/sgrLetter/fits_rlim_line"
-files = glob.glob(path+"/*.out")
+#path = "/home/newbym2/Dropbox/Research/sgrLetter/fits_rlim_line"
+#path = "/home/newbym2/Dropbox/Research/sgrLetter/bhb_stuff/lam_hists_all/"
+path = "/home/newbym2/Dropbox/Research/sgrLetter/FTO_new/lam_hists_all/"
+files = glob.glob(path+"*.out")
 print files
 
 def clean_data(data):
@@ -25,6 +27,8 @@ def clean_data(data):
         #data[i,1] = data[i,1] - (1.6*data[i,0] +140.0)
         if data[i,1] <= 0.0:  mask[i] = 1  #flag zeros
         #if data[i,0] > 15.0:  mask[i] = 1 #flag virgo-ish bits in flat bg subtraction
+        #if data[i,0] < -36.0:  mask[i] = 1 # bhbs
+        #if data[i,0] > 26.0:  mask[i] = 1 # bhbs
     # make new array that contains only mask==0
     data_out = []
     for i in range(len(data[:,0])):
@@ -35,7 +39,8 @@ for f in files:
     # load in data
     #name = f[-18:-13]  #spec_cut
     #name = f[-9:-4]  #all_data
-    name = f.split("/")[-1][0:5]
+    name = f.split("/")[-1][0:5].strip("_")
+    if float(name) < 200.0:  continue
     data = clean_data(np.loadtxt(f) ) 
     if len(data)<2:  continue
     # Set up data
@@ -44,15 +49,16 @@ for f in files:
     # make a line, using the average of 10 bins on each end as the anchor points
     x0, y0, x1, y1 = [], [], [], []
     i = 0
+    minbin = 100.0
     while len(x0) < 5:
-        if y[i] > 200.0:  x0.append(x[i]);  y0.append(y[i])
+        if y[i] > minbin:  x0.append(x[i]);  y0.append(y[i])
         i += 1
-    if eval(name) > 291:  i = -10 #-20
+    if eval(name) > 291:  i = -20 #-20
     elif eval(name) > 274:  i = -40
-    #elif eval(name) < 201:  i = -20
+    elif eval(name) < 201:  i = -40
     else:  i = -1
     while len(x1) < 5:
-        if y[i] > 99.0:  x1.append(x[i]);  y1.append(y[i])
+        if y[i] > minbin:  x1.append(x[i]);  y1.append(y[i])
         i -= 1
     xi, yi = np.mean(x0), np.mean(y0)
     xf, yf = np.mean(x1), np.mean(y1)
@@ -62,7 +68,7 @@ for f in files:
     bb = yf - (aa*xf)
     #fit it
     fitter = fit.ToFit(x,y,e)
-    
+    """
     fitter.function=func.double_gauss_line
     fitter.update_params([6.0, 0.0, 5.0, 6.0, -6.0, 5.0, aa, bb])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
@@ -72,7 +78,7 @@ for f in files:
     fitter.update_params([6.0, 5.0, 1.0, 6.0, -10.0, 1.0, 5.0, 10.0, 5.0, 10.0, aa, bb])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0]
     fitter.param_names = ["amp", "mu", "sigma", "amp", "mu", "sigma", "amp","sigma", "amp","sigma","slope","intercept"]
-    
+    """
     fitter.function=func.double_gaussian
     fitter.update_params([20.0, 0.0, 5.0, 20.0, 20.0, 15.0])
     fitter.step = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
@@ -97,8 +103,8 @@ for f in files:
     print new_params[:4]
     plt.plot(fitter.x, func.gaussian_function(fitter.x, new_params[:3]), 'k--')
     plt.plot(fitter.x, func.gaussian_function(fitter.x, new_params[3:6]), 'k--')
-    #plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[6], new_params[1], new_params[7]]), 'k--')
-    #plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[8], new_params[4], new_params[9]]), 'k--')
+    plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[6], new_params[1], new_params[7]]), 'k--')
+    plt.plot(fitter.x, func.gaussian_function(fitter.x, [new_params[8], new_params[4], new_params[9]]), 'k--')
     plt.xlabel("B")
     plt.ylabel("counts")
     plt.title(name, fontsize=8 )
