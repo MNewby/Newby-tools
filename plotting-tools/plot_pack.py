@@ -99,8 +99,8 @@ class HistMaker:
         self.labels = [None, None]  # Labels for x,y axes
         self.ticks = [None, None]  # Tick Locations for x,y axes
         self.xflip, self.yflip = 0, 0   # Set=1 to flip respective axis
-    def savehist(self, outfile):
-        np.savetxt(outfile, self.H, delimiter=",") #, header=" pyplot image output, in y,x. "+\
+    def savehist(self, outfile, fmt='%.2f'):
+        np.savetxt(outfile, self.H, delimiter=",", fmt=fmt) #, header=" pyplot image output, in y,x. "+\
         #  "x is {0} from {1} to {2}, in steps of {3}; "+\
         #  "y is {4} from {5} to {6}, in steps of {7}".format(self.labels[0], self.xmin, 
         #    self.xmax, self.xsize, self.labels[1], self.ymin, self.ymax, self.ysize)  )

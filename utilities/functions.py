@@ -110,6 +110,13 @@ def double_gauss_line(x, params):
     y = (aa*x) + bb
     return G1 + G2 + y
 
+def triple_gauss_floor(x, params):
+    # 10 parameters
+    A1, mu1, sig1, A2, mu2, sig2, A3, mu3, sig3, aa = params
+    G1 = A1*A1*sc.exp(-1.0*(x-mu1)*(x-mu1) / (2.0*sig1*sig1) )
+    G2 = A2*A2*sc.exp(-1.0*(x-mu2)*(x-mu2) / (2.0*sig2*sig2) )
+    G3 = A3*A3*sc.exp(-1.0*(x-mu3)*(x-mu3) / (2.0*sig3*sig3) )
+    return G1 + G2 + G3 + aa
 
 def double_gaussian_one_fixed(x, params):
     # 6 parameters, 4 fit;  holds the mean and sigma constant for 2nd gaussian

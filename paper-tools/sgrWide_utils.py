@@ -720,6 +720,7 @@ def plot_ganged_hists():
     #p1 = [9,5,1,10,11,12,2,3,4,6,7,8]
     # initialize plot info
     if fname[-8:-4] == "quad":  function = func.quad_fat_gauss_line
+    elif fname[-8:-4] == "trip":  function = func.triple_gauss_floor
     else:  function = func.double_gauss_line
     # Panes which skip labelling axes
     nox = [1,2,3,4,5,6,7,8,9]
@@ -758,12 +759,17 @@ def plot_ganged_hists():
         sp.bar(hist[:,0], hist[:,1], 0.5, align='center', color='w', zorder=1)
         if fname[-8:-4] == "quad":
             plt.plot(x, function(x, results[i,1:13]), 'k-', zorder=2)
+        elif fname[-8:-4] == "trip":
+            plt.plot(x, function(x, results[i,1:11]), 'k-', zorder=2)
         else: plt.plot(x, function(x, results[i,1:9]), 'k-', zorder=2)
         plt.plot(x, func.gaussian_function(x, results[i,1:4]), 'k:', zorder=2)
         plt.plot(x, func.gaussian_function(x, results[i,4:7]), 'k:', zorder=2)
         if fname[-8:-4] == "quad":
             plt.plot(x, func.gaussian_function(x, [results[i,7], results[i,2], results[i,8]]), 'k:', zorder=2)
             plt.plot(x, func.gaussian_function(x, [results[i,9], results[i,5], results[i,10]]), 'k:', zorder=2)
+        if fname[-8:-4] == "trip":
+            plt.plot(x, func.gaussian_function(x, [results[i,7], results[i,8], results[i,9]]), 'k:', zorder=2)
+            plt.plot(x, results[i,10]*sc.ones(len(x))
         # spec stuff
         if holder != []:
             hold=np.array(holder)
