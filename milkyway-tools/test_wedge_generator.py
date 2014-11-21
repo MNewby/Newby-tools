@@ -17,7 +17,7 @@ Matthew Newby (RPI), March 28, 2011
 """
 deg = 180.0 / ma.pi 
 rad = ma.pi / 180.0 
-
+SQ2PI = sc.sqrt(2 * ma.pi)
 # Finish stream_length, convolve, and master function
 
 class ParamSet:
@@ -25,6 +25,7 @@ class ParamSet:
     def __init__(self, paramString=None):
     # SDSS Stripe Number
         self.wedge = 82
+        self.modfit = False
     # Background weight (epsilon), 4 parameters (?, q, r_0, ?)
         self.background = [0.0, 1.0, 0.455, 19.5, 1.0]
     # stream weight (epsilon), 5 parameters (mu, r, theta, phi, sigma) per stream
@@ -78,6 +79,26 @@ class ParamSet:
         print self.stripe
 
 
+def modfit_error(x, modfit):
+    """Detection efficiency Corrected for Modfit"""
+    if modfit:
+        ay = [5.61945007e2, -1.67343282e1, 1.09325822e-1, 1.34993610e-3, -1.42044161e-5, 0.0, 0.0, 0.0]
+        ar = [8.55878159, -1.04891551e1, 3.51630757, -2.29741062e-01, 6.72278105e-03, -1.01910181e-04, 7.82787167e-07, -2.41452056e-09]
+        total = (ay[0] + ar[0]) + (ay[1] + ar[1]) * (x) + (ay[2] + ar[2]) * (x * x) + (ay[3] + ar[3]) * (x * x * x) + (ay[4] + ar[4]) * x**4 + (ay[5] + ar[5]) * x**5 + (ay[6] + ar[6]) * x**6 + (ay[7] + ar[7]) * x**7
+        if total < 0.0: total = 0.0;
+        return (total/532.0)
+    else:
+        return 1.0
+
+def broken_power_law(x,y,z,q,r0):
+    """ Galactic-centric Broken Power Law See Akhter et al. 2012 """
+    r = sc.sqrt( (x*x) + (y*y) + ((z*z)/(q*q)) )
+    if r < r0:
+        n = 2.78
+    else:
+        n = 5.00
+    return (8.5/r)**n
+
 def hernquist_profile(x,y,z, q,r0):
     """ Galactic-centric hernquist density profile """
     r = sc.sqrt( (x*x) + (y*y) + ((z*z)/(q*q)) )
@@ -103,6 +124,7 @@ def stream_into_stripe(params, sn, N_stars, batch=1000, fileout="streamgen82.txt
     # Get constants
     mu,R,theta,phi,sigma,wedge = \
         params.mu[sn],params.R[sn],params.theta[sn],params.phi[sn],params.sigma[sn], params.wedge
+    print "Stream Parameters", mu, R, theta, phi, sigma, wedge
     u_min, u_max = get_stream_length(params, sn, accuracy=0.0001)
     nu_min, nu_max = params.nu_lim[0], params.nu_lim[1]
     mu_min, mu_max = params.mu_lim[0], params.mu_lim[1]
@@ -128,11 +150,11 @@ def stream_into_stripe(params, sn, N_stars, batch=1000, fileout="streamgen82.txt
                 if co.SDSS_primary(mu1,nu1,wedge,low=9,high=25) == 0:  continue
             # Convolve
             if convolve==1:
-                r1 = star_convolution(r1)
+                r1 = star_convolution(r1, params.modfit)
             # Detection
             if detection==1:
                 m_g = co.getg(r1)
-                if np.random.uniform() > (sigmoid_error(m_g)):  continue
+                if np.random.uniform() > sigmoid_error(m_g, params.modfit):  continue
             if (co.getg(r1) < g_min) or (co.getg(r1) > g_max): continue
             # When a point passes all the testsm add it to the set
             l,b,r1 = co.GC2lbr(mu1, nu1, r1, wedge)
@@ -213,7 +235,7 @@ def get_stream_length(params, N=0, accuracy=0.0001):
     # finish up
     length = np.fabs(u1-u2)
     print "# Stream is {0} kpc long within wedge boundaries".format(length)
-    while np.fabs(u1-u2) < 20.0:
+    while np.fabs(u1-u2) < 60.0:
         u1 = u1*2.0
         u2 = u2*2.0
     if u2 > u1:  return u1, u2
@@ -246,11 +268,11 @@ def generate_background(num_stars, params, batch=1000, fail_quit=100,
                 l,b,r1 = co.xyz2lbr (x[i], y[i], z[i])
                 # Convolve
                 if convolve==1:
-                    r1 = star_convolution(r1)
+                    r1 = star_convolution(r1, params.modfit)
                 # Detection
                 if detection==1:
                     m_g = co.getg(r1)
-                    if np.random.uniform() > (sigmoid_error(m_g)):  continue
+                    if np.random.uniform() > sigmoid_error(m_g, params.modfit):  continue
                 if (co.getg(r1) < g_min) or (co.getg(r1) > g_max): continue
                 if primary == 1:
                     if co.SDSS_primary(l,b,wedge,fmt='lb',low=9,high=25) == 0:  continue
@@ -284,6 +306,7 @@ def get_stripe_points(mu_lim, nu_lim, r_lim, number=1):   #GC checked
     return (mu,nu,r)
 
 def get_max_prob(params):
+    print "Background Parameters:", params.q, params.r0
     mu_min, mu_max, mu_steps = params.mu_lim
     nu_min, nu_max, nu_steps = params.nu_lim
     r_min, r_max, r_steps = params.r_lim
@@ -335,14 +358,14 @@ def generate_perturbation(num_stars, params, parameters, batch=1000, fail_quit=1
             rho = perturb_density(x[i],y[i],z[i], parameters)
             #print (rho / tot_prob), rho, tot_prob
             if (rho / tot_prob) > np.random.uniform():
-                l,b,r1 = co.xyz2lbr (x[i], y[i], z[i])
+                l,b,r1 = co.xyz2lbr(x[i], y[i], z[i])
                 # Convolve
                 if convolve==1:
-                    r1 = star_convolution(r1)
+                    r1 = star_convolution(r1, params.modfit)
                 # Detection
                 if detection==1:
                     m_g = co.getg(r1)
-                    if np.random.uniform() > (sigmoid_error(m_g)):  continue
+                    if np.random.uniform() > sigmoid_error(m_g, params.modfit):  continue
                 if (co.getg(r1) < g_min) or (co.getg(r1) > g_max):  continue
                 if primary == 1:
                     if co.SDSS_primary(l,b,wedge,fmt='lb',low=9,high=25) == 0:  continue
@@ -405,19 +428,33 @@ def perturb_density(x,y,z, parameters):
     exponent = (g*parameters[1]) + parameters[2]
     return (parameters[0] + sc.exp(exponent))
     
-def sigmoid_error(x, modulus=None):
+def sigmoid_error(x, modfit, modulus=None):
     """Application of detection efficiency"""    
     s = [0.9402, 1.6171, 23.5877]
     if modulus != None:
         s[2] = s[2] - modulus
     detection_efficiency = s[0] / (np.exp(s[1]*(x - s[2])) + 1.)
-    return detection_efficiency
+    return detection_efficiency * modfit_error(co.getr(x), modfit)
 
-def star_convolution(r, mu=4.2, sigma=0.6):
-    """ Convolve Stars based on turnoff distribution """
+def star_convolution(r, modfit, mu=4.2, sigma=0.6):
+    """ Convolve Stars based on turnoff distribution Using Rejection Sampling"""
     m_g = co.getg(r)
-    m_g = np.random.normal(m_g, 0.6)
-    return co.getr(m_g)
+    if not modfit: 
+        return co.getr(np.random.normal(m_g, 0.6));
+    found = 0;
+    sigma_l = .36
+    sigma_r = ((0.52 / (1.0 + sc.exp(12.0 - r))) + 0.76)
+    sigma = .36
+    while not found:
+        guess = np.random.uniform(- (.6 * 3.0), .6 * 3.0);
+        if guess < 0.0: 
+            sigma = sigma_l
+        else: 
+            sigma = sigma_r
+        probability = sc.exp(-(guess * guess) / (2.0 * sigma * sigma) ) / (.5 * (sigma_r + sigma_l) * SQ2PI)
+        if (np.random.uniform() < (probability)): 
+            found = 1
+    return co.getr(m_g + guess)
     
 def build_stripe(params, filename, num_stars, perturb_weight=None,
                  perturb_params=(0.0, 0.79, -19.9), con=1, det=1, app=1):
@@ -437,24 +474,28 @@ def build_stripe(params, filename, num_stars, perturb_weight=None,
     for i in range(len(params.streams)):
         denom = denom + np.exp(params.stream_weight[i])
     back_stars = int((1.0 / denom)*num_stars)
+    total_stars = back_stars
     print "# - {0} Stars in Background".format(back_stars)
     stream_stars = []
     for i in range(len(params.streams)):
         new_stars = int((np.exp(params.stream_weight[i]) / denom)*num_stars)
         stream_stars.append(new_stars)
+        total_stars = total_stars + new_stars
         print "# - {0} Stars in Stream {1}".format(new_stars, i) 
+    #Print number of stars at the top of the file
+    if not app:
+        out = open(filename, 'w')
+        out.write("%d" % total_stars)
+        out.close()
     # app is zero here in order to generate file
-    x = generate_background(back_stars, params, batch=10000, fail_quit=100,
-                        fileout=filename, detection=det, convolve=con, append=0)
+    x = generate_background(back_stars, params, batch=10000, fail_quit=10000, fileout=filename, detection=det, convolve=con, append=1)
     print "# --- Background Generation Complete"
     if len(stream_stars) > 0:
         for i in range(len(stream_stars)):
-            y = stream_into_stripe(params, i, stream_stars[i], batch=10000, fileout=filename,
-                        detection=det, convolve=con, append=app)
+            y = stream_into_stripe(params, i, stream_stars[i], batch=10000, fileout=filename, detection=det, convolve=con, append=1)
             print "# --- Stream {0} Generation Complete".format(i)
     if perturb_weight != None:
-        z = generate_perturbation(perturb_stars, params, perturb_params, batch=1000,
-                        fail_quit=100, fileout=filename, detection=det, convolve=con, append=app)
+        z = generate_perturbation(perturb_stars, params, perturb_params, batch=1000, fail_quit=100, fileout=filename, detection=det, convolve=con, append=app)
         print "# --- Perturbation Generation Complete"
     return 1
 
