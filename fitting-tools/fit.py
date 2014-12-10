@@ -241,6 +241,7 @@ def MCMC(fitter, iters=1000, annealing=0, verbose=0, seed=None):
     print "# - After {0} moves, {1} iterations".format(moves, iters)
     print "# - Final values (mean):  {0}".format(p_mean)
     print "# - Value deviations (stdev):  {0}".format(p_std)
+    fitter.error = p_std
     # which parameter set should be returned as best?
     return path
 

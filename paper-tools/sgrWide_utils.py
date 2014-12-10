@@ -16,6 +16,39 @@ import sgr_law as sgr
 import fit as fit
 import functions as func
 
+
+def do_stuff():
+    #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
+    #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
+    #make_total_plot(RGB=1)
+    #make_total_plot(RGB=0, rcut=(ac.getr(16.0), ac.getr(22.5) ), vrange=(0.0, 150.0))
+    #make_total_plot(RGB=0, rcut=(ac.getr(20.0), ac.getr(20.5) ) )
+    #make_diff_hist()
+    #get_bif()
+    #get_sgr_curves()
+    #batch_shift()
+    #compile_tables(rnames=[], folder=[], subfolder=[])
+    #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
+    #RGB_from_files(mask_data="Rhist_sgr.csv", imfile=None, fitfile=True)
+    #plot_profiles()    
+    #plot_profiles(savewedge=True)
+    #proj_test()
+    #sgr_rv_skyplot()
+    #sgr_rv_cut()
+    #split_by_plate()
+    #photo_spec_analysis()
+    #process_spec()
+    #plot_ganged_hists()
+    #spec_area()
+    #make_data_tables()
+    #count_stars()
+    #count_stars_in_rcut()
+    sgr_plot3D()
+    #tomography()
+    #crotus_cut(cdata="crotus_data.txt")
+    #lam_wedges()
+    
+    
 def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False, suffix=""):
     files = glob.glob(path+"/stars*")
     print files
@@ -259,9 +292,9 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
     else:  plt.savefig(imfile)
     plt.close('all')
 
-def RGB_from_files(mask_data=None, imfile=None, fitfile=False):
+def RGB_from_files(mask_data=None, imfile=None, fitfile=None):
     wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
-    fname = "smarter_slide_back_quad.txt"
+    #fname = "smarter_slide_back_quad.txt"
     suffix = "_sgr2"
     Rfile = "Rhist"+suffix+".csv"
     Gfile = "Ghist"+suffix+".csv"
@@ -287,8 +320,8 @@ def RGB_from_files(mask_data=None, imfile=None, fitfile=False):
     #skip2 = [210.0]  #double
     skip1 = [297.5, 295.0, 292.5, 290.0] #quad:  
     skip2 = [200.0, 202.5, 212.5, 297.5] #quad:
-    if fitfile:
-        fitdata = np.loadtxt(wd+fname, delimiter=",")
+    if fitfile != None:
+        fitdata = np.loadtxt(wd+fitfile, delimiter=",")
         lams = (fitdata[:,0] - 200.0) / 0.5
         bet1 = (fitdata[:,2] + 40.0) / 0.5
         bet1e = fitdata[:,3] / 0.5
@@ -651,11 +684,11 @@ def photo_spec_analysis():
         np.savetxt(svname, sc.array(stars), delimiter=",")
         print "saved {0}".format(svname)
 
-def compile_tables():
+def compile_tables(rnames, folder, subfolder):
     # cycle through files using a list of destinations and names
-    rnames = ["smarter_slide_back"]
-    #rnames = ["smart_sliding_back"]
-    """rnames = ["virgo_B-slice_all",
+    """rnames = ["smarter_slide_back"]
+    rnames = ["smart_sliding_back"]
+    rnames = ["virgo_B-slice_all",
               "back_m2b160_all",
               "flatsub_100_all",
               "cutoff_R30_all",
@@ -664,10 +697,9 @@ def compile_tables():
               "flatsub_100_spec",
               "back_sliding"
               ]"""
-    wd="/home/newbym2/Dropbox/Research/sgrLetter/"
-    folder = ["fits_smarter_slide/"]
+    """folder = ["fits_smarter_slide/"]
     #folder = ["fits_smart_slide/"]
-    """folder = ["no_virgo_B_slice_smallbins/",
+    folder = ["no_virgo_B_slice_smallbins/",
               "backfunc_smallbins/",
               "hist_fits_flatsub100/",
               "hists_r30_cutoff/",
@@ -676,7 +708,8 @@ def compile_tables():
               "hist_fits_spec_cut_flatsub30/",
               "fits_sliding_line"
               ]"""
-    subfolder = ["double_gaussian/", "quad_gaussian/"]
+    #subfolder = ["double_gaussian/", "quad_gaussian/"]
+    wd="/home/newbym2/Dropbox/Research/sgrLetter/"
     fname = "AA_hist_fits.txt"
     outf = "fit_results/"
     for i, f in enumerate(folder):
@@ -703,18 +736,18 @@ def compile_tables():
             outfile.close
             #print table #.sort()
 
-def plot_ganged_hists():
-    # Make 4x3 blocks of histgram fits;  only have to change next line
-    fname = "smarter_slide_back_quad.txt"
-    wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
+def plot_ganged_hists(fname="smarter_slide_back_quad.txt",
+        wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"):
+    #path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins/"
+    # Make 4x3 blocks of histgram fits
     r = np.loadtxt(wd+fname, delimiter=",")
     results = r[np.lexsort( (r[:,0], r[:,0]) )]
-    path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins/"
     #files = glob.glob(path+"/*.out")
     plate_info = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/plate_data.csv", delimiter=",")
     # range of plots
+    L_range = (20.0, 320.0)
     b_range = (-30, 30)
-    N_range = (0, 450)
+    N_range = (0, 600)
     # subplot organization
     px, py = 3, 4
     #p1 = [9,5,1,10,11,12,2,3,4,6,7,8]
@@ -727,25 +760,13 @@ def plot_ganged_hists():
     noy = [2,3,5,6,8,9,11,12]
     x = np.arange(b_range[0], b_range[1], 0.1)
     # get this bastard going
-    for i in range(len(results[:,0])):
-        if i == 0:
-            fig1 = plt.figure(num=1, figsize=(12,9), dpi=100)
+    figs, fignum = [], 0
+    for i in range(results.shape[0]-1):
+        if i % (py*px) == 0:
+            fignum += 1
+            figs.append(plt.figure(num=fignum, figsize=(12,9), dpi=120) )
             plt.subplots_adjust(hspace=0.001, wspace=0.001)
-            oo = 0  #offset
-        if i == 12:  
-            fig2 = plt.figure(num=2, figsize=(12,9), dpi=100)
-            plt.subplots_adjust(hspace=0.001, wspace=0.001)
-            oo = -12
-        if i == 24:
-            fig3 = plt.figure(num=3, figsize=(12,9), dpi=100)
-            plt.subplots_adjust(hspace=0.001, wspace=0.001)
-            oo = -24
-        if i == 36:
-            fig4 = plt.figure(num=4, figsize=(8,4.5), dpi=100)
-            plt.subplots_adjust(hspace=0.001, wspace=0.001)
-            px, py = 2, 2
-            nox, noy = [1,2], [2,4]
-            oo = -36
+            oo = -1*i  #offset; -0, -12, -24, -36, etc.
         Lslice = results[i,0]
         # spec stuff
         holder = []
@@ -753,10 +774,10 @@ def plot_ganged_hists():
             if abs(plate_info[j,0]-Lslice) > 1.25:  continue
             holder.append([plate_info[j,0], plate_info[j,1], plate_info[j,2], plate_info[j,3]])
         # get histogram
-        hist=np.loadtxt(path+str(results[i,0])+".out")
+        hist=np.loadtxt(wd+"lambda_"+str(results[i,0])+".txt")
         #Make plot
         sp = plt.subplot(py,px,(i+1+oo))
-        sp.bar(hist[:,0], hist[:,1], 0.5, align='center', color='w', zorder=1)
+        sp.bar(np.arange(-70.0,40.1,0.5), hist, 0.5, align='center', color='w', zorder=1)
         if fname[-8:-4] == "quad":
             plt.plot(x, function(x, results[i,1:13]), 'k-', zorder=2)
         elif fname[-8:-4] == "trip":
@@ -769,7 +790,7 @@ def plot_ganged_hists():
             plt.plot(x, func.gaussian_function(x, [results[i,9], results[i,5], results[i,10]]), 'k:', zorder=2)
         if fname[-8:-4] == "trip":
             plt.plot(x, func.gaussian_function(x, [results[i,7], results[i,8], results[i,9]]), 'k:', zorder=2)
-            plt.plot(x, results[i,10]*sc.ones(len(x))
+            plt.plot(x, results[i,10]*sc.ones(len(x)) )
         # spec stuff
         if holder != []:
             hold=np.array(holder)
@@ -784,7 +805,7 @@ def plot_ganged_hists():
             for k in range(len(hold[:,0])):
                 plt.text(hold[k,1], 400, str(int(hold[k,3])), fontsize=8)
         #plt.title(name, fontsize=8 )
-        plt.text(-25, 375, r"$\Lambda$="+str(Lslice), fontsize=12)
+        plt.text(-25, 475, r"$\Lambda$="+str(Lslice), fontsize=12)
         plt.xlim(b_range[0], b_range[1])
         plt.ylim(N_range[0], N_range[1])
         # i+1 corresponds to plot number starting from 1
@@ -945,17 +966,18 @@ def make_data_tables():
 def sgr_plot3D():
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib import cm
-    fname = "smarter_slide_back_quad.txt"
-    wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
+    fname = "fits_double.csv"
+    wd = "/home/newbym2/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/"
     r = np.loadtxt(wd+fname, delimiter=",")
     data = r[np.lexsort( (r[:,0], r[:,0]) )]
     fig = plt.figure()
     ax = fig.gca(projection='3d')
     #fig = plt.figure()
     #ax = fig.add_subplot(111, projection='3d')
-    z = np.arange(200.0, 300.0, 2.5)    
+    z = data[:,0]
     virgox, virgoy = [], []
     for i in range(len(data[:,0])):
+        if z[i] > 120.0:  continue
         xs = np.arange(-30.0, 30.0, 0.1)
         if fname[-8:-4] == "quad":  
             ys = func.quad_fat_gauss_line(xs, data[i,1:13])
@@ -993,7 +1015,7 @@ def sgr_plot3D():
     ax.set_ylabel(r'$\Lambda$')
     ax.set_zlabel('N')
     ax.set_xlim(-30.0, 30.0)
-    ax.set_ylim(200.0, 300.0)
+    ax.set_ylim(20.0, 140.0)
     ax.set_zlim(0.0, 600.0)
     plt.show()
 
@@ -1067,35 +1089,7 @@ def lam_wedges():
 
             
 if __name__ == "__main__":
-    #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
-    #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
-    #make_total_plot(RGB=1)
-    #make_total_plot(RGB=0, rcut=(ac.getr(16.0), ac.getr(22.5) ), vrange=(0.0, 150.0))
-    #make_total_plot(RGB=0, rcut=(ac.getr(20.0), ac.getr(20.5) ) )
-    #make_diff_hist()
-    #get_bif()
-    #get_sgr_curves()
-    #batch_shift()
-    #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
-    #RGB_from_files(mask_data="Rhist_sgr.csv", imfile=None, fitfile=True)
-    #plot_profiles()    
-    #plot_profiles(savewedge=True)
-    #proj_test()
-    #sgr_rv_skyplot()
-    #sgr_rv_cut()
-    #split_by_plate()
-    #photo_spec_analysis()
-    #compile_tables()
-    #process_spec()
-    #plot_ganged_hists()
-    #spec_area()
-    #make_data_tables()
-    #count_stars()
-    #count_stars_in_rcut()
-    #sgr_plot3D()
-    #tomography()
-    #crotus_cut(cdata="crotus_data.txt")
-    lam_wedges()
+    do_stuff()
     
     
 """

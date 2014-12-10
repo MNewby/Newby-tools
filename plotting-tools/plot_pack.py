@@ -98,12 +98,20 @@ class HistMaker:
         self.scale = None        # Special scaling, such as 'sqrt' or 'log'
         self.labels = [None, None]  # Labels for x,y axes
         self.ticks = [None, None]  # Tick Locations for x,y axes
+        self.ticklabels = [None, None]  # Tick Labels for x,y axes  NOT IMPLEMENTED
         self.xflip, self.yflip = 0, 0   # Set=1 to flip respective axis
     def savehist(self, outfile, fmt='%.2f'):
         np.savetxt(outfile, self.H, delimiter=",", fmt=fmt) #, header=" pyplot image output, in y,x. "+\
         #  "x is {0} from {1} to {2}, in steps of {3}; "+\
         #  "y is {4} from {5} to {6}, in steps of {7}".format(self.labels[0], self.xmin, 
         #    self.xmax, self.xsize, self.labels[1], self.ymin, self.ymax, self.ysize)  )
+    def xyToBins(self, x=None, y=None):
+        """ Take x,y, coordinates and convert them to bin coordinates"""
+        if x != None:  xx = (x - self.xarea[0]) / self.xsize
+        else:  xx = None
+        if y != None:  yy = (y - self.yarea[0]) / self.ysize
+        else:  yy = None
+        return xx, yy
     def gblur(self, blur=1):
         self.H = GaussBlurHist(self.H, blur)
     def plot(self):
@@ -112,6 +120,13 @@ class HistMaker:
 # Make image
 # Imagefile, outfile for hist, infile
 
+def HistFromFile(infile, xsize=None, ysize=None, xarea=None, yarea=None):
+    if infile[-4:] == ".csv":  data = np.loadtxt(infile, delimiter=",")
+    else:   data = np.loadtxt(infile)
+    hist = HistMaker([1,2], [1,2], xsize, ysize, xarea, yarea)
+    hist.H = data
+    return hist
+    
 
 def MakeHist(infile=None):
     """ Master def, makes a hist from data accroding to inputs, calling other defs here"""
@@ -299,5 +314,5 @@ def PlotHist(field, imfile=None, cbarO='vertical', cax=None):
     else:  cbax = fig.add_axes(cax); cb = plt.colorbar(mappable=im, ax=ax1, cax=cbax, orientation=cbarO)
     # Save file, if outfile declared
     if imfile != None:  plt.savefig(imfile)
-    else:  plt.show()
+    else: plt.show()
     plt.close('all')
