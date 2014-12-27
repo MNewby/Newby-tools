@@ -28,9 +28,9 @@ class results():
         printa("Errors: "+str(self.errors))
 
 """ STUFF TO CHANGE FOR EACH RUN """
-dumpfile = "modfit.out"
+dumpfile = "dump.out"
 sts000 = sp.call("rm {0}".format(dumpfile), shell=True)
-luafile = "ModfitParams.lua"
+luafile = "params15.lua"
 def mw_func(params):
     write_lua(params, luafile)
     sts1 = sp.call("./milkyway_separation -f -i -s stars-15.txt -a temp.lua", shell=True)
