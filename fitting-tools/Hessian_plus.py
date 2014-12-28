@@ -51,6 +51,7 @@ def do_MCMC(result, n_steps=1000):
     for i in range(lp):  current_params[i] = result.params[i]
     new_params = sc.zeros(lp)
     current_RR = result.function(current_params) #R_squared(function, current_params, x, y, sigma)
+    if current_RR < 0.0:  current_RR = -1.0*current_RR  #fix for likelihoods
     for i in range(n_steps):
         #Record position
         positions.append(current_params.tolist())
@@ -59,7 +60,8 @@ def do_MCMC(result, n_steps=1000):
             new_params[j] = np.random.normal(current_params[j], result.steps[j])
         #Decide whether to move or not
         new_RR = result.function(new_params) #R_squared(function, new_params, x, y, sigma)
-        compare = (current_RR / new_RR)
+        if new_RR < 0.0:  new_RR = -1.0*new_RR
+        compare = (current_RR / new_RR) 
         #if (np.random.uniform() < (np.exp(-1.0*new_RR) / np.exp(-1.0*current_RR) ) ):
         if (np.random.uniform() < compare):
             moves = moves + 1
