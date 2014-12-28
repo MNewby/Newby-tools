@@ -234,10 +234,10 @@ if __name__ == "__main__":
     t0 = time.time()
     result = results()
     result.params = read_lua(luafile)
-    result.steps = [0.01,0.5, 
-        0.02,2.0,0.1,0.1,0.1,0.1, 
-        0.02,2.0,0.1,0.1,0.1,0.1, 
-        0.02,2.0,0.1,0.1,0.1,0.1 ]
+    result.steps = [0.1,1.0, 
+        0.1,10.0,1.0,0.2,0.2,0.5, 
+        0.1,10.0,1.0,0.2,0.2,0.5, 
+        0.1,10.0,1.0,0.2,0.2,0.5 ]
     results.errors = []
     results.function = mw_func
     #smart_Hessian(result, loops=10) #change this line

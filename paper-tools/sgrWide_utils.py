@@ -42,15 +42,15 @@ def do_stuff():
     #spec_area()
     #make_data_tables()
     #count_stars()
-    count_stars(fname="fits_double.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/")
-    count_stars(fname="fits_quad.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_quad/")
-    count_stars(fname="fits_triple.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_triple_floor/")
+    #count_stars(fname="fits_double.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/")
+    #count_stars(fname="fits_quad.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_quad/")
+    #count_stars(fname="fits_triple.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_triple_floor/")
     #count_stars_in_rcut()
     #sgr_plot3D()
     #tomography()
     #crotus_cut(cdata="crotus_data.txt")
     #lam_wedges()
-    
+    plot_MCMC_results()
     
 def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False, suffix=""):
     files = glob.glob(path+"/stars*")
@@ -1104,6 +1104,31 @@ def lam_wedges():
                     mu_lim=None, r_lim=(0.0, 50.0), vm=10.0, nu_flatten=0, bar=1, raw_coords=1)
         print "Finished file {0} of {1}:".format(files.index(f)+1, len(files) )
     print "### - Done"
+
+def plot_MCMC_results():
+    import string as st
+    wd = "/home/newbym2/milkywayathome_client/bin/"
+    fname = "dump.out"
+    data, holder = [], ""
+    infile = open(wd+fname, "r")
+    for line in infile:
+        if line[0] == "[":
+            if holder != "":
+                holder = holder.translate(None, '[]:').split()
+                for j in range(len(holder)):
+                    holder[j] = eval(holder[j])
+                data.append(holder)
+            holder = ""
+        holder = holder + line
+    infile.close()
+    data = np.array(data)
+    for p in range(data.shape[1]):
+        plt.figure(p+1)
+        plt.hist(data[:,p], bins=50, range=(np.ma.min(data[:,p]), np.ma.max(data[:,p]) ) )
+        plt.xlabel("parameter {0}".format(p) )
+        plt.ylabel("frequency")
+        plt.savefig("MCMC_15_out_"+str(p)+".png")
+        plt.close("all")
 
             
 if __name__ == "__main__":
