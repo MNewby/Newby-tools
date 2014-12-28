@@ -376,6 +376,7 @@ def build_hists(hmin=19.2, hmax=22.5, lambins=5, fit_type="double",
     fits_out = np.array(fits_out)
     fits_out = fits_out[np.lexsort( (fits_out[:,0], fits_out[:,0]) ) ]
     np.savetxt("fits_"+fit_type+".csv", fits_out, delimiter=",", fmt='%.6f')
+    sgrU1.count_stars(fname="fits_"+fit_type+".csv", ftype=fit_type, wd="./")
     plot_with_fits(fits_out, fit_type=fit_type, outfile="fits_"+fit_type+"_bw.png",
         lstep=lstep, bstep=bstep)
     print "### - DONE"

@@ -42,8 +42,11 @@ def do_stuff():
     #spec_area()
     #make_data_tables()
     #count_stars()
+    count_stars(fname="fits_double.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/")
+    count_stars(fname="fits_quad.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_quad/")
+    count_stars(fname="fits_triple.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_triple_floor/")
     #count_stars_in_rcut()
-    sgr_plot3D()
+    #sgr_plot3D()
     #tomography()
     #crotus_cut(cdata="crotus_data.txt")
     #lam_wedges()
@@ -877,18 +880,21 @@ def count_stars_in_rcut():
     print "Final Count:", total
     
 
-def count_stars():
-    fname = "smart_sliding_back_quad.txt"
-    wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"
+def count_stars(fname="smart_sliding_back_quad.txt" ,ftype=None,
+        wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"):
+    if ftype == None:
+        ftype == fname[-8:-4]
     r = np.loadtxt(wd+fname, delimiter=",")
     data = r[np.lexsort( (r[:,0], r[:,0]) )]
-    path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins/"
+    #path = "~/Dropbox/Research/sgrLetter/hist_fits_smallbins/"
     sgr1, sgr2, virgo, back = 0, 0, 0, 0
-    if fname[-8:-4] == "quad":  sgr1b, sgr2b = 0, 0
+    if ftype == "quad":  sgr1b, sgr2b = 0, 0
     dt, dL = 0.5, 2.5
     all_stars = 0
     for i in range(len(data[:,0])):
-        hist = np.loadtxt(path+str(data[i,0])+".out")
+        if data[i,0] < 191.0:  continue
+        betas = np.arange(-70.0,41.0,0.5)
+        hist = np.array( zip(betas, np.loadtxt(wd+"lambda_"+str(data[i,0]-2.5)+".txt") ) )
         all_stars = all_stars + sum(hist[:,1])*dL
         #print np.sum(hist[:,1])
         #get range of data
@@ -899,7 +905,8 @@ def count_stars():
         while x < 100:  x = hist[j,1]; j += 1
         low = hist[j,0]
         #Integrate to get total stars
-        if fname[-8:-4] == "quad":  aa, bb = data[i,11], data[i,12]
+        if ftype == "quad":  aa, bb = data[i,11], data[i,12]
+        if ftype == "triple":  aa, bb = 0.0, data[i,9]
         else:  aa, bb = data[i,7], data[i,8]
         if aa < 0:
             newback = (aa*low + bb)*(high-low)/dt
@@ -911,24 +918,35 @@ def count_stars():
             amp=(data[i,1]*data[i,1]) )/dt
         newsgr2 = func.integrate_gaussian(low, high, mu=data[i,5], sig=data[i,6], 
             amp=(data[i,4]*data[i,4]) )/dt
-        if fname[-8:-4] == "quad":
+        if ftype == "quad":
             newsgr1b = func.integrate_gaussian(low, high, mu=data[i,2], sig=data[i,8], 
                 amp=(data[i,7]*data[i,7]) )/dt
             newsgr2b = func.integrate_gaussian(low, high, mu=data[i,5], sig=data[i,10], 
                 amp=(data[i,9]*data[i,9]) )/dt
+        if fname == "triple":
+			newsgr3 = func.integrate_gaussian(low, high, mu=data[i,7], sig=data[i,8], 
+                amp=(data[i,6]*data[i,6]) )/dt
         back = back + abs(newback)*dL
         virgo = virgo + abs(newvirgo)*dL
         sgr1 = sgr1 + abs(newsgr1)*dL
         sgr2 = sgr2 + abs(newsgr2)*dL
-        if fname[-8:-4] == "quad":
+        if ftype == "quad":
             sgr1b = sgr1b + abs(newsgr1b)*dL
             sgr2b = sgr2b + abs(newsgr2b)*dL
-    if fname[-8:-4] == "quad":
+    if ftype == "quad":
         total = (sgr1+sgr1b+sgr2+sgr2b+virgo+back)
         print "Sgr1a: {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
         print "Sgr1b: {0:8.1f},  {1:.3f}".format(sgr1b, sgr1b/total)
         print "Sgr2a: {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
         print "Sgr2b: {0:8.1f},  {1:.3f}".format(sgr2b, sgr2b/total)
+        print "Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
+        print "Back : {0:8.1f},  {1:.3f}".format(back, back/total)
+        print "Total: {0:8.1f}".format(total)
+    elif ftype == "triple":
+        total = (sgr1+sgr2+sgr3+virgo+back)
+        print "Sgr1a: {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
+        print "Sgr2a: {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
+        print "Sgr2b: {0:8.1f},  {1:.3f}".format(sgr3, sgr3/total)
         print "Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
         print "Back : {0:8.1f},  {1:.3f}".format(back, back/total)
         print "Total: {0:8.1f}".format(total)
