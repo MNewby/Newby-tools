@@ -41,25 +41,30 @@ def book_plot():
     sp3 = fig.add_subplot(313)
     BHB = BHB[:,::-1]
     #BHB = BHB[::-1,:]
-    im3 = sp3.imshow(BHB, cmap=pp.spectral_wb, vmax=45.0)
+    im3 = sp3.imshow(BHB, cmap='bone', vmax=35.0)
+    #im3 = sp3.imshow(BHB, cmap='gist_yarg', vmax=30.0)
+    #im3 = sp3.imshow(BHB, cmap=pp.spectral_wb, vmax=45.0)
     xlocs = np.arange(0.0, 301.0, 20.0)
     xlabs = []
     for i in range(len(xlocs)):  xlabs.append("${0:.0f}$".format(xlocs[-1*(i+1)]+20))
-    plt.xticks(xlocs, xlabs, fontsize=10)
+    plt.xticks(xlocs, xlabs, fontsize=12)
     ylocs = np.arange(10.0, 120.0, 10.0)
     ylabs = []
     for i in range(len(ylocs)):  
         if i % 2 == 0:  ylabs.append("${0:.0f}$".format(ylocs[i]-70))
         else:  ylabs.append("")
-    plt.yticks(ylocs, ylabs, fontsize=10 )
-    plt.xlabel(r"$\Lambda$")
-    plt.ylabel(r"$B$", rotation=0)
-    plt.text(125, 11, "SDSS BHB Selection", fontsize=8, family="serif")
+    plt.yticks(ylocs, ylabs, fontsize=12 )
+    plt.xlabel(r"$\Lambda$", fontsize=14)
+    plt.ylabel(r"$B$", rotation=0, fontsize=14)
+    plt.text(125, 11, "SDSS BHB Selection", fontsize=10, family="serif",
+        backgroundcolor="w", color="k")
     # RGBs
     sp1 = plt.subplot(311) #, sharex=sp3)
     RGB = RGB[:,::-1]
     RGB = RGB[::-1,:]
-    sp1.imshow(RGB[20:131,20:320], cmap=pp.spectral_wb, vmax=30.0)
+    sp1.imshow(RGB[20:131,20:320], cmap='hot', vmax=5.0)
+    #sp1.imshow(RGB[20:131,20:320], cmap='gist_yarg', vmax=5.0)
+    #sp1.imshow(RGB[20:131,20:320], cmap=pp.spectral_wb, vmax=30.0)
     plt.xticks(np.arange(20.0, 320.0, 20.0))
     plt.setp(sp1.get_xticklabels(), visible=False)
     ylocs = np.arange(10.0, 120.0, 10.0)
@@ -67,15 +72,17 @@ def book_plot():
     for i in range(len(ylocs)):  
         if i % 2 == 0:  ylabs.append("${0:.0f}$".format(ylocs[i]-70))
         else:  ylabs.append("")
-    plt.yticks(ylocs[:-1], ylabs[:-1], fontsize=10 )
-    plt.ylabel(r"$B$", rotation=0)
-    plt.text(125, 11, "WISE RGB Selection", fontsize=8, family="serif",
+    plt.yticks(ylocs[:-1], ylabs[:-1], fontsize=12 )
+    plt.ylabel(r"$B$", rotation=0, fontsize=14)
+    plt.text(125, 11, "WISE RGB Selection", fontsize=10, family="serif",
         backgroundcolor="w", color="k")
     # MSTOs
     sp2 = plt.subplot(312) #, sharex=sp3)
     MSTO = MSTO[:,::-1]
     #MSTO = MSTO[::-1,:]
-    sp2.imshow(MSTO, cmap=pp.spectral_wb, vmax=160.0)
+    sp2.imshow(MSTO, cmap='afmhot', vmax=120.0)
+    #sp2.imshow(MSTO, cmap='gist_yarg', vmax=80.0)
+    #sp2.imshow(MSTO, cmap=pp.spectral_wb, vmax=160.0)
     plt.xticks(np.arange(40.0, 620.0, 40.0))
     plt.setp(sp2.get_xticklabels(), visible=False)
     ylocs = np.arange(20.0, 240.0, 20.0)
@@ -83,11 +90,12 @@ def book_plot():
     for i in range(len(ylocs)):
         if i % 2 == 0:  ylabs.append("${0:.0f}$".format((ylocs[i]/2.0)-70))
         else:  ylabs.append("")
-    plt.yticks(ylocs[:-1], ylabs[:-1], fontsize=10 )
-    plt.ylabel(r"$B$", rotation=0)
-    plt.text(246, 22, "SDSS MSTO Selection", fontsize=8, family="serif")
-    plt.savefig("figure_raw.ps")
-    plt.savefig("figure_raw.png")
+    plt.yticks(ylocs[:-1], ylabs[:-1], fontsize=12 )
+    plt.ylabel(r"$B$", rotation=0, fontsize=14)
+    plt.text(246, 22, "SDSS MSTO Selection", fontsize=10, family="serif",
+        backgroundcolor="w", color="k")
+    plt.savefig("figure_fancy.ps")
+    plt.savefig("figure_fancy.png")
     
 
 
