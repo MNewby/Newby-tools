@@ -38,7 +38,8 @@ def do_stuff():
     #split_by_plate()
     #photo_spec_analysis()
     #process_spec()
-    #plot_ganged_hists()
+    plot_ganged_hists(fname="fits_double.csv",
+        wd = "/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/")
     #spec_area()
     #make_data_tables()
     #count_stars()
@@ -50,7 +51,7 @@ def do_stuff():
     #tomography()
     #crotus_cut(cdata="crotus_data.txt")
     #lam_wedges()
-    plot_MCMC_results()
+    #plot_MCMC_results()
     
 def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False, suffix=""):
     files = glob.glob(path+"/stars*")
@@ -740,13 +741,14 @@ def compile_tables(rnames, folder, subfolder):
             #print table #.sort()
 
 def plot_ganged_hists(fname="smarter_slide_back_quad.txt",
-        wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"):
+        wd = "/home/newbym/Dropbox/Research/sgrLetter/fit_results/",
+        correction = 1.0):
     #path = "/home/newbym2/Dropbox/Research/sgrLetter/hist_fits_smallbins/"
-    # Make 4x3 blocks of histgram fits
+    # Make 4x3 blocks of histogram fits
     r = np.loadtxt(wd+fname, delimiter=",")
     results = r[np.lexsort( (r[:,0], r[:,0]) )]
     #files = glob.glob(path+"/*.out")
-    plate_info = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/plate_data.csv", delimiter=",")
+    plate_info = np.loadtxt("/home/newbym/Dropbox/Research/sgrLetter/plate_data.csv", delimiter=",")
     # range of plots
     L_range = (20.0, 320.0)
     b_range = (-30, 30)
@@ -799,7 +801,7 @@ def plot_ganged_hists(fname="smarter_slide_back_quad.txt",
             hold=np.array(holder)
             if fname[-8:-4] == "quad":  norm = function(hold[:,1], results[i,1:13])
             else:  norm = function(hold[:,1], results[i,1:9])
-            plt.scatter(hold[:,1], norm*hold[:,2], c="red", marker="s", zorder=5)
+            plt.scatter(hold[:,1], norm*correction*hold[:,2], c="red", marker="s", zorder=5)
             #plt.errorbar(hold[:,1], norm*hold[:,2], yerr= norm*(np.sqrt(1+(hold[:,2]*hold[:,3]))+1), 
             #    marker=None, ls=" ", zorder=4, ecolor="red")
             plt.scatter(hold[:,1], norm, c="green", marker="s", zorder=4)
@@ -820,7 +822,10 @@ def plot_ganged_hists(fname="smarter_slide_back_quad.txt",
         else:  
             plt.ylabel("N")
             plt.yticks(np.arange(0.0, 450.0, 50.0), ["","","100","","200","","300", "","400"])
-    plt.show()
+    i=1
+    for fig in figs:
+        fig.savefig("figure_{0}.png".format(i), fig);  i += 1
+    #plt.show()
     plt.close()
 
 def process_spec():
@@ -985,7 +990,7 @@ def sgr_plot3D():
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib import cm
     fname = "fits_double.csv"
-    wd = "/home/newbym2/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/"
+    wd = "/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/"
     r = np.loadtxt(wd+fname, delimiter=",")
     data = r[np.lexsort( (r[:,0], r[:,0]) )]
     fig = plt.figure()
@@ -995,7 +1000,9 @@ def sgr_plot3D():
     z = data[:,0]
     virgox, virgoy = [], []
     for i in range(len(data[:,0])):
-        if z[i] > 120.0:  continue
+        if z[i] < 195.0:  continue
+        if z[i] > 303.0:  continue
+        #print z[i]
         xs = np.arange(-30.0, 30.0, 0.1)
         if fname[-8:-4] == "quad":  
             ys = func.quad_fat_gauss_line(xs, data[i,1:13])
@@ -1033,7 +1040,8 @@ def sgr_plot3D():
     ax.set_ylabel(r'$\Lambda$')
     ax.set_zlabel('N')
     ax.set_xlim(-30.0, 30.0)
-    ax.set_ylim(20.0, 140.0)
+    #ax.set_ylim(20.0, 140.0)
+    ax.set_ylim(180.0, 320.0)
     ax.set_zlim(0.0, 600.0)
     plt.show()
 
