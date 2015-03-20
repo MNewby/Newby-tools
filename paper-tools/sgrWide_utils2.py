@@ -14,7 +14,7 @@ import glob
 import sgr_law as sgr
 import fit as fit
 import functions as func
-import sgrWide_utils as sgrU1
+#import sgrWide_utils as sgrU1
 
 def do_stuff():
     """ called if main """
@@ -22,7 +22,8 @@ def do_stuff():
     #sky_map(dumb=0)
     #clean_FTO_data()
     #FTO_skyplot(gmin=16.0, gmax=23.5)
-    #FTO_skyplot(gmin=20.0, gmax=22.5)
+    FTO_skyplot(gmin=20.0, gmax=22.5)
+    #FTO_skyplot(gmin=19.5, gmax=20.5) # virgo
     #FTO_skyplot(gmin=16.0, gmax=23.5, multistep=0.1)
     #plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/FTO_All_hist.csv",
     #                outfile=None)  #"FTO_All.png")  #"sgr_bhbs.csv")
@@ -45,8 +46,9 @@ def do_stuff():
     #plot_with_fits(data=np.loadtxt("/home/newbym2/Newby-tools/paper-tools/fits_quad.csv", 
     #    delimiter=","), fit_type="triple" )
     #make_galaxy_plot()
-    sgrU1.plot_ganged_hists(fname="fits_double.csv",
-        wd = "/home/newbym2/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_free_line/")
+    #sgrU1.plot_ganged_hists(fname="fits_double.csv",
+    #    wd = "/home/newbym2/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_free_line/")
+    #plot_stream_counts()
 
 def sky_map(infile="/home/newbym2/Desktop/sdssN-stars/sgr_sky_data.csv", dumb=1):
     """Map a variable in Lambda, Beta  """
@@ -127,16 +129,18 @@ def clean_FTO_data(path="/home/newbym2/Desktop/FTO-stars/"):
     np.savetxt(path+"stars-MSTO-N-all.txt", out, fmt='%.5f')
     print "### - DONE"
 
-def FTO_skyplot(path="/home/newbym2/Desktop/FTO-stars/", gmin=16.0, gmax=22.5, 
+def FTO_skyplot(path="/home/newbym/Desktop/FTO-stars/", gmin=16.0, gmax=22.5, 
                 multistep=None):
     """Make a skyplot with updated MSTO stars from SDSS """
     #files = glob.glob(path+"stars*")
     #files.append(path+"South/stars-79-new.txt")
     #files.append(path+"South/stars-82-new.txt")
     #files.append(path+"South/stars-86-new.txt")
-    files = glob.glob(path+"FTO_All*")
-    files.append(path+"FTO_south_dirty.csv")
+    #files = glob.glob(path+"FTO_All*")
+    #files.append(path+"FTO_south_dirty.csv")
     #files = glob.glob(path+"*dirty*")
+    #files = [path+"MSTO_North_plus20.csv", path+"MSTO_South_minus20.csv"]
+    files = [path+"BHB_all.csv"]
     out = []
     for f in files:
         #data = np.loadtxt(f, skiprows=1)
@@ -145,7 +149,8 @@ def FTO_skyplot(path="/home/newbym2/Desktop/FTO-stars/", gmin=16.0, gmax=22.5,
         for i in range(data.shape[0]):
             #if data[i,2] < ac.getr(16.0):  continue
             #if data[i,2] > ac.getr(22.5):  continue
-            gmag = data[i,3]
+            gmag = data[i,3]  # for FTO data
+            #gmag = data[i,2]  #for MSTO data
             if gmag < gmin:  continue
             if gmag > gmax:  continue
             lam, bet = (ac.lb2sgr(data[i,0], data[i,1], 30.0))[3:5]
@@ -171,14 +176,14 @@ def FTO_skyplot(path="/home/newbym2/Desktop/FTO-stars/", gmin=16.0, gmax=22.5,
             hist.varea = (0.0, 12.0)
             pp.PlotHist(hist, imfile="FTO_"+str(run)+".png", cbarO='horizontal')
     else:
-        hist = pp.HistMaker(out[:,0], out[:,1], 0.1, 0.1, yarea=(-70.0, 40.0), xarea=(20.0, 320.0) )
-        hist.savehist(outfile="FTO_small_hist.csv", fmt='%.1f')
+        hist = pp.HistMaker(out[:,0], out[:,1], 1.0, 1.0, yarea=(-70.0, 40.0), xarea=(20.0, 320.0) )
+        hist.savehist(outfile="BLUE_all_hist.csv", fmt='%.1f')
         hist.yflip=1
         hist.xflip=1
         hist.labels=(r"$\Lambda$","B")
         hist.ticks = (None, [-40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0])
-        hist.varea=(0.0, 200.0)
-        pp.PlotHist(hist, imfile="FTO_small.png", cbarO='horizontal')
+        hist.varea=(0.0, 30.0)
+        pp.PlotHist(hist, imfile="BLUE_all.png", cbarO='horizontal')
     
 
 def plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/FTO_All_hist.csv", 
@@ -584,6 +589,22 @@ def make_galaxy_plot():
     plt.xlim(-180.0, 180.0)
     plt.ylim(-90.0, 90.0)
     plt.show()
+
+def plot_stream_counts():
+	dfile = "/home/newbym/Dropbox/Research/sgrLetter/star_counts_far_edge_fit_line.txt"
+	qfile = "/home/newbym/Dropbox/Research/sgrLetter/star_counts_far_edge_quad.txt"
+	db = np.loadtxt(dfile)
+	#dq = np.loadtxt(qfile)
+	plt.figure()
+	plt.plot(db[:,0], db[:,1], "k:", label="background")
+	plt.plot(db[:,0], db[:,2], "r:", label="Virgo")
+	plt.plot(db[:,0], db[:,3], "b-", label="Sgr1")
+	plt.plot(db[:,0], db[:,4], "g-", label="Sgr2")
+	plt.legend(loc="upper left")
+	plt.ylim(0.0, np.ma.max(db[:,1]) )
+	plt.xlim(320.0, 50.0)
+	plt.show()
+   
     
     
 if __name__ == "__main__":  do_stuff()

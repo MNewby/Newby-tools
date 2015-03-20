@@ -21,7 +21,7 @@ def do_stuff():
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
     #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
     #make_total_plot(RGB=1)
-    #make_total_plot(RGB=0, rcut=(ac.getr(16.0), ac.getr(22.5) ), vrange=(0.0, 150.0))
+    make_total_plot(RGB=0, rcut=(ac.getr(16.0), ac.getr(22.5) ), vrange=(0.0, 150.0))
     #make_total_plot(RGB=0, rcut=(ac.getr(20.0), ac.getr(20.5) ) )
     #make_diff_hist()
     #get_bif()
@@ -38,11 +38,13 @@ def do_stuff():
     #split_by_plate()
     #photo_spec_analysis()
     #process_spec()
-    plot_ganged_hists(fname="fits_double.csv",
-        wd = "/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/")
+    #plot_ganged_hists(fname="fits_double.csv",
+    #    wd = "/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/")
     #spec_area()
     #make_data_tables()
     #count_stars()
+    #count_stars(fname="fits_double.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_free_line/")
+    #count_stars(fname="fits_quad.csv", ftype="quad", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_quad/")
     #count_stars(fname="fits_double.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_fixed_line/")
     #count_stars(fname="fits_quad.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_quad/")
     #count_stars(fname="fits_triple.csv", ftype="double", wd="/home/newbym/Dropbox/Research/sgrLetter/plus_15kpc/far_edge_triple_floor/")
@@ -897,7 +899,8 @@ def count_stars(fname="smart_sliding_back_quad.txt" ,ftype=None,
     dt, dL = 0.5, 2.5
     all_stars = 0
     for i in range(len(data[:,0])):
-        if data[i,0] < 191.0:  continue
+        if data[i,0] > 187.0 and data[i,0] < 191.0:  continue 
+        #if data[i,0] < 191.0:  continue
         betas = np.arange(-70.0,41.0,0.5)
         hist = np.array( zip(betas, np.loadtxt(wd+"lambda_"+str(data[i,0]-2.5)+".txt") ) )
         all_stars = all_stars + sum(hist[:,1])*dL
@@ -936,33 +939,36 @@ def count_stars(fname="smart_sliding_back_quad.txt" ,ftype=None,
         sgr1 = sgr1 + abs(newsgr1)*dL
         sgr2 = sgr2 + abs(newsgr2)*dL
         if ftype == "quad":
+            print data[i,0], newback*dL, newvirgo*dL, newsgr1*dL, newsgr2*dL, newsgr1b*dL, newsgr2b*dL
             sgr1b = sgr1b + abs(newsgr1b)*dL
             sgr2b = sgr2b + abs(newsgr2b)*dL
+        elif ftype == "double":
+            print data[i,0], newback*dL, newvirgo*dL, newsgr1*dL, newsgr2*dL
     if ftype == "quad":
         total = (sgr1+sgr1b+sgr2+sgr2b+virgo+back)
-        print "Sgr1a: {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
-        print "Sgr1b: {0:8.1f},  {1:.3f}".format(sgr1b, sgr1b/total)
-        print "Sgr2a: {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
-        print "Sgr2b: {0:8.1f},  {1:.3f}".format(sgr2b, sgr2b/total)
-        print "Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
-        print "Back : {0:8.1f},  {1:.3f}".format(back, back/total)
-        print "Total: {0:8.1f}".format(total)
+        print "# Sgr1a: {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
+        print "# Sgr1b: {0:8.1f},  {1:.3f}".format(sgr1b, sgr1b/total)
+        print "# Sgr2a: {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
+        print "# Sgr2b: {0:8.1f},  {1:.3f}".format(sgr2b, sgr2b/total)
+        print "# Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
+        print "# Back : {0:8.1f},  {1:.3f}".format(back, back/total)
+        print "# Total: {0:8.1f}".format(total)
     elif ftype == "triple":
         total = (sgr1+sgr2+sgr3+virgo+back)
-        print "Sgr1a: {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
-        print "Sgr2a: {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
-        print "Sgr2b: {0:8.1f},  {1:.3f}".format(sgr3, sgr3/total)
-        print "Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
-        print "Back : {0:8.1f},  {1:.3f}".format(back, back/total)
-        print "Total: {0:8.1f}".format(total)
+        print "# Sgr1a: {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
+        print "# Sgr2a: {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
+        print "# Sgr2b: {0:8.1f},  {1:.3f}".format(sgr3, sgr3/total)
+        print "# Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
+        print "# Back : {0:8.1f},  {1:.3f}".format(back, back/total)
+        print "# Total: {0:8.1f}".format(total)
     else:
         total = (sgr1+sgr2+virgo+back)
-        print "Sgr1 : {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
-        print "Sgr2 : {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
-        print "Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
-        print "Back : {0:8.1f},  {1:.3f}".format(back, back/total)
-        print "Total: {0:8.1f}".format(total)
-    print "All Stars: {0}".format(int(all_stars))
+        print "# Sgr1 : {0:8.1f},  {1:.3f}".format(sgr1, sgr1/total)
+        print "# Sgr2 : {0:8.1f},  {1:.3f}".format(sgr2, sgr2/total)
+        print "# Virgo: {0:8.1f},  {1:.3f}".format(virgo, virgo/total)
+        print "# Back : {0:8.1f},  {1:.3f}".format(back, back/total)
+        print "# Total: {0:8.1f}".format(total)
+    print "# All Stars: {0}".format(int(all_stars))
     
 
 def make_data_tables():

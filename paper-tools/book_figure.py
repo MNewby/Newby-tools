@@ -12,7 +12,8 @@ import astro_coordinates as ac
 
 def do_stuff():
     #Mgiant_hist()
-    book_plot()
+    #book_plot()
+    test_coords()
     
 def Mgiant_hist():
     data = np.loadtxt("/home/newbym/Desktop/Mgiant_wise_sgr.csv", delimiter=",", skiprows=1)
@@ -30,8 +31,10 @@ def Mgiant_hist():
     pp.PlotHist(hist, imfile="Mgiant_sgr.png", cbarO='horizontal')
         
 def book_plot():
-    BHB = np.loadtxt("/home/newbym/Desktop/bhbs_all_hist.csv", delimiter=",")
-    MSTO = np.loadtxt("/home/newbym/Desktop/FTO_All_hist.csv", delimiter=",")
+    #BHB = np.loadtxt("/home/newbym/Desktop/bhbs_all_hist.csv", delimiter=",")
+    #MSTO = np.loadtxt("/home/newbym/Desktop/FTO_All_hist.csv", delimiter=",")
+    BHB = np.loadtxt("/home/newbym/Desktop/BLUE_all_hist.csv", delimiter=",")
+    MSTO = np.loadtxt("/home/newbym/Desktop/MSTO_all_hist.csv", delimiter=",")
     RGB = np.loadtxt("/home/newbym/Desktop/Mgiant_hist2.csv", delimiter=",")
     r_steps, rx_min, rx_max, ry_min, ry_max = 1.0, 0.0, 360.0, -90.0, 90.0
     f_steps, fx_min, fx_max, fy_min, fy_max = 0.5, 20.0, 320.0, -70.0, 40.0
@@ -44,7 +47,7 @@ def book_plot():
     #BHB = BHB[::-1,:]
     #im3 = sp3.imshow(BHB, cmap='bone', vmax=35.0)
     #im3 = sp3.imshow(BHB, cmap='gist_yarg', vmax=30.0)
-    im3 = sp3.imshow(BHB, cmap=pp.spectral_wb, vmax=45.0)
+    im3 = sp3.imshow(BHB, cmap=pp.spectral_wb, vmax=30.0)
     plt.plot([5.0, 295.0], [60.0, 60.0], 'k--')
     plt.plot([5.0, 295.0], [80.0, 80.0], 'k--')
     xlocs = np.arange(0.0, 301.0, 20.0)
@@ -111,6 +114,32 @@ def book_plot():
     plt.savefig("figure_color2.ps")
     plt.savefig("figure_color2.png")
     
+def test_coords():
+    # test Li Jing's coord transforms
+    #ra,dec,l,b,j0,k0,w10,w20,lambda,beta
+    arcsec = 1.0 / 3600.0
+    data = np.loadtxt("/home/newbym/Desktop/Mgiant_wise_sgr.csv", delimiter=",", skiprows=1)
+    ra, dec = data[:,0], data[:,1]
+    l, b = data[:,2], data[:,3]
+    lam, bet = data[:,8], data[:,9]
+    badl, badb, badlam, badbet, badlam2, badbet2 = [], [], [], [], [], []
+    for i in range(data.shape[0]):
+        new_l, new_b = ac.EqTolb(ra[i], dec[i])
+        if np.abs(new_l - l[i]) > arcsec:  badl.append(new_l - l[i])
+        if np.abs(new_b - b[i]) > arcsec:  badb.append(new_b - b[i])
+        new_lam, new_bet = ac.lb2sgr(l[i],b[i], 30.)[3:5]
+        if np.abs(new_lam - lam[i]) > arcsec:  badlam.append(lam[i])
+        if np.abs(new_bet - -1.*bet[i]) > arcsec:  badbet.append(bet[i])
+        new_lam2, new_bet2 = ac.lb2sgr(new_l,new_b, 30.)[3:5]
+        if np.abs(new_lam2 - lam[i]) > arcsec:  badlam2.append(lam[i])
+        if np.abs(new_bet2 - -1.*bet[i]) > arcsec:  badbet2.append(bet[i])
+    print data.shape[0]
+    print np.mean(badl), np.mean(badb)
+    print np.mean(badlam), np.mean(badbet)
+    print np.mean(badlam2), np.mean(badbet2)
+    print "Done"
+    
+        
 
 
 if __name__ == "__main__":  do_stuff()
