@@ -13,42 +13,45 @@ import astro_coordinates as ac
 def do_stuff():
     #Mgiant_hist()
     #book_plot()
-    test_coords()
+    #test_coords()
+    mag_plots()
     
 def Mgiant_hist():
     data = np.loadtxt("/home/newbym/Desktop/Mgiant_wise_sgr.csv", delimiter=",", skiprows=1)
     print data.shape
     #data[:,9] = -1.0*data[:,9]
-    #hist = pp.HistMaker(data[:,8], data[:,9], 1.0, 1.0, yarea=(-70.0, 40.0), xarea=(20.0, 320.0) )
-    lam, bet = ac.lb2sgr(data[:,2], data[:,3], 50.0 )[3:5]
-    hist = pp.HistMaker(lam, bet, 1.0, 1.0)
-    hist.savehist(outfile="Mgiant_hist2.csv", fmt='%.1f')
+    hist = pp.HistMaker(data[:,8], data[:,9], 1.0, 1.0, yarea=(-90.0, 90.0)) #, xarea=(20.0, 320.0) )
+    #lam, bet = ac.lb2sgr(data[:,2], data[:,3], 100.0 )[3:5]   # use the proxy distance that is same as MSTOs
+    #hist = pp.HistMaker(lam, bet, 1.0, 1.0, yarea=(-90, 90))
+    hist.savehist(outfile="Mgiant_test3.csv", fmt='%.1f')
     hist.yflip=1
     hist.xflip=1
-    hist.labels=(r"$\Lambda$","B")
+    hist.labels=(r"$\Lambda$",r"$B$")
     #hist.ticks = (None, [-40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0])
     hist.varea=(0.0, 200.0)
     pp.PlotHist(hist, imfile="Mgiant_sgr.png", cbarO='horizontal')
-        
+
 def book_plot():
     #BHB = np.loadtxt("/home/newbym/Desktop/bhbs_all_hist.csv", delimiter=",")
     #MSTO = np.loadtxt("/home/newbym/Desktop/FTO_All_hist.csv", delimiter=",")
     BHB = np.loadtxt("/home/newbym/Desktop/BLUE_all_hist.csv", delimiter=",")
     MSTO = np.loadtxt("/home/newbym/Desktop/MSTO_all_hist.csv", delimiter=",")
-    RGB = np.loadtxt("/home/newbym/Desktop/Mgiant_hist2.csv", delimiter=",")
+    #RGB = np.loadtxt("/home/newbym/Desktop/Mgiant_test1.csv", delimiter=",")
+    RGB = np.loadtxt("Mgiant_test3.csv", delimiter=",")
     r_steps, rx_min, rx_max, ry_min, ry_max = 1.0, 0.0, 360.0, -90.0, 90.0
     f_steps, fx_min, fx_max, fy_min, fy_max = 0.5, 20.0, 320.0, -70.0, 40.0
     b_steps, bx_min, bx_max, by_min, by_max = 1.0, 20.0, 320.0, -70.0, 40.0
     fig = plt.figure(1, figsize=(12,9), dpi=120)
     plt.subplots_adjust(hspace=0.001, wspace=0.001)
-    # BHBs
+    ########################################### BHBs
     sp3 = fig.add_subplot(313)
     BHB = BHB[:,::-1]
     #BHB = BHB[::-1,:]
     #im3 = sp3.imshow(BHB, cmap='bone', vmax=35.0)
     #im3 = sp3.imshow(BHB, cmap='gist_yarg', vmax=30.0)
-    im3 = sp3.imshow(BHB, cmap=pp.spectral_wb, vmax=30.0)
+    im3 = sp3.imshow(BHB, cmap=pp.spectral_wb, vmax=25.0)
     plt.plot([5.0, 295.0], [60.0, 60.0], 'k--')
+    plt.plot([5.0, 295.0], [70.0, 70.0], 'k--')
     plt.plot([5.0, 295.0], [80.0, 80.0], 'k--')
     xlocs = np.arange(0.0, 301.0, 20.0)
     xlabs = []
@@ -66,14 +69,15 @@ def book_plot():
         backgroundcolor="w", color="k")
     plt.xlim(0.0,300.0)
     plt.ylim(110.0, 30.0)
-    # RGBs
+    ########################################### RGBs
     sp1 = plt.subplot(311) #, sharex=sp3)
     RGB = RGB[:,::-1]
-    #RGB = RGB[::-1,:]
+    RGB = RGB[::-1,:]
     #sp1.imshow(RGB[20:131,20:320], cmap='hot', vmax=5.0)
     #sp1.imshow(RGB[20:131,20:320], cmap='gist_yarg', vmax=5.0)
     sp1.imshow(RGB[20:131,20:320], cmap=pp.spectral_wb, vmax=5.0)
     plt.plot([5.0, 295.0], [60.0, 60.0], 'k--')
+    plt.plot([5.0, 295.0], [70.0, 70.0], 'k--')
     plt.plot([5.0, 295.0], [80.0, 80.0], 'k--')
     plt.xticks(np.arange(20.0, 320.0, 20.0))
     plt.setp(sp1.get_xticklabels(), visible=False)
@@ -88,7 +92,7 @@ def book_plot():
         backgroundcolor="w", color="k")
     plt.xlim(0.0,300.0)
     plt.ylim(110.0, 30.0)
-    # MSTOs
+    ########################################### MSTOs
     sp2 = plt.subplot(312) #, sharex=sp3)
     MSTO = MSTO[:,::-1]
     #MSTO = MSTO[::-1,:]
@@ -96,6 +100,7 @@ def book_plot():
     #sp2.imshow(MSTO, cmap='gist_yarg', vmax=80.0)
     sp2.imshow(MSTO, cmap=pp.spectral_wb, vmax=120.0)
     plt.plot([10.0, 590.0], [120.0, 120.0], 'k--')
+    plt.plot([10.0, 590.0], [140.0, 140.0], 'k--')
     plt.plot([10.0, 590.0], [160.0, 160.0], 'k--')
     plt.xticks(np.arange(40.0, 620.0, 40.0))
     plt.setp(sp2.get_xticklabels(), visible=False)
@@ -111,8 +116,8 @@ def book_plot():
     plt.xlim(0.0,600.0)
     plt.ylim(220.0, 60.0)
     # plot
-    plt.savefig("figure_color2.ps")
-    plt.savefig("figure_color2.png")
+    #plt.savefig("figure_color.ps")
+    plt.savefig("figure_color_test3.png")
     
 def test_coords():
     # test Li Jing's coord transforms
@@ -129,17 +134,44 @@ def test_coords():
         if np.abs(new_b - b[i]) > arcsec:  badb.append(new_b - b[i])
         new_lam, new_bet = ac.lb2sgr(l[i],b[i], 30.)[3:5]
         if np.abs(new_lam - lam[i]) > arcsec:  badlam.append(lam[i])
-        if np.abs(new_bet - -1.*bet[i]) > arcsec:  badbet.append(bet[i])
+        if np.abs(new_bet - bet[i]) > arcsec:  badbet.append(bet[i])
         new_lam2, new_bet2 = ac.lb2sgr(new_l,new_b, 30.)[3:5]
         if np.abs(new_lam2 - lam[i]) > arcsec:  badlam2.append(lam[i])
-        if np.abs(new_bet2 - -1.*bet[i]) > arcsec:  badbet2.append(bet[i])
+        if np.abs(new_bet2 - bet[i]) > arcsec:  badbet2.append(bet[i])
     print data.shape[0]
     print np.mean(badl), np.mean(badb)
-    print np.mean(badlam), np.mean(badbet)
-    print np.mean(badlam2), np.mean(badbet2)
+    print np.mean(badlam), np.mean(badbet), np.std(badbet)
+    print np.mean(badlam2), np.mean(badbet2), np.std(badbet2)
     print "Done"
     
-        
-
+def mag_plots(gmin=16.0, gmax=22.5):
+    path="/home/newbym/Desktop/FTO-stars/"
+    files = [path+"MSTO_North_plus20.csv", path+"MSTO_South_minus20.csv"]
+    #files = [path+"BHB_all.csv"]
+    out = []
+    for f in files:
+        data = np.loadtxt(f, delimiter=",", skiprows=1)
+        print "Loaded:", f
+        for i in range(data.shape[0]):
+            #if data[i,2] < ac.getr(16.0):  continue
+            #if data[i,2] > ac.getr(22.5):  continue
+            #gmag = data[i,3]  # for FTO data
+            gmag = data[i,2]  #for MSTO data
+            if gmag < gmin:  continue
+            if gmag > gmax:  continue
+            lam, bet = (ac.lb2sgr(data[i,0], data[i,1], 30.0))[3:5]
+            if abs(bet) > 10.0:  continue
+            out.append([lam, bet, gmag])
+        print "Transformed coordinates:", f
+    out = np.array(out)
+    hist = pp.HistMaker(out[:,0], out[:,2], 0.5, 0.01, yarea=(16.0, 22.5), xarea=(0.0, 360.0) )
+    hist.savehist(outfile="MSTO_b10g_hist.csv", fmt='%.1f')
+    hist.yflip=0
+    hist.xflip=1
+    hist.labels=(r"$\Lambda$",r"$g_0$")
+    hist.ticks = (None, None)
+    hist.varea=(0.0, 120.0)
+    pp.PlotHist(hist, imfile="MSTO_b10g.png", cbarO='horizontal')
+    
 
 if __name__ == "__main__":  do_stuff()
