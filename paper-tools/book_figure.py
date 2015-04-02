@@ -8,13 +8,15 @@ import scipy as sc
 import matplotlib
 import matplotlib.pyplot as plt
 import plot_pack as pp
+import progress as pr
 import astro_coordinates as ac
 
 def do_stuff():
     #Mgiant_hist()
     #book_plot()
     #test_coords()
-    mag_plots()
+    #mag_plots()
+    g_plots()
     
 def Mgiant_hist():
     data = np.loadtxt("/home/newbym/Desktop/Mgiant_wise_sgr.csv", delimiter=",", skiprows=1)
@@ -146,32 +148,89 @@ def test_coords():
     
 def mag_plots(gmin=16.0, gmax=22.5):
     path="/home/newbym/Desktop/FTO-stars/"
-    files = [path+"MSTO_North_plus20.csv", path+"MSTO_South_minus20.csv"]
-    #files = [path+"BHB_all.csv"]
+    #files = [path+"MSTO_North_plus20.csv", path+"MSTO_South_minus20.csv"]
+    files = [path+"BHB_all.csv"]
     out = []
     for f in files:
         data = np.loadtxt(f, delimiter=",", skiprows=1)
         print "Loaded:", f
+        pb = pr.Progressbar(steps=data.shape[0], prefix="Loading Stars:", suffix=None,
+        symbol="#", active="=", brackets="[]", percent=True, size=40)
         for i in range(data.shape[0]):
             #if data[i,2] < ac.getr(16.0):  continue
             #if data[i,2] > ac.getr(22.5):  continue
-            #gmag = data[i,3]  # for FTO data
-            gmag = data[i,2]  #for MSTO data
+            gmag = data[i,3]  # for BHB data
+            #gmag = data[i,2]  #for MSTO data
             if gmag < gmin:  continue
             if gmag > gmax:  continue
             lam, bet = (ac.lb2sgr(data[i,0], data[i,1], 30.0))[3:5]
-            if abs(bet) > 10.0:  continue
+            #if abs(bet) > 10.0:  continue
             out.append([lam, bet, gmag])
+            if i % 10000 == 0:  pb.updatebar(float(i)/float(data.shape[0]) )
+        pb.endbar()
         print "Transformed coordinates:", f
     out = np.array(out)
-    hist = pp.HistMaker(out[:,0], out[:,2], 0.5, 0.01, yarea=(16.0, 22.5), xarea=(0.0, 360.0) )
-    hist.savehist(outfile="MSTO_b10g_hist.csv", fmt='%.1f')
+    hist = pp.HistMaker(out[:,0], out[:,2], 0.5, 0.1, yarea=(16.0, 22.5), xarea=(0.0, 360.0) )
+    hist.savehist(outfile="BHB_allg_hist.csv", fmt='%.1f')
     hist.yflip=0
     hist.xflip=1
     hist.labels=(r"$\Lambda$",r"$g_0$")
     hist.ticks = (None, None)
-    hist.varea=(0.0, 120.0)
-    pp.PlotHist(hist, imfile="MSTO_b10g.png", cbarO='horizontal')
+    hist.varea=(0.0, 60.0)
+    pp.PlotHist(hist, imfile="BHB_allg.png", cbarO='horizontal')
     
+def g_plots():
+    #path = 
+    MSTO = np.loadtxt("MSTO_b15g_hist.csv", delimiter=",")
+    BHB = np.loadtxt("BHB_b10g_hist.csv", delimiter=",")
+    fig = plt.figure(1, figsize=(12,9), dpi=120)
+    plt.subplots_adjust(hspace=0.001, wspace=0.001)
+    ########################################### BHBs
+    sp3 = fig.add_subplot(212)
+    #BHB = BHB[:,::-1]
+    #BHB = BHB[::-1,:]
+    #im3 = sp3.imshow(BHB, cmap='bone', vmax=35.0)
+    #im3 = sp3.imshow(BHB, cmap='gist_yarg', vmax=30.0)
+    im3 = sp3.imshow(BHB, cmap=pp.spectral_wb, vmax=25.0, aspect=2)
+    xlocs = np.arange(0.0, 720.0, 40.0)
+    xlabs = []
+    for i in range(len(xlocs)):  xlabs.append("${0:.0f}$".format(xlocs[(i)]/2.0))
+    plt.xticks(xlocs, xlabs, fontsize=12)
+    ylocs = np.arange(0.0, 65.1, 5.0)
+    ylabs = []
+    for i in range(len(ylocs)):  
+        if i % 2 == 0:  ylabs.append("${0:.0f}$".format(0.1*ylocs[i]+16.0))
+        else:  ylabs.append("")
+    plt.yticks(ylocs, ylabs, fontsize=10 )
+    plt.xlabel(r"$\Lambda$", fontsize=14)
+    plt.ylabel(r"$g_0$", rotation=0, fontsize=14)
+    #plt.text(135, 41, "SDSS BHB Selection", fontsize=10, family="serif",
+    #    backgroundcolor="w", color="k")
+    plt.xlim(720.0, 0.0)
+    plt.ylim(0.0, 65.0)
+    ########################################### MSTOs
+    sp2 = plt.subplot(211)#, sharex=sp3)
+    #MSTO = MSTO[:,::-1]
+    #MSTO = MSTO[::-1,:]
+    #sp2.imshow(MSTO, cmap='afmhot', vmax=120.0)
+    #sp2.imshow(MSTO, cmap='gist_yarg', vmax=80.0)
+    sp2.imshow(MSTO, cmap=pp.spectral_wb, vmax=25.0, aspect=0.25)
+    plt.xticks(np.arange(0.0, 720.0, 40.0))
+    plt.setp(sp2.get_xticklabels(), visible=False)
+    ylocs = np.arange(0.0, 651.0, 50.0)
+    ylabs = []
+    for i in range(len(ylocs)):
+        if i % 2 == 0:  ylabs.append("${0:.0f}$".format((0.01*ylocs[i])+16.0))
+        else:  ylabs.append("")
+    plt.yticks(ylocs[:-1], ylabs[:-1], fontsize=10 )
+    plt.ylabel(r"$g_0$", rotation=0, fontsize=14)
+    #plt.text(266, 82, "SDSS MSTO Selection", fontsize=10, family="serif",
+    #    backgroundcolor="w", color="k")
+    plt.xlim(720.0, 0.0)
+    plt.ylim(0.0, 650.0)
+    #plt.show()
+    plt.savefig("BHB_MSTO_g.png")
+    #print BHB.shape
+    #print MSTO.shape
 
 if __name__ == "__main__":  do_stuff()

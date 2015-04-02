@@ -284,7 +284,7 @@ def PlotHist(field, imfile=None, cbarO='vertical', cax=None):
     else:  cmap = field.cmap
     fig = plt.figure(dpi=120)
     ax1 = fig.add_subplot(111)
-    im = ax1.imshow(H, cmap=cmap, norm=None, aspect=None, interpolation='nearest',
+    im = ax1.imshow(H, cmap=cmap, norm=None, aspect=3, interpolation='nearest',
                alpha=None, vmin=vmin, vmax=vmax, origin='lower', extent=None)
     # Add xTicks and labels
     xlocs, xlabels, ylocs, ylabels = [], [], [], []
