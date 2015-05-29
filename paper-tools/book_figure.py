@@ -16,8 +16,9 @@ def do_stuff():
     #book_plot()
     #test_coords()
     #mag_plots()
-    g_plots()
-    
+    #g_plots()
+    study_giants()
+
 def Mgiant_hist():
     data = np.loadtxt("/home/newbym/Desktop/Mgiant_wise_sgr.csv", delimiter=",", skiprows=1)
     print data.shape
@@ -61,7 +62,7 @@ def book_plot():
     plt.xticks(xlocs, xlabs, fontsize=12)
     ylocs = np.arange(10.0, 120.0, 10.0)
     ylabs = []
-    for i in range(len(ylocs)):  
+    for i in range(len(ylocs)):
         if i % 2 == 0:  ylabs.append("${0:.0f}$".format(ylocs[i]-70))
         else:  ylabs.append("")
     plt.yticks(ylocs, ylabs, fontsize=12 )
@@ -85,7 +86,7 @@ def book_plot():
     plt.setp(sp1.get_xticklabels(), visible=False)
     ylocs = np.arange(10.0, 120.0, 10.0)
     ylabs = []
-    for i in range(len(ylocs)):  
+    for i in range(len(ylocs)):
         if i % 2 == 0:  ylabs.append("${0:.0f}$".format(ylocs[i]-70))
         else:  ylabs.append("")
     plt.yticks(ylocs[:-1], ylabs[:-1], fontsize=12 )
@@ -120,7 +121,7 @@ def book_plot():
     # plot
     #plt.savefig("figure_color.ps")
     plt.savefig("figure_color_test3.png")
-    
+
 def test_coords():
     # test Li Jing's coord transforms
     #ra,dec,l,b,j0,k0,w10,w20,lambda,beta
@@ -145,10 +146,12 @@ def test_coords():
     print np.mean(badlam), np.mean(badbet), np.std(badbet)
     print np.mean(badlam2), np.mean(badbet2), np.std(badbet2)
     print "Done"
-    
+
 def mag_plots(gmin=16.0, gmax=22.5):
-    path="/home/newbym/Desktop/FTO-stars/"
+    path = "/usr/home/f/081/tug08879/Desktop/"
+    #path="/home/newbym/Desktop/FTO-stars/"
     #files = [path+"MSTO_North_plus20.csv", path+"MSTO_South_minus20.csv"]
+    #files = [path+"MSTO_North.csv", path+"MSTO_South.csv"]
     files = [path+"BHB_all.csv"]
     out = []
     for f in files:
@@ -164,23 +167,29 @@ def mag_plots(gmin=16.0, gmax=22.5):
             if gmag < gmin:  continue
             if gmag > gmax:  continue
             lam, bet = (ac.lb2sgr(data[i,0], data[i,1], 30.0))[3:5]
-            #if abs(bet) > 10.0:  continue
+            if lam > 170.0:
+                if bet > 10.0:  continue
+                if bet < 2.5:  continue
+            else:
+                if bet >  -5.0:  continue
+                if bet < -12.5:  continue
             out.append([lam, bet, gmag])
             if i % 10000 == 0:  pb.updatebar(float(i)/float(data.shape[0]) )
         pb.endbar()
         print "Transformed coordinates:", f
     out = np.array(out)
     hist = pp.HistMaker(out[:,0], out[:,2], 0.5, 0.1, yarea=(16.0, 22.5), xarea=(0.0, 360.0) )
-    hist.savehist(outfile="BHB_allg_hist.csv", fmt='%.1f')
+    hist.savehist(outfile="BHB_bright_faint_hist.csv", fmt='%.1f')
     hist.yflip=0
     hist.xflip=1
     hist.labels=(r"$\Lambda$",r"$g_0$")
     hist.ticks = (None, None)
     hist.varea=(0.0, 60.0)
-    pp.PlotHist(hist, imfile="BHB_allg.png", cbarO='horizontal')
-    
+    pp.PlotHist(hist, imfile="BHB_bright_faint.png", cbarO='horizontal')
+    pp.PlotHist(hist, imfile="BHB_bright_faint.ps", cbarO='horizontal')
+
 def g_plots():
-    #path = 
+    #path =
     MSTO = np.loadtxt("MSTO_b15g_hist.csv", delimiter=",")
     BHB = np.loadtxt("BHB_b10g_hist.csv", delimiter=",")
     fig = plt.figure(1, figsize=(12,9), dpi=120)
@@ -198,7 +207,7 @@ def g_plots():
     plt.xticks(xlocs, xlabs, fontsize=12)
     ylocs = np.arange(0.0, 65.1, 5.0)
     ylabs = []
-    for i in range(len(ylocs)):  
+    for i in range(len(ylocs)):
         if i % 2 == 0:  ylabs.append("${0:.0f}$".format(0.1*ylocs[i]+16.0))
         else:  ylabs.append("")
     plt.yticks(ylocs, ylabs, fontsize=10 )
@@ -232,5 +241,25 @@ def g_plots():
     plt.savefig("BHB_MSTO_g.png")
     #print BHB.shape
     #print MSTO.shape
+
+def study_giants():
+    path = "/usr/home/f/081/tug08879/Desktop/"
+    #data = np.loadtxt(path+"Mgiant_wise_sgr.csv", delimiter=",", skiprows=1)
+    #hist = pp.HistMaker( (data[:,4]-data[:,5]), data[:,5], 0.01, 0.1) #, yarea=(8.0, 15.0), xarea=(-0.1, 1.5) )
+    #hist.savehist(outfile="giantCMD_hist.csv", fmt='%.1f')
+    #hist.yflip=1
+    #hist.xflip=0
+    #hist.labels=(r"$J-K$",r"$K$")
+    #hist.ticks = (None, None)
+    #hist.varea=(0.0, 500.0)
+    #pp.PlotHist(hist, imfile="giantCMD_faint.png", cbarO='horizontal')
+    #pp.PlotHist(hist, imfile="BHB_bright_faint.ps", cbarO='horizontal')
+    iso = np.loadtxt(path+"sgrIso_10Gyr_FeH-0.8.dat", skiprows=1)
+    plt.figure()
+    plt.plot(iso[:,8]-iso[:,10], iso[:,10])
+    plt.plot([0.8, 0.8], [-6.0,10.0], "k:")
+    #plt.xlim(0.8, 1.3)
+    plt.ylim(10.0, -6.0)
+    plt.show()
 
 if __name__ == "__main__":  do_stuff()

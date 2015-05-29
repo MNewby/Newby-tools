@@ -32,7 +32,7 @@ white_black = LinearSegmentedColormap('grey', cdict1)
 cdict2 = {'red':  ((0.0, 0.0, 0.0),
                    (0.125, 1.0, 1.0),
                    (0.25, 0.0, 0.0),
-                   (0.4, 0.5, 0.5),                   
+                   (0.4, 0.5, 0.5),
                    (0.5, 1.0, 1.0),
                    (0.6, 0.0, 0.0),
                    (0.7, 1.0, 1.0),
@@ -77,7 +77,7 @@ spectral_wb = ListedColormap(spectral_colors[:,:3], name="spectral_wb", N=256)
 #spectral_c = ListedColormap(spectral_colors[:,:3], name="spectral_c", N=256)
 
 """ ---------------------- 2D Hist Methods ---------------------------------- """
-""" 2-dimensional histogram, creates histogram ready for imshow, and factors for 
+""" 2-dimensional histogram, creates histogram ready for imshow, and factors for
     converting between matrix elements and real-world values.
      - Read & Bin Data
      - Print data to file
@@ -103,7 +103,7 @@ class HistMaker:
     def savehist(self, outfile, fmt='%.2f'):
         np.savetxt(outfile, self.H, delimiter=",", fmt=fmt) #, header=" pyplot image output, in y,x. "+\
         #  "x is {0} from {1} to {2}, in steps of {3}; "+\
-        #  "y is {4} from {5} to {6}, in steps of {7}".format(self.labels[0], self.xmin, 
+        #  "y is {4} from {5} to {6}, in steps of {7}".format(self.labels[0], self.xmin,
         #    self.xmax, self.xsize, self.labels[1], self.ymin, self.ymax, self.ysize)  )
     def xyToBins(self, x=None, y=None):
         """ Take x,y, coordinates and convert them to bin coordinates"""
@@ -116,7 +116,7 @@ class HistMaker:
         self.H = GaussBlurHist(self.H, blur)
     def plot(self):
         PlotHist(self)
-    
+
 # Make image
 # Imagefile, outfile for hist, infile
 
@@ -126,7 +126,7 @@ def HistFromFile(infile, xsize=None, ysize=None, xarea=None, yarea=None):
     hist = HistMaker([1,2], [1,2], xsize, ysize, xarea, yarea)
     hist.H = data
     return hist
-    
+
 
 def MakeHist(infile=None):
     """ Master def, makes a hist from data accroding to inputs, calling other defs here"""
@@ -144,7 +144,7 @@ def GetArea(xdata, xsize=None, xarea=None):
     if xarea == None:  xmax, xmin = np.ma.max(xdata), np.ma.min(xdata)
     else:  xmin, xmax = xarea[0], xarea[1]
     if xsize == None:  xsize = (xmax-xmin) / 10.0
-    xbins = int( (xmax - xmin) / xsize) + 1  # WARNING:  +1 bin may cause issues with edges if blurring 
+    xbins = int( (xmax - xmin) / xsize) + 1  # WARNING:  +1 bin may cause issues with edges if blurring
     return xbins, xmin, xmax, xsize
 
 
@@ -166,7 +166,7 @@ def BlockHist(xdata, ydata, field):
 def GaussBlurHist(H, xblur=1, yblur='same', edge=0.0):
     """ H is a y,x 2D histogram.
         xblur is the number of pixels to use when blurring in x-direction
-        yblur is blur in y-direction, 
+        yblur is blur in y-direction,
         xarea, yarea should be (min, max) or None (will give min, max of data)
         If outfile is not None, then will dump the histogram to a file with that name
         labels are ['xlabel', 'ylabel']"""
@@ -213,7 +213,7 @@ def GaussBlurHist(H, xblur=1, yblur='same', edge=0.0):
     else:  H3 = H2
     return H3
 
-    
+
 def ErrBlurLinear(field, xfunc=None, yfunc=None, edge=0.0):
     # Blur each point into a Gaussian Distribuion, using functions for err(x) and err(y)
     return -1
@@ -221,7 +221,7 @@ def ErrBlurLinear(field, xfunc=None, yfunc=None, edge=0.0):
 
 def ErrBlurPoint(xdata, ydata, field, con=30, xerror=None, yerror=None):
     """ xdata...
-        """ 
+        """
     # Initialize area and array
     H = sc.zeros((field.ybins, field.xbins), float)
     weight = 1.0 / float( (con+1)*(con+1) )
@@ -250,14 +250,14 @@ def gaussian(x, mu, sigma):
 
 
 def convolve(sig, con):
-    """ convolves a point into a line of points, such that the histogram of the 
+    """ convolves a point into a line of points, such that the histogram of the
         new points forms a Gaussian """
     p = 0.9973 / float(con)
     points = [0.0]
     for i in range(con/2):  points.append(getb(sig, points[i], p) )
     x = -1.0*sc.array(points[1:])
     return sc.append(sc.array(points), x)
-    
+
 
 def getb(sig, a, p):
     part1 = ss.erf( a / (sq2*sig) )
@@ -265,7 +265,7 @@ def getb(sig, a, p):
     part3 = sq2*sig*ss.erfinv(part2)
     return part3
 
-    
+
 def PlotHist(field, imfile=None, cbarO='vertical', cax=None):
     """ field is a HistMaker object """
     H = field.H
@@ -288,23 +288,23 @@ def PlotHist(field, imfile=None, cbarO='vertical', cax=None):
                alpha=None, vmin=vmin, vmax=vmax, origin='lower', extent=None)
     # Add xTicks and labels
     xlocs, xlabels, ylocs, ylabels = [], [], [], []
-    if field.ticks[0] == None:  
+    if field.ticks[0] == None:
         xpos = np.arange(field.xmin, field.xmax+0.000001, ((field.xmax-field.xmin)/10.0) )
-    else:   
+    else:
         xpos = field.ticks[0]
     for pos in xpos:
         xlocs.append((pos-field.xmin)/field.xsize)
-        xlabels.append("${0:.0f}$".format(pos))
+        xlabels.append("${0:.1f}$".format(pos))
     if field.xflip == 1:  plt.xticks((field.xbins-np.array(xlocs))[::-1], xlabels[::-1], rotation=45, fontsize=12)
     else:                 plt.xticks(xlocs, xlabels, rotation=45, fontsize=12)
     # Add yTicks and labels
-    if field.ticks[1] == None:  
+    if field.ticks[1] == None:
         ypos = np.arange(field.ymin, field.ymax+0.000001, ((field.ymax-field.ymin)/10.0) )
-    else:   
+    else:
         ypos = field.ticks[1]
     for pos in ypos:
         ylocs.append((pos-field.ymin)/field.ysize)
-        ylabels.append("${0:.0f}$".format(pos))
+        ylabels.append("${0:.1f}$".format(pos))
     if field.yflip == 1:  plt.yticks((field.ybins-np.array(ylocs))[::-1], ylabels[::-1], rotation=0, fontsize=12)
     else:                 plt.yticks(ylocs, ylabels, rotation=0, fontsize=12)
     # Add axes labels
