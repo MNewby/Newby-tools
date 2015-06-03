@@ -22,9 +22,9 @@ def do_stuff():
     #sky_map(dumb=0)
     #clean_FTO_data()
     #FTO_skyplot(gmin=16.0, gmax=23.5)
-    FTO_skyplot(gmin=20.0, gmax=22.5)
+    #FTO_skyplot(gmin=20.0, gmax=22.5)
     #FTO_skyplot(gmin=19.5, gmax=20.5) # virgo
-    #FTO_skyplot(gmin=16.0, gmax=23.5, multistep=0.1)
+    FTO_skyplot(gmin=16.0, gmax=22.5, multistep=0.1)
     #plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/FTO_All_hist.csv",
     #                outfile=None)  #"FTO_All.png")  #"sgr_bhbs.csv")
     #plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/hist_g_20.0_22.5.txt",
@@ -43,7 +43,7 @@ def do_stuff():
     #    lstep=1.0, bstep=1.0,
     #    path="/home/newbym2/Dropbox/Research/sgrLetter/bhb_tomography/half_bins/",
     #    outpath="/home/newbym2/Dropbox/Research/sgrLetter/plus_15kpc_bhb/") #15 kpc bhb
-    #plot_with_fits(data=np.loadtxt("/home/newbym2/Newby-tools/paper-tools/fits_quad.csv", 
+    #plot_with_fits(data=np.loadtxt("/home/newbym2/Newby-tools/paper-tools/fits_quad.csv",
     #    delimiter=","), fit_type="triple" )
     #make_galaxy_plot()
     #sgrU1.plot_ganged_hists(fname="fits_double.csv",
@@ -60,7 +60,7 @@ def sky_map(infile="/home/newbym2/Desktop/sdssN-stars/sgr_sky_data.csv", dumb=1)
         print np.ma.min(g_ext), np.ma.max(g_ext)
         lam, bet = ac.lb2sgr(l, b, 30.0)[3:5]
         plt.figure()
-        sc = plt.scatter(lam, bet, c=g_ext, cmap=pp.spectral_wb, edgecolors='none', 
+        sc = plt.scatter(lam, bet, c=g_ext, cmap=pp.spectral_wb, edgecolors='none',
                     s=3, alpha=0.3, vmin=0, vmax=0.4)
         plt.colorbar(sc)
         plt.xlim(320, 20.0); plt.ylim(40.0, -70.0)
@@ -99,16 +99,16 @@ def sky_map(infile="/home/newbym2/Desktop/sdssN-stars/sgr_sky_data.csv", dumb=1)
         cbar = plt.colorbar(mappable=im, aspect=30, orientation="horizontal")
         xpos = np.arange(0.0, 601.0, 20.0)
         xlab = []
-        for i in range(len(xpos)):  
-            if i % 3 == 0:  
+        for i in range(len(xpos)):
+            if i % 3 == 0:
                 xx = (xpos[i]*x_step) + x_range[0]
                 xlab.append(str(xx).split(".")[0] )
             else:  xlab.append("")
         plt.xticks(xpos, xlab[::-1])
         ypos = np.arange(0.0, 221.0, 20.0)
         ylab = []
-        for i in range(len(ypos)):  
-            if i % 2 == 0:  
+        for i in range(len(ypos)):
+            if i % 2 == 0:
                 yy = (ypos[i]*y_step) + y_range[0]
                 ylab.append(str(yy).split(".")[0] )
             else:  ylab.append("")
@@ -129,7 +129,7 @@ def clean_FTO_data(path="/home/newbym2/Desktop/FTO-stars/"):
     np.savetxt(path+"stars-MSTO-N-all.txt", out, fmt='%.5f')
     print "### - DONE"
 
-def FTO_skyplot(path="/home/newbym/Desktop/FTO-stars/", gmin=16.0, gmax=22.5, 
+def FTO_skyplot(path="/home/newbym/Desktop/FTO-stars/", gmin=16.0, gmax=22.5,
                 multistep=None):
     """Make a skyplot with updated MSTO stars from SDSS """
     #files = glob.glob(path+"stars*")
@@ -153,13 +153,14 @@ def FTO_skyplot(path="/home/newbym/Desktop/FTO-stars/", gmin=16.0, gmax=22.5,
             #gmag = data[i,2]  #for MSTO data
             if gmag < gmin:  continue
             if gmag > gmax:  continue
-            lam, bet = (ac.lb2sgr(data[i,0], data[i,1], 30.0))[3:5]
+            lam, bet = (ac.lb2sgr(data[i,0], ac.getr(data[i,1])))[3:5]
             out.append([lam, bet, gmag])
         print "Transformed coordinates:", f
     out = np.array(out)
     if multistep != None:
         #runs = np.arange(10.0, 50.0, 5.0)  #for distance
         runs = np.arange(gmin, gmax, multistep)
+        runs = [20.0+0.25, 20.66+0.25, 21.33+0.25, 22.0+0.25, 23.0+0.25] #Belokurov 2006 + g-r=0.25
         for run in runs:
             print "Starting run", run
             gslice = []
@@ -184,9 +185,9 @@ def FTO_skyplot(path="/home/newbym/Desktop/FTO-stars/", gmin=16.0, gmax=22.5,
         hist.ticks = (None, [-40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0])
         hist.varea=(0.0, 30.0)
         pp.PlotHist(hist, imfile="BLUE_all.png", cbarO='horizontal')
-    
 
-def plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/FTO_All_hist.csv", 
+
+def plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/FTO_All_hist.csv",
     outfile="FTO_All.png"):
     """ creates a image plot from a file """
     #indata = np.loadtxt(infile, delimiter=",")
@@ -203,9 +204,9 @@ def plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/FTO_All_hist.cs
     hist.varea=(0.0, 120.0)  # FTOs, bw
     #hist.varea=(0.0, 45.0)  # BHBs
     pp.PlotHist(hist, imfile=outfile, cbarO='horizontal', cax=[0.1, 0.75, 0.8, 0.02])
-    
-        
-def bhb_tools(infile="/home/newbym2/Desktop/sdssN-stars/sgr_bhbs_all.csv", 
+
+
+def bhb_tools(infile="/home/newbym2/Desktop/sdssN-stars/sgr_bhbs_all.csv",
                 out=[], gmin=15.0, gmax=22.5, suffix="All"):
     """ bhb stuff """
     data = np.loadtxt(infile, delimiter=",", skiprows=1)
@@ -241,7 +242,7 @@ def bhb_tools(infile="/home/newbym2/Desktop/sdssN-stars/sgr_bhbs_all.csv",
         hist.yflip=1
         hist.varea=(0.0, 6.0)
         hist.savehist("sgr_bhbs.csv", fmt='%.1f')
-        #hist.ticks= [[20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0],[-40.0, -20.0, 0.0, 20.0]] 
+        #hist.ticks= [[20.0, 40.0, 60.0, 80.0, 100.0, 120.0, 140.0],[-40.0, -20.0, 0.0, 20.0]]
         # mask the data
         if "mask" in out:
             mask = np.loadtxt("Rhist_sgr.csv", delimiter=",")
@@ -257,8 +258,8 @@ def bhb_tomography(minmag=15.0, maxmag=22.5, step=0.5):
         print "Starting run", run
         bhb_tools(out=["sgrplot"], gmin=run, gmax=(run+step), suffix=str(run))
     print "### - Done"
-    
-            
+
+
 def giant_tools(infile="/home/newbym2/Desktop/sdssN-stars/giant_spec_all.csv", out=[]):
     """ tools for red giants """
     data = np.loadtxt(infile, delimiter=",", skiprows=1)
@@ -272,7 +273,7 @@ def giant_tools(infile="/home/newbym2/Desktop/sdssN-stars/giant_spec_all.csv", o
         cmag.varea=(0.0, 144.0)
         cmag.plot()
     plt.show()
-    
+
 def lambet_profiles(path="/home/newbym2/Desktop/sdssN-stars/", glb="*bhbs_all*",
                     lj=0, bj=1, gj=2, lbins=2.5, bbins=0.5, suffix="_bhbs", coords="sgr"):
     """ remixed from plot_profiles in utilities1 """
@@ -328,9 +329,9 @@ def lambet_profiles(path="/home/newbym2/Desktop/sdssN-stars/", glb="*bhbs_all*",
         outstuff = sc.array(zip(Ledges+(bbins/2.0), Lhist))
         np.savetxt(Lname+".out", outstuff, fmt='%.2f')
     pb3.endbar()
-    print "Ended Successfully"    
+    print "Ended Successfully"
 
-def build_hists(hmin=19.2, hmax=22.5, lambins=5, fit_type="double", 
+def build_hists(hmin=19.2, hmax=22.5, lambins=5, fit_type="double",
     background="common", lstep=0.5, bstep=0.5,
     path="/home/newbym2/Dropbox/Research/sgrLetter/FTO_tomography/half_bins/",
     outpath="/home/newbym2/Dropbox/Research/sgrLetter/plus_10kpc/"):
@@ -352,7 +353,7 @@ def build_hists(hmin=19.2, hmax=22.5, lambins=5, fit_type="double",
     j, hist, lname = 0, np.zeros(H.shape[0], float), "lambda_"+str(50.0)
     all_outname = "hist_g_{0}_{1}.txt".format(hmin, hmax)
     np.savetxt(all_outname, H, fmt='%.2f')
-    plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/"+all_outname, 
+    plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/"+all_outname,
             outfile="FTO_"+all_outname+".png")
     fits_out = []
     for i in range(H.shape[1]):
@@ -361,13 +362,13 @@ def build_hists(hmin=19.2, hmax=22.5, lambins=5, fit_type="double",
         if lslice < 50.0:  continue
         if (lslice >= 117.5) and (lslice < 190.0):  continue
         if lslice >= 315.0:  continue
-        # Fit slices 
+        # Fit slices
         if j >= lambins:
             np.savetxt(outpath+lname+".txt", hist, fmt='%.2f')
             # FIT STUFF HERE; SKIP IF EMPTY
             if np.sum(hist) > 100:
                 xx = np.arange(bmin, bmax+0.00001, bstep)+(bstep*0.5)
-                params = fit_hists(xx, hist, lname, fit_type=fit_type, 
+                params = fit_hists(xx, hist, lname, fit_type=fit_type,
                     outpath=outpath, cuts=cuts, background=background, binsize=bstep)
                 fits_out.append(np.insert(params, 0, lslice) )
             lname = "lambda_"+str(lslice)
@@ -387,7 +388,7 @@ def build_hists(hmin=19.2, hmax=22.5, lambins=5, fit_type="double",
     print "### - DONE"
 
 
-def fit_hists(x_raw, y_raw, name, outfile=None, outpath="", fit_type='double', 
+def fit_hists(x_raw, y_raw, name, outfile=None, outpath="", fit_type='double',
         cuts=None, background="common", binsize=0.5):
     run = eval(name.split("_")[-1])
     # clean data;  don't fit bins with certain criteria
@@ -497,7 +498,7 @@ def fit_hists(x_raw, y_raw, name, outfile=None, outpath="", fit_type='double',
     plt.close('all')
     return np.insert(np.concatenate((fitter.params, fitter.error)), -1, fitter.RR)
 
-def plot_with_fits(data, fit_type="double", outfile=None, 
+def plot_with_fits(data, fit_type="double", outfile=None,
         infile="/home/newbym2/Dropbox/Research/sgrLetter/FTO_All_hist.csv",
         lstep=0.5, bstep=0.5):
     """ Plots a black and white plot of star densities with fit points over top """
@@ -509,8 +510,8 @@ def plot_with_fits(data, fit_type="double", outfile=None,
     #initialize figure
     fig = plt.figure(1, dpi=120, figsize=(12,9))
     ax1 = fig.add_subplot(111)
-    im = ax1.imshow(back, cmap='gist_yarg', norm=None, aspect=None, 
-        interpolation='nearest', alpha=None, vmin=0.0, vmax=120.0, 
+    im = ax1.imshow(back, cmap='gist_yarg', norm=None, aspect=None,
+        interpolation='nearest', alpha=None, vmin=0.0, vmax=120.0,
         origin='lower', extent=None, zorder=1)
     # --- Now plot fits
     # first Gaussian
@@ -524,38 +525,38 @@ def plot_with_fits(data, fit_type="double", outfile=None,
             bet1ee = data[:,8] / bstep
             bet2ee = data[:,10] / bstep
         for i in range(lams.shape[0]):
-            if (abs(data[i,1]) > 5.0):  
-                plt.errorbar(lams[i], bet1[i], yerr=bet1e[i], ecolor="red", marker="o", 
+            if (abs(data[i,1]) > 5.0):
+                plt.errorbar(lams[i], bet1[i], yerr=bet1e[i], ecolor="red", marker="o",
                      mec='black', mfc='red', ms=2, ls=" ", mew=0.5, zorder=3, alpha=0.5)
             if (abs(data[i,4]) > 5.0):
-                plt.errorbar(lams[i], bet2[i], yerr=bet2e[i], ecolor="cyan", marker="o", 
+                plt.errorbar(lams[i], bet2[i], yerr=bet2e[i], ecolor="cyan", marker="o",
                      mec='black', mfc='cyan', ms=2, ls=" ", mew=0.5, zorder=3, alpha=0.5)
             if fit_type == "quad":
                 if (abs(data[i,7]) > 5.0):
                     plt.errorbar(lams[i], bet1[i], yerr=bet1ee[i], ecolor="magenta", fmt=None, capsize=10.0, zorder=2)
                 if (abs(data[i,9]) > 5.0):
-                    plt.errorbar(lams[i], bet2[i], yerr=bet2ee[i], ecolor="blue", fmt=None, capsize=10.0, zorder=2) 
+                    plt.errorbar(lams[i], bet2[i], yerr=bet2ee[i], ecolor="blue", fmt=None, capsize=10.0, zorder=2)
     if fit_type == "triple":
         bet2 = (data[:,5] - bmin) / bstep
         bet2e = data[:,6] / bstep
         bet3 = (data[:,8] - bmin) / bstep
         bet3e = data[:,9] / bstep
         for i in range(lams.shape[0]):
-            if (abs(data[i,1]) > 5.0):  
-                plt.errorbar(lams[i], bet1[i], yerr=bet1e[i], ecolor="red", marker="o", 
+            if (abs(data[i,1]) > 5.0):
+                plt.errorbar(lams[i], bet1[i], yerr=bet1e[i], ecolor="red", marker="o",
                      mec='black', mfc='red', ms=2, ls=" ", mew=0.5, zorder=3, alpha=0.5)
             if (abs(data[i,4]) > 5.0):
-                plt.errorbar(lams[i], bet2[i], yerr=bet2e[i], ecolor="cyan", marker="o", 
+                plt.errorbar(lams[i], bet2[i], yerr=bet2e[i], ecolor="cyan", marker="o",
                      mec='black', mfc='cyan', ms=2, ls=" ", mew=0.5, zorder=3, alpha=0.5)
             if (abs(data[i,7]) > 5.0):
-                plt.errorbar(lams[i], bet3[i], yerr=bet3e[i], ecolor="yellow", marker="o", 
+                plt.errorbar(lams[i], bet3[i], yerr=bet3e[i], ecolor="yellow", marker="o",
                      mec='black', mfc='yellow', ms=2, ls=" ", mew=0.5, zorder=3, alpha=0.5)
     # clean up appearance
     xlocs = np.arange(0.0, 601.0, 20.0)
     xlabs = []
     for i in range(len(xlocs)):
         if i % 2 == 0:  xlabs.append(str((xlocs[i]*lstep)+lmin ).split(".")[0])
-        else:   xlabs.append("") 
+        else:   xlabs.append("")
     ylocs = np.arange(0.0, 201.0, 20.0)
     ylabs = []
     for i in range(len(ylocs)):
@@ -604,7 +605,7 @@ def plot_stream_counts():
 	plt.ylim(0.0, np.ma.max(db[:,1]) )
 	plt.xlim(320.0, 50.0)
 	plt.show()
-   
-    
-    
+
+
+
 if __name__ == "__main__":  do_stuff()

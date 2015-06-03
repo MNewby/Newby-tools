@@ -20,8 +20,8 @@ import functions as func
 def do_stuff():
     #shift_sgr(filein="streamgen_sgrfidprim.txt", fileout="stream_shiftfid.txt")
     #make_sim_stream_plot(filein="streamgen_sfp_bigish.txt", RGB=1) #, imfile="sgr_new.png")
-    #make_total_plot(RGB=1)
-    make_total_plot(RGB=0, rcut=(ac.getr(16.0), ac.getr(22.5) ), vrange=(0.0, 150.0))
+    make_total_plot(RGB=1)
+    #make_total_plot(RGB=0, rcut=(ac.getr(16.0), ac.getr(22.5) ), vrange=(0.0, 150.0))
     #make_total_plot(RGB=0, rcut=(ac.getr(20.0), ac.getr(20.5) ) )
     #make_diff_hist()
     #get_bif()
@@ -30,7 +30,7 @@ def do_stuff():
     #compile_tables(rnames=[], folder=[], subfolder=[])
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile="new.png")
     #RGB_from_files(mask_data="Rhist_sgr.csv", imfile=None, fitfile=True)
-    #plot_profiles()    
+    #plot_profiles()
     #plot_profiles(savewedge=True)
     #proj_test()
     #sgr_rv_skyplot()
@@ -54,7 +54,7 @@ def do_stuff():
     #crotus_cut(cdata="crotus_data.txt")
     #lam_wedges()
     #plot_MCMC_results()
-    
+
 def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False, suffix=""):
     files = glob.glob(path+"/stars*")
     print files
@@ -102,7 +102,7 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False, suffi
         for j in range(len(data[:,0])):
             if data[j,0] < Ls[0]+(Ls[2]*i):  continue
             if data[j,0] > Ls[0]+(Ls[2]*(i+1)):  continue
-            if savewedge:  
+            if savewedge:
                 new.append([datar[j,0], datar[j,1], data[j,2]])
                 continue
             new.append(data[j,1])
@@ -122,8 +122,8 @@ def plot_profiles(path="/home/newbym2/Desktop/starfiles", savewedge=False, suffi
             plt.savefig(Lname+".png")
             plt.close('all')
         pb3.updatebar(float(i)/float(Lsteps))
-    print "Ended Successfully"    
-    
+    print "Ended Successfully"
+
 
 def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
     """ Makes the plot for the simulated streams
@@ -153,7 +153,7 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
         #data2[i,0], data2[i,1] = ac.lbToEq(data2[i,0], data2[i,1])
         data2[i,0], data2[i,1] = (ac.lb2sgr(data2[i,0], data2[i,1], 10.0))[3:5]
     """
-    if RGB==1:  
+    if RGB==1:
         data3 = np.concatenate((data2,datasgr), axis=0)
         #data3 = np.concatenate((data2,data), axis=0)
         RGB_plot(data3, imfile=imfile, mask_data="Bhist_sgr.csv", muddle=0)
@@ -169,12 +169,14 @@ def make_sim_stream_plot(filein="stream_50shift.txt", RGB=0, imfile=None):
         sky.savehist("streamgen_bifExtra.csv")
     print "Ended Successfully"
 
-def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None, 
+def make_total_plot(path = "/usr/home/f/081/tug08879/Desktop/", RGB=0, imfile=None,
                     rcut=None, vrange=None, outfile=None):
     """ Makes a 2D histogram """
-    files = glob.glob(path+"/stars*")
+    #files = glob.glob(path+"stars*")
+    files = ["MSTO_North.csv"]
     print files
     data=[]
+    """
     pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
@@ -194,6 +196,8 @@ def make_total_plot(path="/home/newbym2/Desktop/starfiles", RGB=0, imfile=None,
             data.append(temp)
         stripedata.close()
         pb.updatebar(float(files.index(f)+1)/float(len(files)) )
+    """
+    # NEVERMIND...
     data = np.array(data)
     count, nStars, pb2 = 0, float(len(data[:,0])), pr.Progressbar(steps=100,
         prefix="Changing Coordinates:", suffix=None, symbol="#", active="=",
@@ -253,7 +257,7 @@ def RGB_plot(data, normed=0, imfile=None, mask_data=None, muddle=0):
             xarea=xa, yarea=ya)
     if muddle==1:  Bhist.H = Bhist.H + np.absolute(np.random.normal(10.0, 2.0, Bhist.H.shape))
     Bhist.varea = (0.0,200.0)
-    Bhist.savehist("Bhist.csv") 
+    Bhist.savehist("Bhist.csv")
     G = np.array(G)
     Ghist = pp.HistMaker(G[:,0], G[:,1], xsize=0.5, ysize=0.5,
             xarea=xa, yarea=ya)
@@ -324,7 +328,7 @@ def RGB_from_files(mask_data=None, imfile=None, fitfile=None):
     # lambda slices to skip primary or secondary stream plots
     #skip1 = [295.0]  #double
     #skip2 = [210.0]  #double
-    skip1 = [297.5, 295.0, 292.5, 290.0] #quad:  
+    skip1 = [297.5, 295.0, 292.5, 290.0] #quad:
     skip2 = [200.0, 202.5, 212.5, 297.5] #quad:
     if fitfile != None:
         fitdata = np.loadtxt(wd+fitfile, delimiter=",")
@@ -337,17 +341,17 @@ def RGB_from_files(mask_data=None, imfile=None, fitfile=None):
         bet2ee = fitdata[:,10] / 0.5
         # Elminate fits with small amplitudes
         for i in range(len(lams)):
-            if (abs(fitdata[i,1]) > 5.0) and (fitdata[i,0] not in skip1):  
-                plt.errorbar(lams[i], bet1[i], yerr=bet1e[i], ecolor="white", marker="o", 
+            if (abs(fitdata[i,1]) > 5.0) and (fitdata[i,0] not in skip1):
+                plt.errorbar(lams[i], bet1[i], yerr=bet1e[i], ecolor="white", marker="o",
                      mec='black', mfc='white', ms=2, ls=" ", mew=0.5, zorder=3)
             if (abs(fitdata[i,4]) > 5.0) and (fitdata[i,0] not in skip2):
-                plt.errorbar(lams[i], bet2[i], yerr=bet2e[i], ecolor="white", marker="o", 
+                plt.errorbar(lams[i], bet2[i], yerr=bet2e[i], ecolor="white", marker="o",
                      mec='black', mfc='white', ms=2, ls=" ", mew=0.5, zorder=3)
             if fname[-8:-4] == "quad":
                 if (abs(fitdata[i,7]) > 5.0) and (fitdata[i,0] not in skip1):
                     plt.errorbar(lams[i], bet1[i], yerr=bet1ee[i], ecolor="red", fmt=None, capsize=10.0, zorder=2)
                 if (abs(fitdata[i,9]) > 5.0) and (fitdata[i,0] not in skip2):
-                    plt.errorbar(lams[i], bet2[i], yerr=bet2ee[i], ecolor="magenta", fmt=None, capsize=10.0, zorder=2) 
+                    plt.errorbar(lams[i], bet2[i], yerr=bet2ee[i], ecolor="magenta", fmt=None, capsize=10.0, zorder=2)
     xs = np.arange(xa[0], xa[1]+1, 10)
     xlocs, xlabels = (xs - xa[0])*2, []
     for x in xs:  xlabels.append(str(int(x)))
@@ -363,7 +367,7 @@ def RGB_from_files(mask_data=None, imfile=None, fitfile=None):
     if imfile == None:  plt.show()
     else:  plt.savefig(imfile)
     plt.close('all')
-    
+
 def process_image(R,G,B, stretch=1):
     """processes an RGB image"""
     dialR, dialG, dialB = 1.0, 1.0, 1.0
@@ -382,7 +386,7 @@ def process_image(R,G,B, stretch=1):
     denom = np.ma.max(B) - np.ma.min(B)
     B = (B / denom) - (np.ma.min(B) / denom)
     return R, G, B
-    
+
 
 
 def make_diff_hist():
@@ -473,7 +477,7 @@ def new_shift_sgr(lam, bet):
     lam = lam + (cm*5.0)
     bet = bet - 10.0
     return lam, bet
-    
+
 
 def batch_shift():
     infiles = ["streamgen_sgr_sim.txt", "streamgen_sgrwide.txt", "streamgen_sgrsmall.txt", "streamgen_sgrbig.txt"]
@@ -498,12 +502,12 @@ def sgr_rv_fits():
     for w in [0.5, 1.0, 2.5, 5.0, 7.5, 10.0, 15.0, 20.0, 25.0, 30.0, 50.0]:
         keep = []
         for i in range(len(data[:,0])):
-            if abs(bsgr[i]) < w:  
+            if abs(bsgr[i]) < w:
                 if g0[i] < 20.0:  continue
                 if g0[i] > 23.0:  continue
                 keep.append(vgsr[i])
         hist, edges = np.histogram(np.array(keep), bins=60, range=(-300.0, 300.0))
-        y, x = hist, edges[:-1] 
+        y, x = hist, edges[:-1]
         e = func.poisson_errors(y)
         fitter = fit.ToFit(x,y,e)
         fitter.function=func.double_gaussian_one_fixed
@@ -528,8 +532,8 @@ def sgr_rv_fits():
         #plt.ylim(0.0, 60.0)
         #plt.show()
         plt.savefig("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec/r_cut_relative"+str(w)+".png")
-        plt.close()    
-    
+        plt.close()
+
 def sgr_rv_skyplot():
     data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec_all.csv", delimiter=",")
     #dered_g,dered_r,l,b,ELODIERVFINAL,ELODIERVFINALERR,plate,p_ra,p_dec
@@ -580,7 +584,7 @@ def sgr_rv_skyplot():
     plt.text(-50.0, 25.0, "Stars within "+str(nsig)+r"$\sigma$ of mean $v_{\rm gsr}$; $\Lambda<230$", fontsize=12)
     plt.show()"""
     plt.close()
-    
+
 
 def sgr_rv_cut():
     data = np.loadtxt("/home/newbym2/Dropbox/Research/sgrLetter/sgr_spec_all.csv", delimiter=",")
@@ -597,7 +601,7 @@ def sgr_rv_cut():
     mean, stdev, nsig = -118.233333, 30.222222, 2.0
     keep = []
     for i in range(len(data[:,0])):
-        if abs(bsgr[i]) < 10.0:  
+        if abs(bsgr[i]) < 10.0:
             if g0[i] < 20.0:  continue
             if g0[i] > 23.0:  continue
             if vgsr[i] < (mean - stdev*nsig):  continue
@@ -653,7 +657,7 @@ def split_by_plate():
         out.append([plate, pos[i][0], pos[i][1], yes, no])
     savename = "/home/newbym2/Dropbox/Research/sgrLetter/plate_stars.csv"
     np.savetxt(savename, sc.array(out), delimiter=",")
-        
+
 
 def photo_spec_analysis():
     # l, b, r;  plate #, p_ra, p_dec, in Sgr, out Sgr
@@ -677,7 +681,7 @@ def photo_spec_analysis():
                 if skip < 1:  skip =+ 1;  continue
                 if line.strip()=="":  continue
                 temp = line.split()
-                ll, bb, g0 = float(temp[0]), float(temp[1]), ac.getg(float(temp[2]))                
+                ll, bb, g0 = float(temp[0]), float(temp[1]), ac.getg(float(temp[2]))
                 if g0 < 20.0:  continue
                 if g0 > 20.5:  continue
                 del_l, del_b = (ll-pl), (bb-pb)
@@ -726,7 +730,7 @@ def compile_tables(rnames, folder, subfolder):
             for line in results:
                 if line.strip()=="":  continue
                 if (len(line.strip()) < 10):
-                    if entry != 0:  table.append(entry) 
+                    if entry != 0:  table.append(entry)
                     entry = line.strip().strip(":")
                 if line[4:8] == "MCMC":
                     temp = line.split("[")[1].split("]")[0]
@@ -804,10 +808,10 @@ def plot_ganged_hists(fname="smarter_slide_back_quad.txt",
             if fname[-8:-4] == "quad":  norm = function(hold[:,1], results[i,1:13])
             else:  norm = function(hold[:,1], results[i,1:9])
             plt.scatter(hold[:,1], norm*correction*hold[:,2], c="red", marker="s", zorder=5)
-            #plt.errorbar(hold[:,1], norm*hold[:,2], yerr= norm*(np.sqrt(1+(hold[:,2]*hold[:,3]))+1), 
+            #plt.errorbar(hold[:,1], norm*hold[:,2], yerr= norm*(np.sqrt(1+(hold[:,2]*hold[:,3]))+1),
             #    marker=None, ls=" ", zorder=4, ecolor="red")
             plt.scatter(hold[:,1], norm, c="green", marker="s", zorder=4)
-            #plt.errorbar(hold[:,1], norm, yerr= norm*(np.sqrt(1+((1-hold[:,2])*hold[:,3]))+1), 
+            #plt.errorbar(hold[:,1], norm, yerr= norm*(np.sqrt(1+((1-hold[:,2])*hold[:,3]))+1),
             #    marker=None, ls=" ", zorder=3, ecolor="green")
             for k in range(len(hold[:,0])):
                 plt.text(hold[k,1], 400, str(int(hold[k,3])), fontsize=8)
@@ -817,11 +821,11 @@ def plot_ganged_hists(fname="smarter_slide_back_quad.txt",
         plt.ylim(N_range[0], N_range[1])
         # i+1 corresponds to plot number starting from 1
         if (i+1+oo) in nox:  plt.setp(sp.get_xticklabels(), visible=False)
-        else:  
+        else:
             plt.xlabel("B")
             plt.xticks(np.arange(-30.0, 30.0, 5.0), ["-30","","-20","","-10","","0","","10","","20","",""])
         if (i+1+oo) in noy:  plt.setp(sp.get_yticklabels(), visible=False)
-        else:  
+        else:
             plt.ylabel("N")
             plt.yticks(np.arange(0.0, 450.0, 50.0), ["","","100","","200","","300", "","400"])
     i=1
@@ -842,7 +846,7 @@ def process_spec():
     np.savetxt("/home/newbym2/Dropbox/Research/sgrLetter/plate_data.csv", np.array(out), delimiter=",")
 
 def spec_area():
-    """ Returns the ratio of in-Sgr stars to non-Sgr stars 
+    """ Returns the ratio of in-Sgr stars to non-Sgr stars
         within 1-sigma of the Sgr mean, given fits to data within +/-10.0 Beta """
     fit = [3.1707598689912997, -113.54662564418646, 29.872019523468833, 3.539017234542301, 0.0, 120.0]
     x0, xf = (-118.2-30.2), (-118.2+30.2)
@@ -885,7 +889,7 @@ def count_stars_in_rcut():
             total = total + 1
         print count, len(data[:,2]), np.ma.min(data[:,2]), np.ma.max(data[:,2])
     print "Final Count:", total
-    
+
 
 def count_stars(fname="smart_sliding_back_quad.txt" ,ftype=None,
         wd = "/home/newbym2/Dropbox/Research/sgrLetter/fit_results/"):
@@ -899,17 +903,17 @@ def count_stars(fname="smart_sliding_back_quad.txt" ,ftype=None,
     dt, dL = 0.5, 2.5
     all_stars = 0
     for i in range(len(data[:,0])):
-        if data[i,0] > 187.0 and data[i,0] < 191.0:  continue 
+        if data[i,0] > 187.0 and data[i,0] < 191.0:  continue
         #if data[i,0] < 191.0:  continue
         betas = np.arange(-70.0,41.0,0.5)
         hist = np.array( zip(betas, np.loadtxt(wd+"lambda_"+str(data[i,0]-2.5)+".txt") ) )
         all_stars = all_stars + sum(hist[:,1])*dL
         #print np.sum(hist[:,1])
         #get range of data
-        j,x = -1, 0  
+        j,x = -1, 0
         while x < 100:  x = hist[j,1]; j -= 1
         high = hist[j,0]
-        j,x = 0,0  
+        j,x = 0,0
         while x < 100:  x = hist[j,1]; j += 1
         low = hist[j,0]
         #Integrate to get total stars
@@ -922,17 +926,17 @@ def count_stars(fname="smart_sliding_back_quad.txt" ,ftype=None,
         else:
             newback = (aa*low + bb)*(high-low)/dt
             newvirgo = (aa*high - aa*low)*(high - low)/(2.0*dt)
-        newsgr1 = func.integrate_gaussian(low, high, mu=data[i,2], sig=data[i,3], 
+        newsgr1 = func.integrate_gaussian(low, high, mu=data[i,2], sig=data[i,3],
             amp=(data[i,1]*data[i,1]) )/dt
-        newsgr2 = func.integrate_gaussian(low, high, mu=data[i,5], sig=data[i,6], 
+        newsgr2 = func.integrate_gaussian(low, high, mu=data[i,5], sig=data[i,6],
             amp=(data[i,4]*data[i,4]) )/dt
         if ftype == "quad":
-            newsgr1b = func.integrate_gaussian(low, high, mu=data[i,2], sig=data[i,8], 
+            newsgr1b = func.integrate_gaussian(low, high, mu=data[i,2], sig=data[i,8],
                 amp=(data[i,7]*data[i,7]) )/dt
-            newsgr2b = func.integrate_gaussian(low, high, mu=data[i,5], sig=data[i,10], 
+            newsgr2b = func.integrate_gaussian(low, high, mu=data[i,5], sig=data[i,10],
                 amp=(data[i,9]*data[i,9]) )/dt
         if fname == "triple":
-			newsgr3 = func.integrate_gaussian(low, high, mu=data[i,7], sig=data[i,8], 
+			newsgr3 = func.integrate_gaussian(low, high, mu=data[i,7], sig=data[i,8],
                 amp=(data[i,6]*data[i,6]) )/dt
         back = back + abs(newback)*dL
         virgo = virgo + abs(newvirgo)*dL
@@ -969,7 +973,7 @@ def count_stars(fname="smart_sliding_back_quad.txt" ,ftype=None,
         print "# Back : {0:8.1f},  {1:.3f}".format(back, back/total)
         print "# Total: {0:8.1f}".format(total)
     print "# All Stars: {0}".format(int(all_stars))
-    
+
 
 def make_data_tables():
     fname = "smarter_slide_back_quad.txt"
@@ -977,10 +981,10 @@ def make_data_tables():
     r = np.loadtxt(wd+fname, delimiter=",")
     data = r[np.lexsort( (r[:,0], r[:,0]) )]
     #set offset index for errors
-    if fname[-8:-4] == "quad":  
+    if fname[-8:-4] == "quad":
         de = 12
         print "slice\t A1\t mu1\t sig1\t A2\t mu2\t sig2\t A1b\t sig1b\t A2b\t sig2b\t aa\t bb"
-    else:  
+    else:
         de = 8
         print "slice\t A1\t mu1\t sig1\t A2\t mu2\t sig2\t aa\t bb"
     #print data[0,:]
@@ -991,7 +995,7 @@ def make_data_tables():
         for j in range(1, de+1):
             out = out+"{0:6.1f}".format(data[i,j])+pm+"{0:.2f}".format(data[i,(j+de)])
         print out
-        
+
 def sgr_plot3D():
     from mpl_toolkits.mplot3d import Axes3D
     from matplotlib import cm
@@ -1010,9 +1014,9 @@ def sgr_plot3D():
         if z[i] > 303.0:  continue
         #print z[i]
         xs = np.arange(-30.0, 30.0, 0.1)
-        if fname[-8:-4] == "quad":  
+        if fname[-8:-4] == "quad":
             ys = func.quad_fat_gauss_line(xs, data[i,1:13])
-        else:  
+        else:
             ys = func.double_gauss_line(xs, data[i,1:9])
         zz = z[i] #(z[i]-200.0)*10.0
         ax.plot(xs, ys, zs=zz, zdir='y', alpha=0.8, color="black")
@@ -1039,7 +1043,7 @@ def sgr_plot3D():
     #    ax.bar(hist[:,0], hist[:,1], zs=float(name), zdir='y', alpha=0.8, color="white")
     #vout = np.transpose(np.vstack((np.array(virgox), np.array(virgoy) ) ) )
     #print vout, vout.shape
-    #np.savetxt("virgo_edge_points.txt", vout, fmt='%.6f') 
+    #np.savetxt("virgo_edge_points.txt", vout, fmt='%.6f')
     ax.plot(virgox, virgoy, zs=30.0, zdir='x', alpha=0.8, color="red")
     ax.plot(virgox, func.gauss_plus_floor(virgox, [13.0, 267., 20.5, 137.]), zs=30.0, zdir='x', alpha=0.8, color="cyan")
     ax.set_xlabel('B')
@@ -1080,7 +1084,7 @@ def crotus_cut(path="/home/newbym2/Desktop/starfiles", cdata=None):
         pb.endbar()
         data = np.array(data)
         np.savetxt("crotus_data.txt", data, fmt='%.6f')
-    else:  
+    else:
         data = []
         rdata = np.loadtxt(cdata)
         rlim0 = 28.5  #ac.getr(22.5)
@@ -1091,7 +1095,7 @@ def crotus_cut(path="/home/newbym2/Desktop/starfiles", cdata=None):
             data.append(rdata[i,:])
         data = np.array(data)
     #Now do analysis
-    sky = pp.HistMaker(data[:,3], data[:,4], xsize=0.25, ysize=0.25, 
+    sky = pp.HistMaker(data[:,3], data[:,4], xsize=0.25, ysize=0.25,
         xarea=(230.0, 255.0), yarea=(-10.0, 15.0))
     sky.varea = (0.0, 60.0)
     sky.cmap="color"
@@ -1100,7 +1104,7 @@ def crotus_cut(path="/home/newbym2/Desktop/starfiles", cdata=None):
     pp.PlotHist(sky, "crotus_cut.png")
     #sky.savehist("streamgen_bifExtra.csv")
     print "### - Done"
-          
+
 def lam_wedges():
     sys.path.insert(0, '../milkyway-tools')
     import sdss_visualizers as sdss
@@ -1144,11 +1148,11 @@ def plot_MCMC_results():
         plt.savefig("MCMC_15_out_"+str(p)+".png")
         plt.close("all")
 
-            
+
 if __name__ == "__main__":
     do_stuff()
-    
-    
+
+
 """
 RA 230.0, dec 2.0, is in stripe 11; mu 229.965574947, nu 0.23156178591
 RA 220.0, dec 4.0, is in stripe 12; mu 219.902390269, nu -0.0990566496675
@@ -1191,5 +1195,5 @@ def proj_test():
     plt.scatter(xx, yy, marker="o", s=1, c="k")
     plt.show()
     plt.close()
-    
+
 """

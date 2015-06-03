@@ -15,9 +15,10 @@ def do_stuff():
     #Mgiant_hist()
     #book_plot()
     #test_coords()
-    #mag_plots()
+    mag_plots()
     #g_plots()
-    study_giants()
+    #study_giants()
+    #field_of_streams()
 
 def Mgiant_hist():
     data = np.loadtxt("/home/newbym/Desktop/Mgiant_wise_sgr.csv", delimiter=",", skiprows=1)
@@ -151,8 +152,8 @@ def mag_plots(gmin=16.0, gmax=22.5):
     path = "/usr/home/f/081/tug08879/Desktop/"
     #path="/home/newbym/Desktop/FTO-stars/"
     #files = [path+"MSTO_North_plus20.csv", path+"MSTO_South_minus20.csv"]
-    #files = [path+"MSTO_North.csv", path+"MSTO_South.csv"]
-    files = [path+"BHB_all.csv"]
+    files = [path+"MSTO_North.csv", path+"MSTO_South.csv"]
+    #files = [path+"BHB_all.csv"]
     out = []
     for f in files:
         data = np.loadtxt(f, delimiter=",", skiprows=1)
@@ -162,14 +163,14 @@ def mag_plots(gmin=16.0, gmax=22.5):
         for i in range(data.shape[0]):
             #if data[i,2] < ac.getr(16.0):  continue
             #if data[i,2] > ac.getr(22.5):  continue
-            gmag = data[i,3]  # for BHB data
-            #gmag = data[i,2]  #for MSTO data
+            #gmag = data[i,3]  # for BHB data
+            gmag = data[i,2]  #for MSTO data
             if gmag < gmin:  continue
             if gmag > gmax:  continue
             lam, bet = (ac.lb2sgr(data[i,0], data[i,1], 30.0))[3:5]
             if lam > 170.0:
-                if bet > 10.0:  continue
-                if bet < 2.5:  continue
+                if bet > -2.5:  continue
+                if bet < -10.0:  continue
             else:
                 if bet >  -5.0:  continue
                 if bet < -12.5:  continue
@@ -179,14 +180,14 @@ def mag_plots(gmin=16.0, gmax=22.5):
         print "Transformed coordinates:", f
     out = np.array(out)
     hist = pp.HistMaker(out[:,0], out[:,2], 0.5, 0.1, yarea=(16.0, 22.5), xarea=(0.0, 360.0) )
-    hist.savehist(outfile="BHB_bright_faint_hist.csv", fmt='%.1f')
+    hist.savehist(outfile="MSTO_faint_faint_hist.csv", fmt='%.1f')
     hist.yflip=0
     hist.xflip=1
     hist.labels=(r"$\Lambda$",r"$g_0$")
     hist.ticks = (None, None)
     hist.varea=(0.0, 60.0)
-    pp.PlotHist(hist, imfile="BHB_bright_faint.png", cbarO='horizontal')
-    pp.PlotHist(hist, imfile="BHB_bright_faint.ps", cbarO='horizontal')
+    pp.PlotHist(hist, imfile="MSTO_faint_faint.png", cbarO='horizontal')
+    pp.PlotHist(hist, imfile="MSTO_faint_faint.ps", cbarO='horizontal')
 
 def g_plots():
     #path =
@@ -261,5 +262,76 @@ def study_giants():
     #plt.xlim(0.8, 1.3)
     plt.ylim(10.0, -6.0)
     plt.show()
+
+def field_of_streams(xa = (0.0,360.0), ya=(-90.0, 90.0), normed=1, file=None):
+    #xa = (110.0,230.0), ya=(-5.0, 60.0), normed=1):
+    path = "/usr/home/f/081/tug08879/Desktop/"
+    file = "MSTO_North.csv"
+    if file != None:
+        data = np.loadtxt(path+file, delimiter=",", skiprows=1)
+        print "Loaded data"
+        # change coordinates
+        for i in range(data.shape[0]):
+            ra, dec = ac.lbToEq(data[i,0], data[i,1])
+            data[i,0], data[i,1] = ra, dec
+        print "Changed Coordinates"
+        Wr, Br, Gr, Rr, Kr = 20.0+0.25, 20.66+0.25, 21.33+0.25, 22.0+0.25, 23.0+0.25  #Belokurov 2006 + g-r=0.25
+        # bins for each color
+        W, B, G, R, K = [], [], [], [], []
+        for i in range(len(data[:,0])):
+            if   data[i,2] < Wr:  W.append(data[i,:])
+            elif data[i,2] < Br:  B.append(data[i,:])
+            elif data[i,2] < Gr:  G.append(data[i,:])
+            elif data[i,2] < Rr:  R.append(data[i,:])
+            else:  pass
+        if R == []:  R = [[0.0,0.0,0.0]]  #failsafe
+        if G == []:  G = [[0.0,0.0,0.0]]  #failsafe
+        if B == []:  B = [[0.0,0.0,0.0]]  #failsafe
+        B = np.array(B)
+        Bhist = pp.HistMaker(B[:,0], B[:,1], xsize=0.25, ysize=0.25, xarea=xa, yarea=ya)
+        Bhist.varea = (0.0,200.0)
+        Bhist.savehist("Bhist.csv")
+        G = np.array(G)
+        Ghist = pp.HistMaker(G[:,0], G[:,1], xsize=0.25, ysize=0.25, xarea=xa, yarea=ya)
+        Ghist.varea = (0.0,200.0)
+        Ghist.savehist("Ghist.csv")
+        R = np.array(R)
+        Rhist = pp.HistMaker(R[:,0], R[:,1], xsize=0.25, ysize=0.25, xarea=xa, yarea=ya)
+        Rhist.varea = (0.0,200.0)
+        Rhist.savehist("Rhist.csv")
+    else:
+        Bhist = pp.HistFromFile("Bhist.csv")
+        Ghist = pp.HistFromFile("Ghist.csv")
+        Rhist = pp.HistFromFile("Rhist.csv")
+    print np.ma.max(Bhist.H), np.ma.max(Ghist.H), np.ma.max(Rhist.H)
+    if normed == 1:
+        Bhist.H = Bhist.H / 15.0 #np.ma.max(Bhist.H)  #Normalize individually
+        Ghist.H = Ghist.H / 15.0 #np.ma.max(Ghist.H)
+        Rhist.H = Rhist.H / 15.0 #np.ma.max(Rhist.H)
+    else:
+        #norm = max(np.ma.max(Bhist.H), np.ma.max(Ghist.H), np.ma.max(Rhist.H))
+        norm = 100.0
+        Bhist.H = norm_hist(Bhist.H, norm)
+        Ghist.H = norm_hist(Ghist.H, norm)
+        Rhist.H = norm_hist(Rhist.H, norm)
+    RGB = np.dstack( (Rhist.H, Ghist.H, Bhist.H) )
+    fig = plt.figure(dpi=300, figsize=(5.0,4.0) )
+    sp = plt.subplot(111)
+    plt.imshow(RGB, origin='lower')
+    plt.setp(sp.get_xticklabels(), visible=False)
+    plt.setp(sp.get_yticklabels(), visible=False)
+    #plt.xlim(530.0, 200.0)
+    #plt.ylim(160.0, 330.0)
+    plt.savefig("FoS_smallbins.png", dpi=300)
+    plt.savefig("FoS_smallbins.ps", dpi=300)
+    #plt.show()
+    #plt.close('all')
+
+def norm_hist(H, norm):
+    for i in range(H.shape[0]):
+        for j in range(H.shape[1]):
+            if H[i,j] > norm:  H[i,j] = 1.0
+        else:  H[i,j] = H[i,j] / norm
+    return H
 
 if __name__ == "__main__":  do_stuff()
