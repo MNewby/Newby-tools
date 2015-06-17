@@ -15,10 +15,10 @@ def do_stuff():
     #Mgiant_hist()
     #book_plot()
     #test_coords()
-    mag_plots()
+    #mag_plots()
     #g_plots()
     #study_giants()
-    #field_of_streams()
+    field_of_streams()
 
 def Mgiant_hist():
     data = np.loadtxt("/home/newbym/Desktop/Mgiant_wise_sgr.csv", delimiter=",", skiprows=1)
@@ -263,10 +263,11 @@ def study_giants():
     plt.ylim(10.0, -6.0)
     plt.show()
 
-def field_of_streams(xa = (0.0,360.0), ya=(-90.0, 90.0), normed=1, file=None):
+def field_of_streams(xa = (0.0,360.0), ya=(-90.0, 90.0), normed=1, file=None, hname=""):
     #xa = (110.0,230.0), ya=(-5.0, 60.0), normed=1):
     path = "/usr/home/f/081/tug08879/Desktop/"
-    file = "MSTO_North.csv"
+    #file = "MSTO_North.csv"
+    hname = "_sgrtweaked"
     if file != None:
         data = np.loadtxt(path+file, delimiter=",", skiprows=1)
         print "Loaded data"
@@ -275,7 +276,8 @@ def field_of_streams(xa = (0.0,360.0), ya=(-90.0, 90.0), normed=1, file=None):
             ra, dec = ac.lbToEq(data[i,0], data[i,1])
             data[i,0], data[i,1] = ra, dec
         print "Changed Coordinates"
-        Wr, Br, Gr, Rr, Kr = 20.0+0.25, 20.66+0.25, 21.33+0.25, 22.0+0.25, 23.0+0.25  #Belokurov 2006 + g-r=0.25
+        #Wr, Br, Gr, Rr, Kr = 20.0+0.25, 20.66+0.25, 21.33+0.25, 22.0+0.25, 23.0+0.25  #Belokurov 2006 + g-r=0.25
+        Wr, Br, Gr, Rr, Kr = 19.0, 21.0, 21.75, 22.5, 23.0
         # bins for each color
         W, B, G, R, K = [], [], [], [], []
         for i in range(len(data[:,0])):
@@ -300,14 +302,21 @@ def field_of_streams(xa = (0.0,360.0), ya=(-90.0, 90.0), normed=1, file=None):
         Rhist.varea = (0.0,200.0)
         Rhist.savehist("Rhist.csv")
     else:
-        Bhist = pp.HistFromFile("Bhist.csv")
-        Ghist = pp.HistFromFile("Ghist.csv")
-        Rhist = pp.HistFromFile("Rhist.csv")
-    print np.ma.max(Bhist.H), np.ma.max(Ghist.H), np.ma.max(Rhist.H)
+        Bhist = pp.HistFromFile("Bhist"+hname+".csv")
+        Ghist = pp.HistFromFile("Ghist"+hname+".csv")
+        Rhist = pp.HistFromFile("Rhist"+hname+".csv")
+    #print np.ma.max(Bhist.H), np.ma.max(Ghist.H), np.ma.max(Rhist.H)
+    # Now correct for bin size changes due to declination
+    for j in range(Bhist.H.shape[0]):
+        decl = (j - 360)*0.25
+        mod = 1.0 / np.cos(decl*ma.pi/180.0)
+        Bhist.H[j,:] = Bhist.H[j,:]*mod
+        Ghist.H[j,:] = Ghist.H[j,:]*mod
+        Rhist.H[j,:] = Rhist.H[j,:]*mod
     if normed == 1:
-        Bhist.H = Bhist.H / 15.0 #np.ma.max(Bhist.H)  #Normalize individually
-        Ghist.H = Ghist.H / 15.0 #np.ma.max(Ghist.H)
-        Rhist.H = Rhist.H / 15.0 #np.ma.max(Rhist.H)
+        Bhist.H = Bhist.H / 25.0 #np.ma.max(Bhist.H)  #Normalize individually
+        Ghist.H = Ghist.H / 12.0 #np.ma.max(Ghist.H)
+        Rhist.H = Rhist.H / 12.0 #np.ma.max(Rhist.H)
     else:
         #norm = max(np.ma.max(Bhist.H), np.ma.max(Ghist.H), np.ma.max(Rhist.H))
         norm = 100.0
@@ -320,10 +329,10 @@ def field_of_streams(xa = (0.0,360.0), ya=(-90.0, 90.0), normed=1, file=None):
     plt.imshow(RGB, origin='lower')
     plt.setp(sp.get_xticklabels(), visible=False)
     plt.setp(sp.get_yticklabels(), visible=False)
-    #plt.xlim(530.0, 200.0)
-    #plt.ylim(160.0, 330.0)
+    plt.xlim(1075.0, 425.0)
+    plt.ylim(340.0, 640.0)
     plt.savefig("FoS_smallbins.png", dpi=300)
-    plt.savefig("FoS_smallbins.ps", dpi=300)
+    #plt.savefig("FoS_smallbins.ps", dpi=300)
     #plt.show()
     #plt.close('all')
 
