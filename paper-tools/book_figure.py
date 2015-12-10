@@ -13,12 +13,13 @@ import astro_coordinates as ac
 
 def do_stuff():
     #Mgiant_hist()
+    BLUE_hist()
     #book_plot()
     #test_coords()
     #mag_plots()
     #g_plots()
     #study_giants()
-    field_of_streams()
+    #field_of_streams()
 
 def Mgiant_hist():
     data = np.loadtxt("/home/newbym/Desktop/Mgiant_wise_sgr.csv", delimiter=",", skiprows=1)
@@ -34,6 +35,37 @@ def Mgiant_hist():
     #hist.ticks = (None, [-40.0, -20.0, 0.0, 20.0, 40.0, 60.0, 80.0])
     hist.varea=(0.0, 200.0)
     pp.PlotHist(hist, imfile="Mgiant_sgr.png", cbarO='horizontal')
+
+def BLUE_hist():
+    BHB = np.loadtxt("/home/mnewby/Desktop/BLUE_all_hist.csv", delimiter=",")
+    BHB = BHB[:,::-1]
+    fig = plt.figure(1, figsize=(12,9), dpi=120)
+    ########################################### BHBs
+    sp = fig.add_subplot(111)
+    #BHB = BHB[:,::-1]
+    #BHB = BHB[::-1,:]
+    im = sp.imshow(BHB, cmap=pp.spectral_wb, vmax=30.0)
+    #plt.plot([5.0, 295.0], [60.0, 60.0], 'k--')
+    #plt.plot([5.0, 295.0], [70.0, 70.0], 'k--')
+    #plt.plot([5.0, 295.0], [80.0, 80.0], 'k--')
+    xlocs = np.arange(0.0, 301.0, 20.0)
+    xlabs = []
+    for i in range(len(xlocs)):  xlabs.append("${0:.0f}$".format(xlocs[-1*(i+1)]+20))
+    plt.xticks(xlocs, xlabs, fontsize=12)
+    ylocs = np.arange(10.0, 121.0, 10.0)
+    ylabs = []
+    for i in range(len(ylocs)):
+        if i % 2 == 0:  ylabs.append("${0:.0f}$".format(ylocs[i]-70))
+        else:  ylabs.append("")
+    plt.yticks(ylocs, ylabs, fontsize=12 )
+    plt.xlabel(r"$\Lambda$", fontsize=14)
+    plt.ylabel(r"$B$", rotation=0, fontsize=14)
+    #plt.text(135, 41, "SDSS BHB Selection", fontsize=10, family="serif",
+    #    backgroundcolor="w", color="k")
+    plt.xlim(0.0,300.0)
+    plt.ylim(100.0, 10.0)
+    plt.savefig("BLUE_stars_SDSS.png")
+    plt.savefig("BLUE_stars_SDSS.ps")
 
 def book_plot():
     #BHB = np.loadtxt("/home/newbym/Desktop/bhbs_all_hist.csv", delimiter=",")
@@ -149,11 +181,11 @@ def test_coords():
     print "Done"
 
 def mag_plots(gmin=16.0, gmax=22.5):
-    path = "/usr/home/f/081/tug08879/Desktop/"
+    path = "/home/mnewby/Desktop/"
     #path="/home/newbym/Desktop/FTO-stars/"
     #files = [path+"MSTO_North_plus20.csv", path+"MSTO_South_minus20.csv"]
-    files = [path+"MSTO_North.csv", path+"MSTO_South.csv"]
-    #files = [path+"BHB_all.csv"]
+    #files = [path+"MSTO_North.csv", path+"MSTO_South.csv"]
+    files = [path+"blue_all.csv"]
     out = []
     for f in files:
         data = np.loadtxt(f, delimiter=",", skiprows=1)
@@ -163,15 +195,19 @@ def mag_plots(gmin=16.0, gmax=22.5):
         for i in range(data.shape[0]):
             #if data[i,2] < ac.getr(16.0):  continue
             #if data[i,2] > ac.getr(22.5):  continue
-            #gmag = data[i,3]  # for BHB data
-            gmag = data[i,2]  #for MSTO data
+            gmag = data[i,3]  # for BHB data
+            #gmag = data[i,2]  #for MSTO data
             if gmag < gmin:  continue
             if gmag > gmax:  continue
             lam, bet = (ac.lb2sgr(data[i,0], data[i,1], 30.0))[3:5]
             if lam > 170.0:
+                #if bet > 10.0:  continue
+                #if bet < 2.5:  continue
                 if bet > -2.5:  continue
                 if bet < -10.0:  continue
             else:
+                #if bet <  -2.5:  continue
+                #if bet > 5.0:  continue
                 if bet >  -5.0:  continue
                 if bet < -12.5:  continue
             out.append([lam, bet, gmag])
@@ -180,14 +216,16 @@ def mag_plots(gmin=16.0, gmax=22.5):
         print "Transformed coordinates:", f
     out = np.array(out)
     hist = pp.HistMaker(out[:,0], out[:,2], 0.5, 0.1, yarea=(16.0, 22.5), xarea=(0.0, 360.0) )
-    hist.savehist(outfile="MSTO_faint_faint_hist.csv", fmt='%.1f')
+    hist.savehist(outfile="blue_faint_faint_hist.csv", fmt='%.1f')
     hist.yflip=0
     hist.xflip=1
     hist.labels=(r"$\Lambda$",r"$g_0$")
-    hist.ticks = (None, None)
-    hist.varea=(0.0, 60.0)
-    pp.PlotHist(hist, imfile="MSTO_faint_faint.png", cbarO='horizontal')
-    pp.PlotHist(hist, imfile="MSTO_faint_faint.ps", cbarO='horizontal')
+    hist.ticks = (sc.arange(20.0, 321.0, 20.0), sc.arange(16.0, 22.6, 0.5) )
+    #hist.ticklabels = (None, ["16.0", "16.5", "17.0", "17.5", "18.0", "18.5", "19.0", "19.5", "20.0",
+    #                            "20.5", "21.0", "21.5", "22.0", "22.5"])
+    hist.varea=(0.0, 30.0)
+    pp.PlotHist(hist, imfile="blue_faint_faint.png", cbarO='horizontal')
+    pp.PlotHist(hist, imfile="blue_faint_faint.ps", cbarO='horizontal')
 
 def g_plots():
     #path =
@@ -342,5 +380,6 @@ def norm_hist(H, norm):
             if H[i,j] > norm:  H[i,j] = 1.0
         else:  H[i,j] = H[i,j] / norm
     return H
+
 
 if __name__ == "__main__":  do_stuff()

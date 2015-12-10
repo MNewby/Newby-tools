@@ -24,7 +24,7 @@ def do_stuff():
     #FTO_skyplot(gmin=16.0, gmax=23.5)
     #FTO_skyplot(gmin=20.0, gmax=22.5)
     #FTO_skyplot(gmin=19.5, gmax=20.5) # virgo
-    FTO_skyplot(gmin=16.0, gmax=22.5, multistep=0.1)
+    #FTO_skyplot(gmin=16.0, gmax=22.5, multistep=None)
     #plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/FTO_All_hist.csv",
     #                outfile=None)  #"FTO_All.png")  #"sgr_bhbs.csv")
     #plot_from_file(infile="/home/newbym2/Newby-tools/paper-tools/hist_g_20.0_22.5.txt",
@@ -34,8 +34,8 @@ def do_stuff():
     #giant_tools(out=["c-mag"])
     #lambet_profiles(path="/home/newbym2/Desktop/sdssN-stars/", glb="*bhbs_all*",
     #                lj=0, bj=1, gj=3, lbins=5.0, bbins=1.0, suffix="_bhbs", coords="sgr")
-    #lambet_profiles(path="/home/newbym2/Desktop/FTO-stars/", glb="FTO_south_dirty**",
-    #                lj=0, bj=1, gj=3, suffix="_TOnew", coords="sgr")
+    lambet_profiles(path="/home/mnewby/Desktop/", glb="*North*",
+                    lj=0, bj=1, gj=2, suffix="_MSTOhalf", coords="sgr")
     #build_hists(hmin=20.0, hmax=22.4, lambins=5, fit_type="quad", background="fitline",
     #    path="/home/newbym2/Dropbox/Research/sgrLetter/FTO_tomography/tenth_bins/",
     #    outpath="/home/newbym2/Dropbox/Research/sgrLetter/plus_15kpc/") #15 kpc
@@ -129,7 +129,7 @@ def clean_FTO_data(path="/home/newbym2/Desktop/FTO-stars/"):
     np.savetxt(path+"stars-MSTO-N-all.txt", out, fmt='%.5f')
     print "### - DONE"
 
-def FTO_skyplot(path="/home/newbym/Desktop/FTO-stars/", gmin=16.0, gmax=22.5,
+def FTO_skyplot(path="/home/mnewby/Desktop/", gmin=16.0, gmax=22.5,
                 multistep=None):
     """Make a skyplot with updated MSTO stars from SDSS """
     #files = glob.glob(path+"stars*")
@@ -140,7 +140,7 @@ def FTO_skyplot(path="/home/newbym/Desktop/FTO-stars/", gmin=16.0, gmax=22.5,
     #files.append(path+"FTO_south_dirty.csv")
     #files = glob.glob(path+"*dirty*")
     #files = [path+"MSTO_North_plus20.csv", path+"MSTO_South_minus20.csv"]
-    files = [path+"BHB_all.csv"]
+    files = [path+"blue_all.csv"]
     out = []
     for f in files:
         #data = np.loadtxt(f, skiprows=1)
@@ -153,7 +153,9 @@ def FTO_skyplot(path="/home/newbym/Desktop/FTO-stars/", gmin=16.0, gmax=22.5,
             #gmag = data[i,2]  #for MSTO data
             if gmag < gmin:  continue
             if gmag > gmax:  continue
-            lam, bet = (ac.lb2sgr(data[i,0], ac.getr(data[i,1])))[3:5]
+            #Distance is ambiguous for blue stars
+            #lam, bet = (ac.lb2sgr(data[i,0], data[i,1], ac.getr(data[i,3]) ) )[3:5]
+            lam, bet = (ac.lb2sgr(data[i,0], data[i,1], 10000.0) )[3:5]
             out.append([lam, bet, gmag])
         print "Transformed coordinates:", f
     out = np.array(out)
@@ -280,7 +282,7 @@ def lambet_profiles(path="/home/newbym2/Desktop/sdssN-stars/", glb="*bhbs_all*",
     files = glob.glob(path+glb)
     print files
     data=[]
-    g_cut_low, g_cut_high = 15.0, 22.5
+    g_cut_low, g_cut_high = 16.0, 22.5
     pb = pr.Progressbar(steps=len(files), prefix="Loading Stars:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     for f in files:
@@ -311,7 +313,8 @@ def lambet_profiles(path="/home/newbym2/Desktop/sdssN-stars/", glb="*bhbs_all*",
     pb3 = pr.Progressbar(steps=len(files), prefix="Making Slices:", suffix=None,
         symbol="#", active="=", brackets="[]", percent=True, size=40)
     #Ls = (40.0, 130.0, lbins)
-    Ls = (200.0, 300.0, lbins)
+    #Ls = (200.0, 300.0, lbins)
+    Ls = (201.25, 301.25, lbins)  #for wedges offset by half a wedge
     Lsteps = int((Ls[1]-Ls[0])/Ls[2])
     for i in range(Lsteps):
         Lname = str(Ls[0]+(Ls[2]*i) )[:6]+suffix
@@ -389,13 +392,13 @@ def build_hists(hmin=19.2, hmax=22.5, lambins=5, fit_type="double",
 
 
 def fit_hists(x_raw, y_raw, name, outfile=None, outpath="", fit_type='double',
-        cuts=None, background="common", binsize=0.5):
+        cuts=None, background="common", binsize=0.5, lam_offset=0.0):
     run = eval(name.split("_")[-1])
     # clean data;  don't fit bins with certain criteria
     if cuts != None:
         mask = sc.ones(len(y_raw), dtype=bool)
         for i in range(cuts.shape[0]):
-            if cuts[i,0] == run:
+            if cuts[i,0]+lam_offset == run:  #for offset Lambda wedges
                 if binsize==0.5:
                     for j in range(cuts[i,1], cuts[i,2]):
                         mask[(j-1)] = cuts[i,3]
@@ -605,6 +608,11 @@ def plot_stream_counts():
 	plt.ylim(0.0, np.ma.max(db[:,1]) )
 	plt.xlim(320.0, 50.0)
 	plt.show()
+
+def Hernquist_bin(gmin=16.0, gmax=22.5, lammin=0.0, lammax=2.5, betamin=0.0, betamax=0.5,
+        rsteps=100, beta_steps=10, lamsteps=1):
+    """ gets the total number of stars in one square of the sky in Sgr Lambda, Beta coords """
+    
 
 
 
