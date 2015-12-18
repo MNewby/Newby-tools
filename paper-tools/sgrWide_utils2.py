@@ -610,10 +610,34 @@ def plot_stream_counts():
 	plt.show()
 
 def Hernquist_bin(gmin=16.0, gmax=22.5, lammin=0.0, lammax=2.5, betamin=0.0, betamax=0.5,
-        rsteps=100, beta_steps=10, lamsteps=1):
+        rsteps=100, beta_steps=2, lamsteps=1, absmag=4.2, rho0=10.0, r0=9.0, q=0.52 ):
     """ gets the total number of stars in one square of the sky in Sgr Lambda, Beta coords """
-    
+    lam0 = (lammax-lammin)*0.5 + lammin
+    lambin = (lammax-lammin)/lamsteps
+    rmin, rmax = ac.getr(gmin, M=absmag), ac.getr(gmax, M=absmag)
+    rbin = (rmax - rmin)/rsteps
+    rcenters = sc.arange(rmin, rmax, rbin) + (rbin*0.5)
+    betabin = (betamax-betamin)/beta_steps
+    betacenters = sc.arange(betamin, betamax, betabin) + (betabin*0.5)
+    Nstars = 0.0
+    #lamsteps not implemented
+    for r in rcenters:
+        new = 0.0
+        for b in betacenters:
+            new = new + sc.cos(b)
+        xgal, ygal, zgal = sgr.law_sgr2xyz_sun(lam0, b, r)  #note default dSun=8.0 kpc
+        zgal = zgal / q
+        rgal = np.sqrt(xgal*xgal + ygal*ygal + zgal*zgal)
+        new = new*rgal / ((rgal + r0)**3)
+        Nstars = Nstars + new
+    return Nstars*rho0*lambin*betabin*rbin
 
+def make_hernquist_hists():
+    """ cycles through the Hernquist_bin function, building histograms for a given
+        wedge in Sgr coordinates """
+    return -1
 
-
-if __name__ == "__main__":  do_stuff()
+if __name__ == "__main__":
+    #do_stuff()
+    print Hernquist_bin(gmin=18.0, gmax=18.5, lammin=90.0, lammax=91.0, betamin=-0.5, betamax=0.5,
+            rsteps=10, beta_steps=2, lamsteps=1, absmag=4.2, rho0=10.0, r0=9.0, q=0.52)

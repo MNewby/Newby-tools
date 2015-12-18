@@ -9,19 +9,19 @@ import matplotlib.pyplot as plt
 import sgr_law as sl
 
 """ This is a translation of stCoords.c and atSurveyGeometry.c from the
-    Milkyway@home code. Other coordinate transforms have been added as 
+    Milkyway@home code. Other coordinate transforms have been added as
     needed, with sources cited appropriately.
 -Matthew Newby, RPI, Jun 15, 2011"""
 
-deg = 180.0 / ma.pi 
-rad = ma.pi / 180.0 
+deg = 180.0 / ma.pi
+rad = ma.pi / 180.0
 surveyCenterRa = 185.0
 surveyCenterDec = 32.5
 raGP = 192.8594813 * rad
 decGP = 27.1282511 * rad
 lCP = 122.932 * rad #123.932 is the wrong value in B&M
-#raSP = 
-#decSP = 
+#raSP =
+#decSP =
 arr = sc.array([0.0])
 dsun = 8.5  # 8.0 is current IAU standard!
 
@@ -79,9 +79,9 @@ def EqTolb (ra_deg, dec_deg):
     l = (lCP - t)
     b, l = angle_bounds2((b*deg), (l*deg))
     return l, b
-    
-def lbToEq (l_deg, b_deg):   
-    """ Converts galactic l,b in to Equatorial ra, dec; from Binney and Merrifield, p. 31;  
+
+def lbToEq (l_deg, b_deg):
+    """ Converts galactic l,b in to Equatorial ra, dec; from Binney and Merrifield, p. 31;
     l, b must be arrays of same shape"""
     l, b = (l_deg*rad), (b_deg*rad)
     # Conversion Code
@@ -122,7 +122,7 @@ def xyz2lbr (x, y, z, d0=dsun):
     else:
         if l < 0.0:  l = l + 360.0
     return l,b,r
-    
+
 def stream2xyz (u, v, w, mu, r, theta, phi, wedge, nu=0.0):
     """ Converts to galactic x,y,z from custom stream coordinates u,v,w;
     ACCEPTS ONLY 1 POINT AT A TIME - don't know what will happen if arrays are passed in
@@ -160,7 +160,7 @@ def xyz2longlat(x,y,z):
     d = sc.sqrt(x*x + y*y)
     lat = sc.arcsin(z/r)
     return long*deg, lat*deg, r
-    
+
 def longlat2xyz(long,lat,r=1.0):
     """ converts spherical longitude and latitude into cartesian x,y,z """
     x = r*sc.cos(long*rad)*sc.cos(lat*rad)
@@ -262,11 +262,11 @@ def GC2lbr(mu, nu, r, wedge):
 def lb2GC(l, b, wedge):
     ra, dec = lbToEq(l, b)
     return EqToGC(ra, dec, wedge)
-    
+
 def lb2sgr(l,b,r):
     x,y,z = lbr2xyz(l,b,r)
     return sl.law_xyz2sgr_sun(x,y,z)
-    
+
 def streamToGC(u,v,w, mu,r,theta,phi,wedge):
     x,y,z = stream2xyz(u,v,w, mu,r,theta,phi,wedge)
     l,b,r1 = xyz2lbr(x,y,z)
@@ -280,14 +280,14 @@ def xyz2lambeta(x,y,z, new_x=[], plane=[], origin=None, verbose=1):
     if type(lam)==type(arr):
         for i in range(len(lam)):
             if lam[i] < 0.0:  lam[i] = lam[i] + 360.0
-    else:  
+    else:
         if lam < 0.0:  lam = lam + 360.0
     return lam, beta, r
 
 def lambeta2xyz(lam, beta, r, center=[], plane=[], origin=None):
     x1, y1, z1 = longlat2xyz(lam, beta, r)
     return plane2xyz(x1, y1, z1, center, plane, origin)
-    
+
 def lambeta2lbr(lam, beta, r, center=[], plane=[], origin=None):
     x1, y1, z1 = longlat2xyz(lam, beta, r)
     x, y, z = plane2xyz(x1, y1, z1, center, plane, origin)
@@ -299,7 +299,7 @@ def lambeta2lbr(lam, beta, r, center=[], plane=[], origin=None):
 def equirec_projection(lam, phi, phi1=0.0):
 	""" Equirectangular Projection (Wikipedia), projects lat/long lines to rectangles
 		lam:  longitude from central meridian
-		phi:  latitude from equator 
+		phi:  latitude from equator
 		phi1:  standard parallel; default makes lat/long -> cartesian coordinates"""
 	if type(lam) != type(arr):  theta = sc.array([lam])
 	if type(phi) != type(arr):  phi = sc.array([phi])
@@ -307,11 +307,11 @@ def equirec_projection(lam, phi, phi1=0.0):
 	y = phi
 	if len(x)==1:  x, y = x[0], y[0]
 	return x, y
-	
+
 def equal_area_projection(lam, phi, acc=0.0002777778):
 	""" Mollweide equal-area projection (Wikipedia)
 		lam:  longitude from central meridian
-		phi:  latitude from equator	
+		phi:  latitude from equator
 		acc:  desired accuracy, in degrees.  Default is one arcsecond"""
 	xm, ym = (2.0)*ma.sqrt(2.0)/ma.pi, ma.sqrt(2.0) #multipliers for projection
 	if type(lam) != type(arr):  theta = sc.array([lam])
@@ -328,7 +328,7 @@ def equal_area_projection(lam, phi, acc=0.0002777778):
 	y = ym*sc.sin(theta)
 	if len(x)==1:  x, y = x[0], y[0]
 	return x*deg, y*deg
-	
+
 def tripel_projection(lam, phi, phi1=ma.acos(2.0/ma.pi)):
     """ Winkel tripel projection (Wikipedia); minimizes distortion in three categories.
 		lam:  longitude from central meridian
@@ -362,7 +362,7 @@ def sin_projection(lam, phi):
 def rv_to_vgsr(rv, l, b):
     # From Yanny et al., 2009
     # vgsr = rv + 10.1 cosb cosl + 224.0 cosbsinl + 6.7 sinb km/s
-    part1 = rv + 10.1*np.cos(b*rad) * np.cos(l*rad) 
+    part1 = rv + 10.1*np.cos(b*rad) * np.cos(l*rad)
     part2 = 224.0 * np.cos(b*rad) * np.sin(l*rad)
     part3 = 6.7*np.sin(b*rad)
     vgsr = part1 + part2 + part3
@@ -385,7 +385,7 @@ def get_eta (wedge):
     if wedge <= 46:  eta = wedge * ss - 57.5
     else:  eta = wedge * ss - 57.5 - 180.0
     return eta
-    
+
 def angle_bounds (angle, min=0.0, max=360.0):
     """ Keeps an angle, in degrees, in a 360 degree region"""
     while angle < min:  angle = angle + 360.0
@@ -480,7 +480,7 @@ def raDeg (raHr, raMin, raSec, dec=0.0):  # Make this one better
 def unsinc(x):
 	"""Returns the unnormalized sinc function; x in radians"""
 	return np.pi * np.sinc(x/np.pi)
-	
+
 def check (expected, test):
     arcsec = 1.0 / 3600.0
     if (expected - test) < arcsec:  return "YES - total error: "+str((expected - test)*3600.0)+" arcseconds"
@@ -511,12 +511,12 @@ def Rot_y(t):
     return  sc.matrix([ [sc.cos(t),      0.0,  sc.sin(t)],
                         [0.0,            1.0,        0.0],
                         [-1.0*sc.sin(t), 0.0,  sc.cos(t)]  ])
-    
+
 def Rot_z(t):
     return  sc.matrix([ [sc.cos(t),  -1.0*sc.sin(t),  0.0],
                         [sc.sin(t),  sc.cos(t),       0.0],
                         [0.0,        0.0,             1.0]  ])
-    
+
 
 """ ------------------ Help Information ------------------ """
 
