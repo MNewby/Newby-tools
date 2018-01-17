@@ -8,6 +8,8 @@ import sys
 sys.path.insert(0, '../utilities')
 import astro_coordinates as co
 
+#Git test comment
+
 rad = ma.pi/180.0
 deg = 180.0/ma.pi
 
@@ -35,7 +37,7 @@ for i in range(len(np)):
     else:  plt.text(rp[i]+1.0, vp[i]+0.5, np[i], fontsize=10)
 plt.fill([30.0, 65.0, 65.0, 30.0],[45.0, 45.0, 30.5, 30.5], 'b', alpha=0.25)
 plt.text(32.0, 42.0, "Solar System Rotation Curve", fontsize=14)
-plt.text(47.5, 32.0, "Point size corresponds to log$_{10}$ planet radii\n (Credit: Matthew Newby, Milkyway@home)", 
+plt.text(47.5, 32.0, "Point size corresponds to log$_{10}$ planet radii\n (Credit: Matthew Newby, Milkyway@home)",
     horizontalalignment="center", fontsize=10)
 #\n (Matthew Newby, Milkyway@home)")
 plt.text(40.0, 37.0, r"$v = \sqrt{GM/r}$", fontsize=20)
@@ -76,4 +78,4 @@ plt.xlim(0.0, 15.0)
 plt.ylim(0.0, 1.6)
 plt.xlabel(r"Radius, $r$ (kpc)")
 plt.ylabel(r"Orbital Velocity ($arb.$)")
-plt.show() 
+plt.show()
