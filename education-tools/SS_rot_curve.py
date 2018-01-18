@@ -8,8 +8,6 @@ import sys
 sys.path.insert(0, '../utilities')
 import astro_coordinates as co
 
-#Git test comment
-
 rad = ma.pi/180.0
 deg = 180.0/ma.pi
 
