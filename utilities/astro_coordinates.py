@@ -247,6 +247,20 @@ def inv_rot_3D(x,y,z, rot="z", angles=[ma.pi]):
     """ MAYBE MAKE THIS ONE TAKE SAME INPUTS AS rot_3D TO MAKE THINGS EASIER """
 
 
+#Tom Donlon Nov. 2018
+def LamEtaToEq(lam_deg, eta_deg): #converts SDSS survey coordinates to Equitorial coordinates
+    ra_cen_deg = 185
+    dec_cen_deg = 32.5
+    dec_cen = dec_cen_deg * np.pi/180
+
+    lam = lam_deg * np.pi/180
+    eta = eta_deg * np.pi/180
+
+    dec = 180/np.pi * np.arcsin(np.cos(lam) * np.sin(eta + dec_cen))
+    ra = 180/np.pi * np.arctan2(np.sin(lam), np.cos(lam) * np.cos(eta + dec_cen)) + ra_cen_deg
+
+    return ra, dec
+
 """ ------------------ Higher-order transforms ------------------ """
 
 def GC2xyz(mu, nu, r, wedge):
