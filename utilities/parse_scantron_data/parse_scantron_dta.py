@@ -53,7 +53,7 @@ def main(args):
         error_check(lines)
         simple_out(head, key, lines, outname=outnames[fcount], delim=delimiter)
         fcount = fcount + 1
-    print("{0} Files comepleated. Script finished.".format(fcount))
+    print("{0} Files comepleted. Script finished.".format(fcount))
 
 def parse_args(args):
     letters, delim, delimiter = 0, 0, ","
