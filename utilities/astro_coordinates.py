@@ -209,7 +209,7 @@ def rot_3D(x,y,z, rot="z", angles=[ma.pi]):
         if rot[i] == "x":   Rx = Rot_x(t);  R = Rx*R;  continue
         elif rot[i] == "y": Ry = Rot_y(t);  R = Ry*R;  continue
         elif rot[i] == "z": Rz = Rot_z(t);  R = Rz*R;  continue
-        else:  print "!!! - Invalid rotation axis, {0}".format(rot(i))
+        else:  print("!!! - Invalid rotation axis, {0}".format(rot(i)) )
     # Now do the rotations
     if type(x) != type(sc.zeros(1)):
         out = R*sc.matrix([ [x],[y],[z] ])
@@ -234,7 +234,7 @@ def inv_rot_3D(x,y,z, rot="z", angles=[ma.pi]):
         if rot[i] == "x":   Rx = LA.inv(Rot_x(t));  R = Rx*R;  continue
         elif rot[i] == "y": Ry = LA.inv(Rot_y(t));  R = Ry*R;  continue
         elif rot[i] == "z": Rz = LA.inv(Rot_z(t));  R = Rz*R;  continue
-        else:  print "!!! - Invalid rotation axis, {0}".format(rot(i))
+        else:  print("!!! - Invalid rotation axis, {0}".format(rot(i)) )
     # Now do the rotations
     if type(x) != type(sc.zeros(1)):
         out = R*sc.matrix([ [x],[y],[z] ])
@@ -488,7 +488,7 @@ def raDeg (raHr, raMin, raSec, dec=0.0):  # Make this one better
     newra = raTime*(15.0)*(sc.cos(sc.radians(dec)) )
     #should be dec != 0.0?  Works if dec =0.0...
     #15.0 = (360 degrees)/(24 hours)
-    #print 'converted ra, in degrees:'
+    #print( 'converted ra, in degrees:')
     return newra
 
 def unsinc(x):
@@ -505,7 +505,7 @@ def SDSS_primary(aa,bb,wedge,fmt="GC",low=9,high=23):
         nu against adjecent stripes;  returns 0 if not primary """
     if    fmt == 'lb':  mu0, nu0 = lb2GC(aa,bb,wedge); l,b = aa,bb
     elif  fmt == 'GC':  mu0, nu0 = aa, bb;  l,b,r = GC2lbr(aa,bb,10.0,wedge)
-    else: print "!!! UNKNOWN FORMAT - ASSUMING MU, NU (GC)"
+    else: print("!!! UNKNOWN FORMAT - ASSUMING MU, NU (GC)")
     if wedge > low:
         mu1, nu1 = lb2GC(l,b,wedge-1)
         if abs(nu1) < abs(nu0):  return 0
