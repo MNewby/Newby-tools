@@ -23,7 +23,7 @@ e = func.poisson_errors(y)
 #s = back[:,run+5]
 
 fitter = fit.ToFit(x,y,e)
-fitter.function=func.gauss_plus_floor
+fitter.function=func.get_2gauss_y
 fitter.update_params([14.0, 250.0, 30.0, 100.0])
 fitter.step = [1.0, 1.0, 1.0, 1.0]
 fitter.param_names = ["amp", "mu", "sigma", "floor"]
